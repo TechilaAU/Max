@@ -1,0 +1,15 @@
+---
+import Page from '../../layouts/Page.astro';
+import { testimonials } from '../../data/site';
+---
+<Page title="Testimonials" description="What clients say about Max Healthcare Equipment's hire, delivery and service in Adelaide." eyebrow="About" crumbs={[{ label: 'About', href: '/about/' }, { label: 'Testimonials' }]}
+  lede="Thank you to everyone who has shared their experience with us.">
+  <div class="grid" style="--min: 340px; gap: 24px">
+    {testimonials.map((t) => (
+      <figure class="card" style="margin: 0">
+        <blockquote style="margin:0; font-family: var(--font-display); font-size: 24px; line-height: 1.3; font-weight: 500">"{t.quote}"</blockquote>
+        <figcaption style="margin-top: 16px; font-weight: 700" class="muted">{t.name}, {t.place}</figcaption>
+      </figure>
+    ))}
+  </div>
+</Page>

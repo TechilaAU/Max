@@ -1,0 +1,22 @@
+---
+import Page from '../../layouts/Page.astro';
+import CategoryTile from '../../components/CategoryTile.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { liveLocations } from '../../data/locations';
+import { categories } from '../../data/categories';
+export function getStaticPaths() { return liveLocations.map((l) => ({ params: { location: l.slug }, props: { l } })); }
+const { l } = Astro.props;
+---
+<Page title={`Healthcare equipment hire ${l.name}`} h1={`Healthcare equipment hire and sales in ${l.name}`} description={`${l.intro}`.slice(0, 160)} eyebrow="Locations" crumbs={[{ label: 'Locations', href: '/locations/' }, { label: l.name }]}
+  lede={l.intro} photoSlot={`location-${l.slug}`} photoLabel={`Max delivery in ${l.name}`}>
+  <div slot="hero" class="btn-row"><a class="btn btn--primary" href="/equipment/hire/">Browse hire equipment</a><a class="btn btn--outline" href="/delivery-collection/">Delivery details</a></div>
+  <h2 style="margin-bottom: 20px">Areas we cover</h2>
+  <ul class="areas">{l.areas.map((a) => <li>{a}</li>)}</ul>
+  <h2 style="margin: 48px 0 24px">Popular equipment</h2>
+  <div class="grid">{categories.slice(0, 8).map((c) => <CategoryTile {...c} />)}</div>
+  <CtaBand slot="after" />
+</Page>
+<style>
+  .areas { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .areas li { background: var(--white); border: 1px solid var(--grey-100); border-radius: 999px; padding: 8px 16px; font-weight: 600; }
+</style>

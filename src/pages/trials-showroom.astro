@@ -1,0 +1,34 @@
+---
+import Page from '../layouts/Page.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { site } from '../data/site';
+---
+<Page title="Trials and showroom" description="Try beds, lift recliners, scooters and more in our Adelaide showroom or at home, with advice from our on-site Occupational Therapist." eyebrow="Try before you decide" crumbs={[{ label: 'Trials and showroom' }]}
+  lede="Visit our trial showroom or we can bring selected equipment to you for an in-home trial, with guidance from our on-site Occupational Therapist." photoSlot="showroom" photoLabel="Showroom interior">
+  <div class="split" style="align-items: flex-start">
+    <div class="stack">
+      <h2>Book a trial</h2>
+      <p class="muted">Tell us what you'd like to try and we'll arrange a time.</p>
+      <EnquiryForm type="trial" submitLabel="Request a trial">
+        <div class="row">
+          <div class="field"><label for="t-name">Your name</label><input id="t-name" name="name" autocomplete="name" required /></div>
+          <div class="field"><label for="t-phone">Phone</label><input id="t-phone" name="phone" type="tel" autocomplete="tel" required /></div>
+        </div>
+        <div class="field"><label for="t-email">Email</label><input id="t-email" name="email" type="email" autocomplete="email" required /></div>
+        <fieldset class="field"><legend>Where?</legend>
+          <div style="display:flex; flex-wrap: wrap; gap: 8px 20px">
+            <label class="choice"><input type="radio" name="trial_location" value="Showroom" checked /> At the showroom</label>
+            <label class="choice"><input type="radio" name="trial_location" value="In-home" /> In my home</label>
+          </div>
+        </fieldset>
+        <div class="field"><label for="t-msg">What would you like to try?</label><textarea id="t-msg" name="message" required></textarea></div>
+      </EnquiryForm>
+    </div>
+    <aside class="card stack" style="gap: 12px">
+      <h2 style="font-size: 24px">Showroom</h2>
+      <p>{site.address.street}<br />{site.address.suburb} {site.address.state} {site.address.postcode}</p>
+      <p class="muted">{site.hours}</p>
+      <a class="btn btn--outline btn--sm" style="align-self:flex-start" href={`https://maps.google.com/?q=${encodeURIComponent(`${site.address.street}, ${site.address.suburb} ${site.address.state} ${site.address.postcode}`)}`} rel="noopener">Get directions</a>
+    </aside>
+  </div>
+</Page>

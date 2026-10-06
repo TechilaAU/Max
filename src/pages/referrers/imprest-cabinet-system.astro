@@ -1,0 +1,32 @@
+---
+import Page from '../../layouts/Page.astro';
+import EnquiryForm from '../../components/EnquiryForm.astro';
+---
+<Page title="Imprest Cabinet System" description="A fully serviced imprest equipment cabinet for Adelaide hospital wards, so patients have what they need for a smooth transition home." eyebrow="For hospitals" crumbs={[{ label: 'Referrers', href: '/referrers/' }, { label: 'Imprest Cabinet System' }]}
+  lede="We partner with several hospitals across Adelaide to provide a fully serviced Imprest Equipment Cabinet. Ask us about setting one up in your workplace." photoSlot="imprest" photoLabel="Imprest equipment cabinet on a hospital ward">
+  <div class="split" style="align-items: flex-start">
+    <div class="prose">
+      <h2 style="margin-top: 0">How it works</h2>
+      <p>An imprest cabinet keeps commonly prescribed equipment on the ward, ready to issue. Patients leave with what they need, ensuring a smooth transition home, and Max takes care of restocking, billing and follow-up.</p>
+      <ul>
+        <li>Stocked with the items your team prescribes most often.</li>
+        <li>Serviced and restocked by Max.</li>
+        <li>Patients are billed directly, with weekly hire payments by secure text link.</li>
+        <li>Hire equipment is collected from the patient's home when they're finished.</li>
+      </ul>
+      <p class="muted">TODO (Max to confirm): restock frequency and any reporting provided to wards.</p>
+    </div>
+    <div class="card stack">
+      <h2 style="font-size: 26px">Enquire about a cabinet</h2>
+      <EnquiryForm type="imprest" submitLabel="Send enquiry">
+        <div class="field"><label for="i-name">Your name</label><input id="i-name" name="name" required /></div>
+        <div class="field"><label for="i-org">Hospital and ward</label><input id="i-org" name="organisation" required /></div>
+        <div class="row">
+          <div class="field"><label for="i-phone">Phone</label><input id="i-phone" name="phone" type="tel" required /></div>
+          <div class="field"><label for="i-email">Email</label><input id="i-email" name="email" type="email" required /></div>
+        </div>
+        <div class="field"><label for="i-msg">Message</label><textarea id="i-msg" name="message"></textarea></div>
+      </EnquiryForm>
+    </div>
+  </div>
+</Page>

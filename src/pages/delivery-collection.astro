@@ -1,0 +1,21 @@
+---
+import Page from '../layouts/Page.astro';
+import CtaBand from '../components/CtaBand.astro';
+---
+<Page title="Delivery and collection" description="Next-day delivery of healthcare equipment across Adelaide, 7 days a week. Free hospital delivery, set-up by trained staff, contactless options." eyebrow="Delivery" crumbs={[{ label: 'Delivery and collection' }]}
+  lede="Guaranteed next-day delivery, 7 days a week (select items on Sunday). Our team delivers, installs and shows you how everything works." photoSlot="delivery" photoLabel="Max delivery van and team">
+  <div class="grid" style="--min: 300px">
+    <div class="card stack" style="gap: 10px"><h3>Hospital delivery</h3><p class="muted">Free. We visit Adelaide hospitals every day. Tell us the ward and room number and your equipment will be ready for discharge.</p></div>
+    <div class="card stack" style="gap: 10px"><h3>Home delivery</h3><p class="muted">A delivery fee applies for home addresses. We bring it in, set it up and check it suits your space.</p></div>
+    <div class="card stack" style="gap: 10px"><h3>Collection</h3><p class="muted">Book a collection day in the hire portal or call us. A collection fee applies each time we collect from a home.</p></div>
+    <div class="card stack" style="gap: 10px"><h3>Booking days</h3><p class="muted">Deliveries and collections are booked by day, from tomorrow onwards. For urgent same-day help, call us.</p></div>
+  </div>
+  <div class="prose" style="margin-top: 48px">
+    <h2>Trained installation staff</h2>
+    <p>Our delivery and installation team are kept up to date with equipment training and product knowledge, so beds, lifters and chairs are set up safely and you know how to use them.</p>
+    <h2>Contactless delivery</h2>
+    <p>Contactless delivery and collection is available where possible. Please tell our team if anyone in the home has cold or flu-like symptoms. See <a href="/cleaning-infection-control/">cleaning and infection control</a>.</p>
+    <p class="muted">TODO (Max to confirm): current home delivery and collection fees by area.</p>
+  </div>
+  <CtaBand slot="after" />
+</Page>

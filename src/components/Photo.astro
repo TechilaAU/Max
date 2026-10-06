@@ -1,0 +1,16 @@
+---
+// Shows a real image when it exists in /public, otherwise a labelled placeholder.
+import { sitePhoto, hasPublic } from '../lib/assets';
+interface Props { slot?: string; src?: string | null; alt: string; label?: string; style?: string; eager?: boolean; }
+const { slot, src, alt, label, style = '', eager = false } = Astro.props;
+const file = src && hasPublic(src) ? src : slot ? sitePhoto(slot) : null;
+---
+<div class="photo" style={style}>
+  {file
+    ? <img src={file} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    : <div class="ph" role="img" aria-label={alt}>[PHOTO: {label ?? alt}]</div>}
+</div>
+<style>
+  .photo { border-radius: var(--r-lg); overflow: hidden; background: var(--grey-100); }
+  .photo img { width: 100%; height: 100%; object-fit: cover; }
+</style>

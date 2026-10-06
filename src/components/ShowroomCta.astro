@@ -1,0 +1,21 @@
+---
+import Photo from './Photo.astro';
+import { site } from '../data/site';
+---
+<section class="wrap" style="padding-block: var(--section)">
+  <div class="show">
+    <Photo slot="showroom" alt="Max Healthcare showroom with lift chairs and beds" label="Showroom interior with lift chairs and beds" style="flex: 1 1 420px; min-height: 340px; border-radius: 0" />
+    <div class="stack" style="flex: 1 1 420px; padding: clamp(28px, 4vw, 48px); justify-content: center; gap: 16px">
+      <h2 style="font-size: clamp(28px, 3.4vw, 38px)">Try it in our showroom or at home.</h2>
+      <p class="muted">Book a time with our OT to trial beds, lift recliners and scooters before you decide.</p>
+      <p style="font-weight: 600">{site.address.street}, {site.address.suburb} {site.address.state} {site.address.postcode}{!site.addressConfirmed && ' [CONFIRM]'}</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/trials-showroom/">Book a trial</a>
+        <a class="btn btn--outline" href={site.phoneHref}>Call {site.phone}</a>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .show { display: flex; flex-wrap: wrap; border-radius: var(--r-lg); overflow: hidden; background: var(--white); border: 1px solid var(--grey-100); }
+</style>

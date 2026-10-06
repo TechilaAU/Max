@@ -1,0 +1,18 @@
+---
+import { site } from '../data/site';
+interface Props { title?: string; text?: string }
+const { title = 'Not sure what you need?', text = 'Talk to our team or our OT. We will help you choose the right equipment and arrange delivery.' } = Astro.props;
+---
+<section class="wrap" style="padding-block: var(--section)">
+  <div class="panel panel--red cta">
+    <div class="stack" style="gap: 10px; flex: 1 1 420px">
+      <h2 style="font-size: clamp(28px, 3.4vw, 38px)">{title}</h2>
+      <p style="color: var(--white)">{text}</p>
+    </div>
+    <div class="btn-row">
+      <a class="btn btn--light" href={site.phoneHref}>Call {site.phone}</a>
+      <a class="btn btn--dark" href="/contact/">Send an enquiry</a>
+    </div>
+  </div>
+</section>
+<style>.cta { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }</style>

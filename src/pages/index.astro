@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import CategoryTile from '../components/CategoryTile.astro';
+import ReferrerBand from '../components/ReferrerBand.astro';
+import WhyMax from '../components/WhyMax.astro';
+import FundingStrip from '../components/FundingStrip.astro';
+import Testimonials from '../components/Testimonials.astro';
+import ShowroomCta from '../components/ShowroomCta.astro';
+import { categories } from '../data/categories';
+import { site } from '../data/site';
+---
+<Base title={site.name} description="Healthcare and mobility equipment for hire or purchase in Adelaide. Beds, wheelchairs, walkers, lift chairs and bathroom aids with next-day delivery. Registered NDIS provider.">
+  <section class="hero">
+    <div class="wrap split">
+      <div class="stack" style="gap: 26px">
+        <span class="badge" style="align-self: flex-start">Hire or buy. 600+ items. Delivered tomorrow.</span>
+        <h1>Home from hospital, with everything ready and waiting.</h1>
+        <p class="lede">Beds, mobility, bathroom and daily-living equipment, delivered and set up by trained staff, with an on-site Occupational Therapist making sure it's the right fit.</p>
+        <form role="search" action="/search/" method="get" class="hsearch">
+          <label for="hero-q" class="sr-only">Search equipment</label>
+          <input id="hero-q" name="q" type="search" placeholder="Search beds, walkers, shower chairs…" />
+          <button class="btn btn--primary" type="submit">Search</button>
+        </form>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="/equipment/hire/">Hire equipment</a>
+          <a class="btn btn--outline" href="/equipment/">Buy equipment</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <Photo slot="hero-delivery" alt="Max delivery team setting up an electric bed in a client's home" style="position:absolute; inset: 0 0 40px 40px" eager />
+        <div class="hero-chip">
+          <span class="chip-ic"><Icon name="truck" size={24} /></span>
+          <span><strong>Order today, delivered tomorrow</strong>Select items on Sundays too</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top: var(--section)">
+    <div class="grid fit" style="--min: 340px; gap: 24px">
+      <div class="panel panel--red stack" style="gap: 18px">
+        <span class="eyebrow" style="color: var(--white)">Short-term recovery</span>
+        <h2>Hire by the week</h2>
+        <p style="color: var(--white); max-width: 460px">Weekly rates, billed from the day it's handed over. Pay securely online, manage your hire in the portal, and book collection when you're done.</p>
+        <ol class="steps">
+          <li><span class="n">1</span>Choose your equipment or ask our OT</li>
+          <li><span class="n">2</span>We deliver and set it up, free to hospitals</li>
+          <li><span class="n">3</span>Pay weekly by text link, return anytime</li>
+        </ol>
+        <div class="btn-row" style="margin-top: 8px"><a class="btn btn--light" href="/equipment/hire/">Browse hire equipment</a><a class="btn btn--dark" href="/hire/">How hire works</a></div>
+      </div>
+      <div class="panel panel--white stack" style="gap: 18px">
+        <span class="eyebrow">Long-term living</span>
+        <h2>Buy new or ex-hire</h2>
+        <p class="muted" style="max-width: 460px">Own it outright, with trials in our showroom or in your home first. Ex-hire stock is cleaned to Safe Work Australia standards and priced to move.</p>
+        <div class="grid" style="--min: 200px; gap: 12px">
+          <a class="mini" href="/trials-showroom/"><strong>In-home trials</strong><span>Try before you commit</span></a>
+          <a class="mini" href="/about/our-team/"><strong>OT guidance</strong><span>The right fit, first time</span></a>
+          <a class="mini" href="/equipment/ex-hire-stock/"><strong>Ex-hire stock</strong><span>SA only, call for list</span></a>
+          <a class="mini" href="/equipment/packages/"><strong>Packages</strong><span>Bundles for going home</span></a>
+        </div>
+        <div class="btn-row" style="margin-top: 8px"><a class="btn btn--dark" href="/equipment/">Shop equipment</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <div class="head-row">
+      <h2>Shop by need</h2>
+      <a href="/equipment/" style="font-weight: 700">View the full range</a>
+    </div>
+    <div class="grid">
+      {categories.map((c) => <CategoryTile slug={c.slug} name={c.name} blurb={c.blurb} />)}
+    </div>
+  </section>
+
+  <ReferrerBand />
+  <WhyMax />
+  <FundingStrip />
+  <Testimonials />
+  <ShowroomCta />
+</Base>
+
+<style>
+  .hero { background: var(--white); padding-block: clamp(48px, 7vw, 80px); }
+  .hero h1 { max-width: 14ch; }
+  .hsearch { display: flex; gap: 10px; max-width: 580px; background: var(--grey-50); border: 1px solid var(--grey-200); border-radius: 16px; padding: 8px; }
+  .hsearch input { border: 0; background: transparent; min-height: 48px; }
+  .hsearch input:focus { outline: none; }
+  .hsearch:focus-within { border-color: var(--red-600); box-shadow: 0 0 0 3px var(--red-100); }
+  .hero-media { position: relative; min-height: clamp(340px, 42vw, 500px); }
+  .hero-chip { position: absolute; left: 0; bottom: 0; background: var(--white); border-radius: 18px; padding: 18px 22px; box-shadow: var(--shadow); display: flex; gap: 14px; align-items: center; max-width: 330px; font-size: 15px; line-height: 1.35; }
+  .hero-chip strong { display: block; font-size: 16px; }
+  .chip-ic { width: 48px; height: 48px; border-radius: 12px; background: var(--red-600); color: var(--white); display: flex; align-items: center; justify-content: center; flex: none; }
+  .mini { background: var(--grey-50); border-radius: 16px; padding: 18px; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; }
+  .mini strong { font-size: 18px; }
+  .mini span { font-size: 15px; color: var(--grey-700); }
+  .mini:hover { background: var(--red-50); color: var(--ink); }
+  @media (max-width: 640px) { .hero-media { min-height: 300px; } .hero-media :global(.photo) { inset: 0 0 50px 0 !important; } }
+</style>

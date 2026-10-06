@@ -1,0 +1,37 @@
+---
+import Page from '../layouts/Page.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { site } from '../data/site';
+---
+<Page title="Contact us" description="Call Max Healthcare Equipment on 1800 684 277 or send an enquiry. Showroom in Adelaide, next-day delivery 7 days a week." eyebrow="Contact" crumbs={[{ label: 'Contact' }]}
+  lede="Call us any day, or send an enquiry and we'll get back to you.">
+  <div class="split" style="align-items: flex-start">
+    <div class="stack">
+      <EnquiryForm type="contact">
+        <div class="row">
+          <div class="field"><label for="ct-name">Name</label><input id="ct-name" name="name" autocomplete="name" required /></div>
+          <div class="field"><label for="ct-phone">Phone</label><input id="ct-phone" name="phone" type="tel" autocomplete="tel" /></div>
+        </div>
+        <div class="field"><label for="ct-email">Email</label><input id="ct-email" name="email" type="email" autocomplete="email" required /></div>
+        <div class="field"><label for="ct-msg">Enquiry</label><textarea id="ct-msg" name="message" required></textarea></div>
+      </EnquiryForm>
+    </div>
+    <aside class="stack" style="gap: 16px">
+      <div class="card stack" style="gap: 8px">
+        <span class="muted">Call</span>
+        <a href={site.phoneHref} style="font-family: var(--font-display); font-size: 34px; font-weight: 800; color: var(--ink); text-decoration: none">{site.phone}</a>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="card stack" style="gap: 8px">
+        <span class="muted">Showroom</span>
+        <p style="font-weight: 600">{site.address.street}, {site.address.suburb} {site.address.state} {site.address.postcode}</p>
+        <p class="muted">{site.hours}</p>
+      </div>
+      <div class="card stack" style="gap: 8px">
+        <span class="muted">Already hiring with us?</span>
+        <p>Pay, view receipts or book a collection in the hire portal.</p>
+        <a class="btn btn--outline btn--sm" style="align-self:flex-start" href="/portal/">Open the hire portal</a>
+      </div>
+    </aside>
+  </div>
+</Page>

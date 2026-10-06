@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { site } from '../data/site';
+---
+<Base title="Search equipment" description="Search the Max Healthcare Equipment range." noindex>
+  <Breadcrumbs items={[{ label: 'Search' }]} />
+  <section class="wrap" style="padding-block: 28px var(--section)">
+    <h1 style="font-size: clamp(34px, 4.5vw, 48px); margin-bottom: 20px">Search equipment</h1>
+    <form role="search" class="form" style="grid-template-columns: 1fr auto; max-width: 640px; margin-bottom: 28px" id="sform">
+      <label for="q" class="sr-only">Search equipment</label>
+      <input id="q" name="q" type="search" placeholder="Search beds, walkers, shower chairs…" autofocus />
+      <button class="btn btn--primary" type="submit">Search</button>
+    </form>
+    <p id="count" class="muted" role="status" aria-live="polite"></p>
+    <div id="results" class="grid" style="--min: 240px; margin-top: 18px"></div>
+    <div id="empty" class="card" hidden style="max-width: 640px">
+      <p>No equipment matches that search. Try a simpler word like "bed" or "walker", or call <a href={site.phoneHref}>{site.phone}</a> and we'll find it for you.</p>
+    </div>
+  </section>
+</Base>
+<style is:global>
+  .sres { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--grey-100); border-radius: var(--r-md); overflow: hidden; text-decoration: none; color: var(--ink); }
+  .sres:hover { border-color: var(--red-200); color: var(--ink); }
+  .sres .im { aspect-ratio: 4/3; background: var(--grey-150); display: flex; align-items: center; justify-content: center; color: var(--grey-500); font-size: 14px; font-weight: 600; }
+  .sres .im img { width: 100%; height: 100%; object-fit: contain; padding: 14px; background: #fff; }
+  .sres .b { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 6px; }
+  .sres .p { font-size: 15px; color: var(--grey-700); }
+</style>
+<script>
+  const base = document.documentElement.dataset.base || '/';
+  const input = document.getElementById('q') as HTMLInputElement;
+  const results = document.getElementById('results')!;
+  const count = document.getElementById('count')!;
+  const empty = document.getElementById('empty')!;
+  const params = new URLSearchParams(location.search);
+  input.value = params.get('q') || '';
+  const fmt = (n: number) => n.toLocaleString('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: n % 1 ? 2 : 0 });
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  type Item = { s: string; n: string; c: string[]; h: number | null; b: number | null; i: string | null; k: string };
+  let items: Item[] = [];
+  function run() {
+    const q = input.value.trim().toLowerCase();
+    const terms = q.split(/\s+/).filter(Boolean);
+    const hits = terms.length ? items.filter((it) => { const hay = `${it.n} ${it.c.join(' ')} ${it.k}`.toLowerCase(); return terms.every((t) => hay.includes(t)); }) : [];
+    results.innerHTML = hits.map((it) => `<a class="sres" href="${base}product/${it.s}/"><div class="im">${it.i ? `<img src="${base}${it.i.replace(/^\//, '')}" alt="" loading="lazy">` : '[PRODUCT IMAGE]'}</div><div class="b"><strong>${esc(it.n)}</strong><span class="p">${it.h ? `Hire <b>${fmt(it.h)}</b>/week ` : ''}${it.b ? `Buy <b>${fmt(it.b)}</b>` : ''}</span></div></a>`).join('');
+    count.textContent = terms.length ? `${hits.length} ${hits.length === 1 ? 'result' : 'results'} for "${q}"` : '';
+    empty.hidden = !(terms.length && hits.length === 0);
+  }
+  document.getElementById('sform')!.addEventListener('submit', (e) => { e.preventDefault(); history.replaceState(null, '', `?q=${encodeURIComponent(input.value)}`); run(); });
+  fetch(`${base}search-index.json`).then((r) => r.json()).then((d) => { items = d; run(); });
+</script>

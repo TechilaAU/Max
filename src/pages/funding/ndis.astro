@@ -1,0 +1,23 @@
+---
+import Page from '../../layouts/Page.astro';
+import CtaBand from '../../components/CtaBand.astro';
+---
+<Page title="NDIS equipment" h1="NDIS equipment hire and purchase" description="Max Healthcare Equipment is a registered NDIS provider in South Australia for personal mobility equipment and therapeutic supports." eyebrow="Funding" crumbs={[{ label: 'Funding', href: '/funding/' }, { label: 'NDIS' }]}
+  lede="As a registered NDIS provider, we work with you and your team to provide the equipment you need.">
+  <div class="prose">
+    <h2 style="margin-top:0">Our NDIS registration</h2>
+    <p>We are registered in South Australia for:</p>
+    <ul>
+      <li>Personal Mobility Equipment (capital supports)</li>
+      <li>Therapeutic Supports (capacity building)</li>
+    </ul>
+    <h2>How to order with NDIS funding</h2>
+    <ol>
+      <li>Your OT or therapist recommends the equipment, or you call us for advice.</li>
+      <li>Send us your plan management details (agency, plan managed or self managed).</li>
+      <li>We quote, confirm, deliver and set up, then invoice your plan manager or you.</li>
+    </ol>
+    <p class="muted">TODO (Max to confirm): NDIS provider number and any quoting turnaround to publish.</p>
+  </div>
+  <CtaBand slot="after" />
+</Page>

@@ -1,0 +1,26 @@
+---
+import Page from '../../layouts/Page.astro';
+import EnquiryForm from '../../components/EnquiryForm.astro';
+---
+<Page title="Careers" h1="Work with Max" description="Careers at Max Healthcare Equipment in Adelaide, including Occupational Therapist, delivery and customer service roles." eyebrow="About" crumbs={[{ label: 'About', href: '/about/' }, { label: 'Careers' }]}
+  lede="We're a growing South Australian business. If you care about helping people get home safely, we'd like to hear from you.">
+  <div class="split" style="align-items: flex-start">
+    <div class="prose">
+      <h2 style="margin-top:0">Current roles</h2>
+      <p>We advertise open roles on SEEK. You're also welcome to send an expression of interest for occupational therapy, customer service or delivery and installation roles.</p>
+      <p class="muted">TODO: link to current SEEK listings.</p>
+    </div>
+    <div class="card stack">
+      <h2 style="font-size: 26px">Expression of interest</h2>
+      <EnquiryForm type="careers" submitLabel="Send expression of interest">
+        <div class="field"><label for="c-name">Name</label><input id="c-name" name="name" required /></div>
+        <div class="row">
+          <div class="field"><label for="c-phone">Phone</label><input id="c-phone" name="phone" type="tel" required /></div>
+          <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required /></div>
+        </div>
+        <div class="field"><label for="c-role">Role you're interested in</label><input id="c-role" name="role" /></div>
+        <div class="field"><label for="c-msg">About you</label><textarea id="c-msg" name="message" required></textarea></div>
+      </EnquiryForm>
+    </div>
+  </div>
+</Page>

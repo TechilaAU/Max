@@ -1,0 +1,43 @@
+---
+import Page from '../layouts/Page.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+const faqs = [
+  { q: 'When does my hire start?', a: 'Hire is charged weekly from the day the equipment is handed over to you, not the day you order.' },
+  { q: 'How is a part week charged?', a: 'Hire is charged at a weekly rate. If the hire has reached the majority of a week (4 days or more), an additional week is charged.' },
+  { q: 'Can I get money back if I return it early?', a: 'If you return equipment before the end of time paid in advance, we refund full weeks only, not part weeks.' },
+  { q: 'Do I pay for delivery and collection?', a: 'Delivery to hospitals is free. Delivery and collection at a home address incur a fee each time we visit.' },
+  { q: 'What condition should equipment be returned in?', a: 'Please return equipment clean and in good working order. Items returned unclean may attract a cleaning fee, and we can refuse unsanitary items.' },
+  { q: 'Will I get the exact model shown?', a: 'Make and model of hire items may vary depending on availability. We always supply an equivalent item.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<Page title="How equipment hire works" description="Hire healthcare equipment by the week in Adelaide. Billed from handover, pay by secure text link, free hospital delivery, book 4 weeks and pay for 3." eyebrow="Weekly hire" crumbs={[{ label: 'Hire' }]}
+  lede="Hire is ideal for short-term recovery. Weekly rates, billed from the day it's handed over, with payments and collection managed online." photoSlot="hire" photoLabel="Electric bed and walker set up in a bedroom" schema={schema}>
+  <div slot="hero" class="btn-row"><a class="btn btn--primary" href="/equipment/hire/">Browse hire equipment</a><a class="btn btn--outline" href={site.phoneHref}>Call {site.phone}</a></div>
+
+  <div class="grid" style="--min: 260px; margin-bottom: 56px">
+    <div class="card"><h3>1. Choose</h3><p class="muted" style="margin-top:8px">Pick from our hire range online, or ask our OT what will work best.</p></div>
+    <div class="card"><h3>2. We deliver</h3><p class="muted" style="margin-top:8px">Next-day delivery and set-up. Free to hospitals, so it's waiting when you get home.</p></div>
+    <div class="card"><h3>3. Pay weekly</h3><p class="muted" style="margin-top:8px">We text a secure payment link. Your card is kept on file for weekly payments.</p></div>
+    <div class="card"><h3>4. Return</h3><p class="muted" style="margin-top:8px">Book a collection day in the hire portal or call us when you're finished.</p></div>
+  </div>
+
+  <div class="panel panel--tint" style="margin-bottom: 56px">
+    <h2 style="font-size: clamp(26px, 3vw, 34px)">Book 4 weeks, pay for 3</h2>
+    <p class="muted" style="margin-top: 10px; max-width: 62ch">Pay for 4 weeks upfront and the fourth week is free. Available to the general public on selected hire items.</p>
+  </div>
+
+  <h2 style="margin-bottom: 24px">Hire questions</h2>
+  <div class="faq">
+    {faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+  </div>
+  <p class="muted" style="margin-top: 24px">Full details are in our <a href="/terms-and-conditions/">terms and conditions</a>.</p>
+  <CtaBand slot="after" />
+</Page>
+<style>
+  .faq { display: grid; gap: 12px; max-width: 820px; }
+  .faq details { background: var(--white); border: 1px solid var(--grey-100); border-radius: var(--r-sm); padding: 0 20px; }
+  .faq summary { font-weight: 700; padding: 18px 0; cursor: pointer; }
+  .faq p { padding-bottom: 18px; color: var(--grey-700); }
+</style>

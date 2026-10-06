@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
+import CategoryTile from '../../components/CategoryTile.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { categories, filterPages } from '../../data/categories';
+---
+<Base title="Equipment range" description="Browse more than 600 healthcare and mobility items to hire or buy in Adelaide: mobility, beds, bathroom, seating, pressure care, lifters and daily living aids.">
+  <Breadcrumbs items={[{ label: 'Equipment' }]} />
+  <PageHero eyebrow="Hire or buy" title="Our equipment range" lede="More than 600 items to hire or buy, delivered next day across Adelaide. Can't see what you need? We source specialised equipment through our supplier network.">
+    <form role="search" action="/search/" method="get" class="form" style="grid-template-columns: 1fr auto; max-width: 560px">
+      <label for="eq-q" class="sr-only">Search equipment</label>
+      <input id="eq-q" name="q" type="search" placeholder="Search the range" />
+      <button class="btn btn--primary" type="submit">Search</button>
+    </form>
+  </PageHero>
+  <section class="wrap section">
+    <div class="grid" style="--min: 300px; margin-bottom: 48px">
+      {filterPages.map((f) => <a class="card link-card" href={`/equipment/${f.slug}/`}><strong style="font-size:20px">{f.name}</strong><span class="muted">{f.blurb}</span></a>)}
+    </div>
+    <h2 style="margin-bottom: 28px">Categories</h2>
+    <div class="grid">{categories.map((c) => <CategoryTile {...c} />)}</div>
+  </section>
+  <CtaBand />
+</Base>

@@ -1,0 +1,15 @@
+---
+import Page from '../../layouts/Page.astro';
+import CtaBand from '../../components/CtaBand.astro';
+---
+<Page title="DVA equipment" h1="Equipment for veterans (DVA)" description="Max Healthcare Equipment supplies DVA clients through the Rehabilitation Appliances Program via our RAP partner. Download the DVA direct order form." eyebrow="Funding" crumbs={[{ label: 'Funding', href: '/funding/' }, { label: 'DVA' }]}
+  lede="We supply equipment to Department of Veterans' Affairs clients through the Rehabilitation Appliances Program (RAP), via our RAP partner.">
+  <div class="prose">
+    <h2 style="margin-top:0">For prescribers</h2>
+    <p>Use the DVA direct order form on our <a href="/referrers/equipment-request-forms/">equipment request forms</a> page, or send the request online and note the client's DVA details.</p>
+    <h2>For veterans and families</h2>
+    <p>Your GP, OT or physio needs to prescribe RAP equipment. Call us and we'll explain the process and what's available.</p>
+    <p class="muted">TODO (Max to confirm): RAP partner name and logo to display.</p>
+  </div>
+  <CtaBand slot="after" />
+</Page>

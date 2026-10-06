@@ -1,0 +1,56 @@
+---
+import Page from '../layouts/Page.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { getProducts } from '../lib/catalogue';
+import { site } from '../data/site';
+const products = await getProducts();
+---
+<Page title="Order request" h1="Request to hire or buy" description="Send an order request to Max Healthcare Equipment. We confirm stock, delivery day and payment with you." crumbs={[{ label: 'Equipment', href: '/equipment/' }, { label: 'Order request' }]}
+  lede="Tell us what you need and where it's going. We'll confirm stock and your delivery day, then text you a secure payment link.">
+  <div class="split" style="align-items: flex-start">
+    <EnquiryForm type="order" submitLabel="Send order request">
+      <div class="row">
+        <div class="field"><label for="o-product">Equipment</label>
+          <select id="o-product" name="product">
+            <option value="">Not sure yet</option>
+            {products.map((p) => <option value={p.slug}>{p.name}</option>)}
+          </select>
+        </div>
+        <fieldset class="field"><legend>Hire or buy?</legend>
+          <div style="display:flex; gap: 20px">
+            <label class="choice"><input type="radio" name="mode" value="hire" checked /> Hire</label>
+            <label class="choice"><input type="radio" name="mode" value="buy" /> Buy</label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="row">
+        <div class="field"><label for="o-name">Your name</label><input id="o-name" name="name" autocomplete="name" required /></div>
+        <div class="field"><label for="o-phone">Mobile</label><input id="o-phone" name="phone" type="tel" autocomplete="tel" required /><span class="hint">We text your payment link here</span></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="o-email">Email</label><input id="o-email" name="email" type="email" autocomplete="email" required /></div>
+        <div class="field"><label for="o-dest">Delivering to</label>
+          <select id="o-dest" name="destination"><option value="Home">A home address</option><option value="Hospital">A hospital (free delivery)</option></select>
+        </div>
+      </div>
+      <div class="field"><label for="o-address">Delivery address, or hospital, ward and room</label><input id="o-address" name="address" required /></div>
+      <div class="field"><label for="o-notes">Anything else we should know?</label><textarea id="o-notes" name="message" placeholder="Discharge date, access, stairs, funding (NDIS, DVA, aged care)…"></textarea></div>
+    </EnquiryForm>
+    <aside class="card stack" style="gap: 14px">
+      <h2 style="font-size: 24px">What happens next</h2>
+      <ol class="steps">
+        <li><span class="n">1</span>We confirm stock and your delivery day. Deliveries are booked from tomorrow onwards.</li>
+        <li><span class="n">2</span>We text you a secure payment link.</li>
+        <li><span class="n">3</span>Our team delivers and sets everything up.</li>
+      </ol>
+      <p class="muted">Need it today? Call <a href={site.phoneHref}>{site.phone}</a>.</p>
+    </aside>
+  </div>
+</Page>
+<script>
+  const q = new URLSearchParams(location.search);
+  const sel = document.getElementById('o-product') as HTMLSelectElement | null;
+  if (sel && q.get('product')) sel.value = q.get('product')!;
+  const mode = q.get('mode');
+  if (mode) document.querySelectorAll<HTMLInputElement>('input[name=mode]').forEach((r) => (r.checked = r.value === mode));
+</script>

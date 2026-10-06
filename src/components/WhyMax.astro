@@ -1,0 +1,16 @@
+---
+const items = [
+  { stat: '600+', title: 'Equipment items', text: 'Plus sourcing for specialised needs through our supplier network.' },
+  { stat: '7 days', title: 'Next-day delivery', text: 'Guaranteed next day, select items on Sunday.' },
+  { stat: 'On-site OT', title: 'Clinical governance', text: 'Advice from a qualified Occupational Therapist.' },
+  { stat: 'Cleaned', title: 'To Safe Work standards', text: 'Every item cleaned between clients. Contactless delivery available.' },
+];
+---
+<section class="section">
+  <div class="wrap">
+    <h2 style="max-width: 720px; margin-bottom: 36px">Putting the smile back into healthcare equipment.</h2>
+    <div class="grid">
+      {items.map((i) => <div class="card"><div class="stat">{i.stat}</div><strong style="display:block;font-size:18px">{i.title}</strong><span class="muted" style="font-size:15px">{i.text}</span></div>)}
+    </div>
+  </div>
+</section>

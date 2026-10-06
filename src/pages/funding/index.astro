@@ -1,0 +1,16 @@
+---
+import Page from '../../layouts/Page.astro';
+import CtaBand from '../../components/CtaBand.astro';
+const items = [
+  { href: '/funding/ndis/', title: 'NDIS', text: 'Registered NDIS provider for personal mobility equipment and therapeutic supports in SA.' },
+  { href: '/funding/dva/', title: 'Veterans (DVA)', text: 'Equipment for DVA clients, with a direct order form for prescribers.' },
+  { href: '/funding/aged-care-support-at-home/', title: 'Aged care and Support at Home', text: 'Equipment for people with home care funding, ordered through your provider.' },
+];
+---
+<Page title="Funding for equipment" description="Use NDIS, DVA or aged care (Support at Home) funding for healthcare equipment from Max Healthcare Equipment in Adelaide." eyebrow="Funding" crumbs={[{ label: 'Funding' }]}
+  lede="If your equipment is funded, we work directly with your plan manager, case manager or provider so you don't have to.">
+  <div class="grid" style="--min: 300px">
+    {items.map((i) => <a class="card link-card" href={i.href}><strong style="font-size: 22px">{i.title}</strong><span class="muted">{i.text}</span></a>)}
+  </div>
+  <CtaBand slot="after" title="Not sure how your funding works?" text="Call us with your plan details and we'll explain what can be supplied and how it's billed." />
+</Page>

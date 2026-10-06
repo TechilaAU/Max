@@ -1,0 +1,17 @@
+---
+import Page from '../../layouts/Page.astro';
+import CtaBand from '../../components/CtaBand.astro';
+---
+<Page title="Aged care and Support at Home equipment" h1="Aged care and Support at Home" description="Healthcare and mobility equipment for people using Support at Home or home care funding in Adelaide. We work directly with your provider." eyebrow="Funding" crumbs={[{ label: 'Funding', href: '/funding/' }, { label: 'Aged care and Support at Home' }]}
+  lede="Using home care funding? Your provider or case manager can order directly from us, or you can call us and we'll work with them.">
+  <div class="prose">
+    <h2 style="margin-top:0">How it works</h2>
+    <ol>
+      <li>Talk to your provider or case manager about the equipment you need, or ask our OT for advice.</li>
+      <li>Your provider sends us the order, or gives us permission to invoice them.</li>
+      <li>We deliver, set up and show you how everything works.</li>
+    </ol>
+    <p class="muted">TODO (Max to confirm): wording on Support at Home and any assistive technology scheme registrations.</p>
+  </div>
+  <CtaBand slot="after" />
+</Page>

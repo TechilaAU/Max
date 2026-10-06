@@ -1,0 +1,27 @@
+---
+import Page from '../../layouts/Page.astro';
+const links = [
+  { href: '/referrers/equipment-request-forms/', title: 'Equipment Request Forms', text: 'Send a request online, or download the SA printable form and DVA direct order form.' },
+  { href: '/referrers/imprest-cabinet-system/', title: 'Imprest Cabinet System', text: 'A fully serviced equipment cabinet on your ward, so patients go home with what they need.' },
+  { href: '/referrers/equipment-catalogue/', title: 'Equipment Catalogue', text: 'Download the Max brochure and full equipment catalogue.' },
+  { href: '/referrers/equipment-information-sheets/', title: 'Equipment Information Sheets', text: 'Printable patient handouts for common aids.' },
+];
+---
+<Page title="Information for referrers" description="For OTs, physios, discharge planners and hospitals in Adelaide: equipment request forms, imprest cabinets, catalogues and patient information sheets." eyebrow="For health professionals" crumbs={[{ label: 'Referrers' }]}
+  lede="We do everything we can to make sure you are getting the best for your patients. Send us a request and we handle delivery, set-up, billing and collection." photoSlot="referrers" photoLabel="Occupational therapist with a patient and walker">
+  <div slot="hero" class="btn-row"><a class="btn btn--primary" href="/referrers/equipment-request-forms/">Submit an equipment request</a></div>
+  <div class="grid" style="--min: 280px; margin-bottom: 56px">
+    {links.map((l) => <a class="card link-card" href={l.href}><strong style="font-size: 21px">{l.title}</strong><span class="muted">{l.text}</span></a>)}
+  </div>
+  <div class="prose">
+    <h2>Why referrers choose Max</h2>
+    <ul>
+      <li>Available every day, with guaranteed next-day delivery (select items on Sunday).</li>
+      <li>More than 600 equipment items, including mobility scooters, electric high-low beds and lift recliners.</li>
+      <li>Clinical governance overseen by our on-site Occupational Therapist, with in-home trials of selected items.</li>
+      <li>Delivery and installation staff trained in the equipment they supply.</li>
+      <li>Close relationships with local and national suppliers, so we can find specialised equipment when you need it.</li>
+      <li>Registered NDIS provider, and we supply DVA clients.</li>
+    </ul>
+  </div>
+</Page>

@@ -1,0 +1,54 @@
+---
+import Page from '../../layouts/Page.astro';
+import EnquiryForm from '../../components/EnquiryForm.astro';
+import Icon from '../../components/Icon.astro';
+import { forms } from '../../data/infoSheets';
+import { hasPublic } from '../../lib/assets';
+---
+<Page title="Equipment request forms" description="Healthcare professionals can arrange equipment for a patient online or with the SA printable request form and DVA direct order form." eyebrow="Referrers" crumbs={[{ label: 'Referrers', href: '/referrers/' }, { label: 'Equipment request forms' }]}
+  lede="If you're a healthcare professional arranging equipment for a patient, fill in the request and we'll do the rest.">
+  <div class="split" style="align-items: flex-start">
+    <div class="stack">
+      <h2>Online equipment request</h2>
+      <EnquiryForm type="equipment-request" submitLabel="Send equipment request">
+        <fieldset class="stack" style="gap: 14px"><legend style="font-size: 20px; font-weight: 700">Referrer</legend>
+          <div class="row">
+            <div class="field"><label for="r-name">Your name</label><input id="r-name" name="name" autocomplete="name" required /></div>
+            <div class="field"><label for="r-role">Role</label><input id="r-role" name="referrer_role" placeholder="OT, physio, discharge planner" /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="r-org">Hospital or organisation</label><input id="r-org" name="organisation" autocomplete="organization" required /></div>
+            <div class="field"><label for="r-phone">Phone</label><input id="r-phone" name="phone" type="tel" required /></div>
+          </div>
+          <div class="field"><label for="r-email">Email</label><input id="r-email" name="email" type="email" autocomplete="email" required /></div>
+        </fieldset>
+        <fieldset class="stack" style="gap: 14px"><legend style="font-size: 20px; font-weight: 700">Patient</legend>
+          <div class="row">
+            <div class="field"><label for="p-name">Patient name</label><input id="p-name" name="patient_name" required /></div>
+            <div class="field"><label for="p-phone">Patient or carer mobile</label><input id="p-phone" name="patient_phone" type="tel" required /><span class="hint">We text the payment link here</span></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="p-dest">Deliver to</label><select id="p-dest" name="destination"><option>Hospital</option><option>Home</option></select></div>
+            <div class="field"><label for="p-date">Discharge or needed-by date</label><input id="p-date" name="needed_by" type="date" /></div>
+          </div>
+          <div class="field"><label for="p-address">Address, or ward and room number</label><input id="p-address" name="address" required /></div>
+          <div class="field"><label for="p-fund">Funding</label><select id="p-fund" name="funding"><option>Private</option><option>NDIS</option><option>DVA</option><option>Aged care / Support at Home</option><option>Hospital funded</option><option>Other</option></select></div>
+        </fieldset>
+        <div class="field"><label for="p-eq">Equipment required</label><textarea id="p-eq" name="message" required placeholder="Item, hire or purchase, weight, height and any clinical notes"></textarea></div>
+      </EnquiryForm>
+    </div>
+    <aside class="stack" style="gap: 14px">
+      <div class="card stack" style="gap: 12px">
+        <h2 style="font-size: 24px">Download a form</h2>
+        {forms.map((f) => hasPublic(`/docs/forms/${f.file}`)
+          ? <a class="dl" href={`/docs/forms/${f.file}`}><Icon name="file" />{f.title}</a>
+          : <span class="dl dl--off"><Icon name="file" />{f.title} [PDF TO ADD]</span>)}
+      </div>
+    </aside>
+  </div>
+</Page>
+<style>
+  .dl { display: flex; gap: 10px; align-items: center; font-weight: 600; text-decoration: none; color: var(--ink); padding: 12px 14px; border-radius: var(--r-sm); background: var(--grey-50); }
+  .dl:hover { background: var(--red-50); color: var(--red-800); }
+  .dl--off { color: var(--grey-500); }
+</style>

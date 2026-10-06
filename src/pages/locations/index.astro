@@ -1,0 +1,10 @@
+---
+import Page from '../../layouts/Page.astro';
+import { liveLocations } from '../../data/locations';
+---
+<Page title="Where we deliver" description="Max Healthcare Equipment delivers hire and purchase equipment next day across Adelaide." eyebrow="Locations" crumbs={[{ label: 'Locations' }]}
+  lede="Next-day delivery, set-up and collection by our own trained team.">
+  <div class="grid" style="--min: 300px">
+    {liveLocations.map((l) => <a class="card link-card" href={`/locations/${l.slug}/`}><strong style="font-size: 22px">{l.name}</strong><span class="muted">{l.intro}</span></a>)}
+  </div>
+</Page>

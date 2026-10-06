@@ -1,0 +1,19 @@
+---
+import Page from '../layouts/Page.astro';
+import { site } from '../data/site';
+---
+<Page title="Hire portal" description="Pay for your hire, view receipts and book a collection in the Max Healthcare Equipment hire portal." eyebrow="Customers" crumbs={[{ label: 'Hire portal' }]}
+  lede="Use the secure link we texted you to pay for your hire, view receipts and book a delivery or collection day.">
+  <div class="grid" style="--min: 280px; max-width: 900px">
+    <div class="card stack" style="gap: 12px">
+      <h2 style="font-size: 24px">Open your portal</h2>
+      <p class="muted">Your personal link is in the text message we sent when your hire started.</p>
+      <a class="btn btn--primary" style="align-self:flex-start" href={site.portalUrl}>Go to the hire portal</a>
+    </div>
+    <div class="card stack" style="gap: 12px">
+      <h2 style="font-size: 24px">Can't find your link?</h2>
+      <p class="muted">Call us and we'll send it again.</p>
+      <a class="btn btn--outline" style="align-self:flex-start" href={site.phoneHref}>Call {site.phone}</a>
+    </div>
+  </div>
+</Page>

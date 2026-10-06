@@ -1,0 +1,27 @@
+---
+const links = [
+  { href: '/referrers/imprest-cabinet-system/', title: 'Imprest Cabinet System', text: 'On-ward stock, fully serviced by Max' },
+  { href: '/referrers/equipment-request-forms/', title: 'Equipment Request Forms', text: 'Online form, SA printable and DVA direct order' },
+  { href: '/referrers/equipment-catalogue/', title: 'Equipment Catalogue', text: 'Download the full brochure' },
+  { href: '/referrers/equipment-information-sheets/', title: 'Information Sheets', text: 'Patient handouts for common aids' },
+];
+---
+<section class="section section--dark">
+  <div class="wrap split" style="align-items: flex-start">
+    <div class="stack">
+      <span class="eyebrow">For OTs, discharge planners and hospitals</span>
+      <h2>The smoothest hospital-to-home transition in Adelaide.</h2>
+      <p class="lede">Send us a request and we do the rest: delivery, set-up, billing and collection. Ask about a fully serviced Imprest Equipment Cabinet for your ward.</p>
+      <div class="btn-row"><a class="btn btn--primary" href="/referrers/equipment-request-forms/">Submit an equipment request</a></div>
+    </div>
+    <div class="grid fit" style="--min: 240px">
+      {links.map((l) => <a class="rcard" href={l.href}><strong>{l.title}</strong><span>{l.text}</span></a>)}
+    </div>
+  </div>
+</section>
+<style>
+  .rcard { background: var(--ink-800); border-radius: var(--r-md); padding: 26px; color: var(--white); text-decoration: none; display: flex; flex-direction: column; gap: 8px; }
+  .rcard strong { font-size: 20px; }
+  .rcard span { color: var(--grey-200); font-size: 15px; }
+  .rcard:hover { background: #443d3c; color: var(--white); }
+</style>

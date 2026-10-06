@@ -1,0 +1,106 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Icon from '../../components/Icon.astro';
+import { getProducts, money } from '../../lib/catalogue';
+import { categoryBySlug } from '../../data/categories';
+import { hasPublic } from '../../lib/assets';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const all = await getProducts();
+  return all.map((p) => ({ params: { slug: p.slug }, props: { p, all } }));
+}
+const { p, all } = Astro.props;
+const cat = p.categories.map(categoryBySlug).find(Boolean);
+const related = all.filter((x) => x.slug !== p.slug && x.categories.some((c) => p.categories.includes(c))).slice(0, 4);
+const sheet = p.infoSheet && hasPublic(`/docs/info-sheets/${p.infoSheet}`) ? `/docs/info-sheets/${p.infoSheet}` : null;
+const schema = {
+  '@context': 'https://schema.org', '@type': 'Product', name: p.name, sku: p.sku || undefined,
+  description: p.summary || p.description,
+  image: p.images.map((i) => new URL(i, Astro.site).toString()),
+  offers: p.buyPrice ? { '@type': 'Offer', price: p.buyPrice, priceCurrency: 'AUD', availability: p.inStock === false ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock' } : undefined,
+};
+---
+<Base title={p.name} description={(p.summary || `${p.name} to hire or buy from Max Healthcare Equipment, Adelaide.`).slice(0, 160)} image={p.images[0]} schema={schema}>
+  <Breadcrumbs items={[{ label: 'Equipment', href: '/equipment/' }, ...(cat ? [{ label: cat.name, href: `/equipment/${cat.slug}/` }] : []), { label: p.name }]} />
+  <section class="wrap" style="padding-block: 28px var(--section)">
+    <div class="split" style="align-items: flex-start">
+      <div class="gallery">
+        <div class="main">{p.images[0] ? <img src={p.images[0]} alt={p.name} id="main-img" /> : <div class="ph">[PRODUCT IMAGE]</div>}</div>
+        {p.images.length > 1 && (
+          <div class="thumbs">{p.images.map((i, n) => <button type="button" data-src={i} aria-label={`Show image ${n + 1}`}><img src={i} alt="" loading="lazy" /></button>)}</div>
+        )}
+      </div>
+      <div class="stack" style="gap: 22px">
+        <div class="stack" style="gap: 10px">
+          {p.exHire && <span class="badge" style="align-self:flex-start">Ex-hire</span>}
+          {p.package && <span class="badge" style="align-self:flex-start">Package</span>}
+          <h1 style="font-size: clamp(32px, 4vw, 46px)">{p.name}</h1>
+          {p.sku && <span class="muted" style="font-size: 15px">Product code {p.sku}</span>}
+          {p.summary && <p class="lede">{p.summary}</p>}
+        </div>
+        <div class="buy">
+          {p.hirePrice ? (
+            <div class="opt">
+              <span class="lbl">Hire</span>
+              <span class="price">{money(p.hirePrice)}<small> per week</small></span>
+              <span class="muted" style="font-size: 15px">Book 4 weeks upfront and pay for 3.</span>
+              <a class="btn btn--primary" href={`/order-request/?product=${p.slug}&mode=hire`}>Hire this</a>
+            </div>
+          ) : null}
+          {p.buyPrice ? (
+            <div class="opt">
+              <span class="lbl">Buy</span>
+              <span class="price">{money(p.buyPrice)}</span>
+              <span class="muted" style="font-size: 15px">{p.inStock === false ? 'Currently out of stock. Order and we will confirm a date.' : 'In stock for next-day delivery.'}</span>
+              <a class={`btn ${p.hirePrice ? 'btn--outline' : 'btn--primary'}`} href={`/order-request/?product=${p.slug}&mode=buy`}>Buy this</a>
+            </div>
+          ) : null}
+          {!p.hirePrice && !p.buyPrice && (
+            <div class="opt"><span class="price" style="font-size: 26px">Call for price</span><a class="btn btn--primary" href={site.phoneHref}>Call {site.phone}</a></div>
+          )}
+        </div>
+        <ul class="assure">
+          <li><Icon name="truck" size={20} />Next-day delivery across Adelaide</li>
+          <li><Icon name="shield" size={20} />Cleaned to Safe Work Australia standards</li>
+          <li><Icon name="user" size={20} />Free advice from our on-site OT</li>
+        </ul>
+        {p.description && <div class="prose"><h2 style="font-size: 24px; margin-top: 0">About this item</h2><p>{p.description}</p></div>}
+        {p.specs && Object.keys(p.specs).length > 0 && (
+          <div class="table-wrap"><table><tbody>{Object.entries(p.specs).map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}</tbody></table></div>
+        )}
+        {sheet && <a class="btn btn--outline btn--sm" href={sheet} style="align-self: flex-start"><Icon name="file" size={18} />Information sheet (PDF)</a>}
+        <p class="muted" style="font-size: 14px">Make and model of hire items may vary depending on availability. Purchase and hire prices do not include collection.</p>
+      </div>
+    </div>
+  </section>
+  {related.length > 0 && (
+    <section class="wrap" style="padding-bottom: var(--section)">
+      <h2 style="margin-bottom: 24px">Related equipment</h2>
+      <div class="grid" style="--min: 240px">{related.map((r) => <ProductCard product={r} />)}</div>
+    </section>
+  )}
+</Base>
+<style>
+  .gallery { display: flex; flex-direction: column; gap: 12px; }
+  .main { aspect-ratio: 1; background: var(--white); border: 1px solid var(--grey-100); border-radius: var(--r-lg); overflow: hidden; }
+  .main img { width: 100%; height: 100%; object-fit: contain; padding: 24px; }
+  .thumbs { display: flex; gap: 10px; flex-wrap: wrap; }
+  .thumbs button { width: 76px; height: 76px; padding: 6px; border-radius: 12px; border: 1px solid var(--grey-200); background: var(--white); cursor: pointer; }
+  .thumbs img { width: 100%; height: 100%; object-fit: contain; }
+  .buy { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .opt { background: var(--white); border: 1px solid var(--grey-100); border-radius: var(--r-md); padding: 22px; display: flex; flex-direction: column; gap: 8px; }
+  .lbl { font-weight: 700; color: var(--red-700); }
+  .price { font-family: var(--font-display); font-size: 36px; font-weight: 800; line-height: 1.1; }
+  .price small { font-family: var(--font-body); font-size: 16px; font-weight: 600; color: var(--grey-700); }
+  .opt .btn { margin-top: 6px; }
+  .assure { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .assure li { display: flex; gap: 10px; align-items: center; }
+  .assure :global(svg) { color: var(--red-600); flex: none; }
+</style>
+<script>
+  const main = document.getElementById('main-img') as HTMLImageElement | null;
+  document.querySelectorAll<HTMLButtonElement>('.thumbs button').forEach((b) => b.addEventListener('click', () => { if (main) main.src = b.querySelector('img')!.src; }));
+</script>

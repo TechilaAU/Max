@@ -1,0 +1,11 @@
+---
+import Page from '../layouts/Page.astro';
+import { site } from '../data/site';
+---
+<Page title="Accessibility" description="Our commitment to an accessible website for everyone." crumbs={[{ label: 'Accessibility' }]}
+  lede="Many of our customers are older or living with disability, so we've built this site to be easy to read and use.">
+  <div class="prose">
+    <p>We aim to meet WCAG 2.2 AA. The site works with keyboard and screen readers, uses large touch targets and high-contrast text, and adapts to any screen size and browser zoom.</p>
+    <p>If anything is hard to use, call us on <a href={site.phoneHref}>{site.phone}</a> and we'll help you directly, then fix the problem.</p>
+  </div>
+</Page>

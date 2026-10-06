@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "rollator-walking-frame-with-easycaddy-package",
+    "name": "Rollator Walking Frame with Easycaddy (package)",
+    "sku": "",
+    "categories": ["mobility"],
+    "package": true,
+    "exHire": false,
+    "summary": "Provides additional support when walking. Ideal for use indoors and following surgery or injury to a lower limb.",
+    "description": "The lightweight anodised aluminium provides a sturdy rigid frame and comes with 4 rubber tips (ferrules) for increased safety. Easy to fold for storage or transportation.",
+    "buyPrice": 220,
+    "hirePrice": 15,
+    "inStock": false,
+    "specs": { "Weight limit": "100kg" },
+    "images": [],
+    "infoSheet": null
+  }
+]

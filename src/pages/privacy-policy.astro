@@ -1,0 +1,18 @@
+---
+import Page from '../layouts/Page.astro';
+import { site } from '../data/site';
+---
+<Page title="Privacy policy" description="How Max Healthcare Equipment collects, uses and protects your personal information." crumbs={[{ label: 'Privacy policy' }]}
+  lede="We respect your privacy and handle personal information in line with the Australian Privacy Principles.">
+  <div class="prose">
+    <p class="muted">TODO: draft for Max's review. Confirm with their legal adviser before launch.</p>
+    <h2>What we collect</h2>
+    <p>Contact and delivery details, the equipment you hire or buy, payment records, funding details (such as NDIS or DVA information) and, where you or your health professional provide it, information about your equipment needs.</p>
+    <h2>How we use it</h2>
+    <p>To supply, deliver, install and collect equipment, take payments, send hire reminders by SMS, work with your funding body or health professional, and meet our legal obligations.</p>
+    <h2>Payments</h2>
+    <p>Card payments are processed by our payment provider. We do not store full card numbers on our own systems.</p>
+    <h2>Access and correction</h2>
+    <p>You can ask to see or correct the personal information we hold about you. Contact us on <a href={site.phoneHref}>{site.phone}</a> or <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </div>
+</Page>

@@ -1,0 +1,14 @@
+---
+import Page from '../../layouts/Page.astro';
+import Icon from '../../components/Icon.astro';
+import { infoSheets } from '../../data/infoSheets';
+import { hasPublic } from '../../lib/assets';
+---
+<Page title="Equipment information sheets" description="Printable patient information sheets for common aids: walkers, shower chairs, commodes, toilet surrounds, bath boards and more." eyebrow="Referrers" crumbs={[{ label: 'Referrers', href: '/referrers/' }, { label: 'Equipment information sheets' }]}
+  lede="Printable handouts explaining how to use and adjust common equipment safely. Give them to patients with their equipment.">
+  <div class="grid" style="--min: 240px">
+    {infoSheets.map((s) => hasPublic(`/docs/info-sheets/${s.file}`)
+      ? <a class="card link-card" href={`/docs/info-sheets/${s.file}`}><Icon name="file" size={26} /><strong style="font-size: 19px">{s.title}</strong><span class="muted">PDF</span></a>
+      : <div class="card link-card"><Icon name="file" size={26} /><strong style="font-size: 19px">{s.title}</strong><span class="muted">[PDF TO ADD]</span></div>)}
+  </div>
+</Page>

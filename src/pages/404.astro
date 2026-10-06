@@ -1,0 +1,12 @@
+---
+import Page from '../layouts/Page.astro';
+---
+<Page title="Page not found" description="This page could not be found." noindex crumbs={[{ label: 'Page not found' }]}
+  lede="The page you're looking for has moved or no longer exists. Search our equipment or head back home.">
+  <form role="search" action="/search/" method="get" class="form" style="grid-template-columns: 1fr auto; max-width: 560px; margin-bottom: 20px">
+    <label for="nf-q" class="sr-only">Search equipment</label>
+    <input id="nf-q" name="q" type="search" placeholder="Search equipment" />
+    <button class="btn btn--primary" type="submit">Search</button>
+  </form>
+  <div class="btn-row"><a class="btn btn--outline" href="/">Go to the homepage</a></div>
+</Page>

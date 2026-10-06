@@ -1,0 +1,20 @@
+---
+import { firstPublic } from '../lib/assets';
+interface Props { slug: string; name: string; blurb: string }
+const { slug, name, blurb } = Astro.props;
+const img = firstPublic(`/images/categories/${slug}.webp`, `/images/categories/${slug}.jpg`, `/images/categories/${slug}.png`);
+---
+<a class="ctile" href={`/equipment/${slug}/`}>
+  <div class="cimg">{img ? <img src={img} alt="" loading="lazy" /> : <div class="ph">[CATEGORY IMAGE]</div>}</div>
+  <div class="cbody"><strong>{name}</strong><span>{blurb}</span></div>
+</a>
+<style>
+  .ctile { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--grey-100); border-radius: var(--r-md); overflow: hidden; text-decoration: none; color: var(--ink); }
+  .ctile:hover { border-color: var(--red-200); color: var(--ink); }
+  .ctile:hover strong { color: var(--red-700); }
+  .cimg { height: 150px; background: var(--grey-150); }
+  .cimg img { width: 100%; height: 100%; object-fit: cover; }
+  .cbody { padding: 16px 18px 18px; display: flex; flex-direction: column; }
+  .cbody strong { font-size: 18px; }
+  .cbody span { font-size: 14px; color: var(--grey-700); }
+</style>

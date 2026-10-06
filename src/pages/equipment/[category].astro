@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { allCategoryPages, categories } from '../../data/categories';
+import { productsFor } from '../../lib/catalogue';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return allCategoryPages.map((c) => ({ params: { category: c.slug }, props: { cat: c } }));
+}
+const { cat } = Astro.props;
+const products = await productsFor(cat.slug);
+---
+<Base title={cat.name} description={`${cat.name} to hire or buy from Max Healthcare Equipment, Adelaide. ${cat.intro}`.slice(0, 160)}>
+  <Breadcrumbs items={[{ label: 'Equipment', href: '/equipment/' }, { label: cat.name }]} />
+  <section class="wrap" style="padding-block: 28px 40px">
+    <div class="stack" style="gap: 14px; max-width: 760px">
+      <h1 style="font-size: clamp(36px, 5vw, 52px)">{cat.name}</h1>
+      <p class="lede">{cat.intro}</p>
+    </div>
+    {cat.subcategories && (
+      <ul class="subs" aria-label="Includes">{cat.subcategories.map((s) => <li>{s}</li>)}</ul>
+    )}
+  </section>
+  <section class="wrap" style="padding-bottom: var(--section)">
+    <div class="layout">
+      <aside class="side" aria-label="Categories">
+        <strong>Categories</strong>
+        {categories.map((c) => <a href={`/equipment/${c.slug}/`} aria-current={c.slug === cat.slug ? 'page' : undefined}>{c.name}</a>)}
+        <hr />
+        <a href="/equipment/hire/" aria-current={cat.slug === 'hire' ? 'page' : undefined}>Hire equipment</a>
+        <a href="/equipment/ex-hire-stock/" aria-current={cat.slug === 'ex-hire-stock' ? 'page' : undefined}>Ex-hire stock</a>
+        <a href="/equipment/packages/" aria-current={cat.slug === 'packages' ? 'page' : undefined}>Packages</a>
+      </aside>
+      <div style="flex: 999 1 560px; min-width: 0">
+        {products.length > 0 ? (
+          <>
+            <p class="muted" style="margin-bottom: 18px">{products.length} {products.length === 1 ? 'item' : 'items'}</p>
+            <div class="grid" style="--min: 240px">{products.map((p) => <ProductCard product={p} />)}</div>
+          </>
+        ) : (
+          <div class="card stack" style="gap: 12px">
+            <h2 style="font-size: 26px">Call us for the current range</h2>
+            <p class="muted">Our full {cat.name.toLowerCase()} range is being added to the new website. Call {site.phone} or send an enquiry and we'll tell you what's available today.</p>
+            <div class="btn-row"><a class="btn btn--primary" href={site.phoneHref}>Call {site.phone}</a><a class="btn btn--outline" href="/contact/">Send an enquiry</a></div>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .subs { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .subs li { background: var(--white); border: 1px solid var(--grey-100); border-radius: 999px; padding: 6px 14px; font-size: 15px; }
+  .layout { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+  .side { flex: 1 1 220px; display: flex; flex-direction: column; gap: 2px; background: var(--white); border: 1px solid var(--grey-100); border-radius: var(--r-md); padding: 18px; }
+  .side strong { margin-bottom: 8px; }
+  .side a { color: var(--ink); text-decoration: none; padding: 8px 10px; border-radius: 8px; }
+  .side a:hover { background: var(--grey-50); }
+  .side a[aria-current='page'] { background: var(--red-50); color: var(--red-800); font-weight: 700; }
+  .side hr { border: 0; border-top: 1px solid var(--grey-100); width: 100%; margin: 8px 0; }
+</style>

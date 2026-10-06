@@ -1,0 +1,173 @@
+---
+import '../styles/global.css';
+import { site, nav } from '../data/site';
+import Icon from '../components/Icon.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+const { title, description, image = '/images/brand/max-logo.png', noindex = false, schema } = Astro.props;
+const fullTitle = title === site.name ? `${site.name} | Hire and Sales, Adelaide` : `${title} | ${site.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const path = Astro.url.pathname.replace(base === '/' ? '' : base.slice(0, -1), '') || '/';
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalBusiness',
+  name: site.name,
+  url: Astro.site?.toString(),
+  logo: new URL('/images/brand/max-logo.png', Astro.site).toString(),
+  telephone: '+611800684277',
+  email: site.email,
+  address: { '@type': 'PostalAddress', streetAddress: site.address.street, addressLocality: site.address.suburb, addressRegion: site.address.state, postalCode: site.address.postcode, addressCountry: 'AU' },
+  areaServed: 'Adelaide, South Australia',
+  sameAs: [site.facebook],
+};
+const schemas = [business, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];
+---
+<!doctype html>
+<html lang="en-AU" data-base={base}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={new URL(image, Astro.site)} />
+  <meta name="theme-color" content="#ED1B24" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="util">
+    <div class="wrap util-in">
+      <div class="util-points"><span>Next-day delivery, 7 days a week</span><span>Registered NDIS provider</span><span>Proudly South Australian owned</span></div>
+      <div class="util-links">
+        <a href="/portal/">Hire portal: pay or manage your hire</a>
+        <a href={site.phoneHref} class="util-phone">{site.phone}</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="hdr">
+    <div class="wrap hdr-in">
+      <a href="/" class="logo" aria-label={`${site.name} home`}><img src="/images/brand/max-logo.png" alt={site.name} width="147" height="58" /></a>
+      <nav aria-label="Main" class="mainnav">
+        {nav.map((n) => <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>)}
+      </nav>
+      <div class="hdr-actions">
+        <a href="/search/" class="iconbtn" aria-label="Search equipment"><Icon name="search" /></a>
+        <a href={site.phoneHref} class="iconbtn phone-only" aria-label={`Call ${site.phone}`}><Icon name="phone" /></a>
+        <a href="/referrers/equipment-request-forms/" class="btn btn--primary btn--sm req">Request equipment</a>
+        <details class="mnav">
+          <summary class="iconbtn" aria-label="Menu"><Icon name="menu" /></summary>
+          <nav aria-label="Mobile" class="mnav-panel">
+            {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+            <a href="/portal/">Hire portal</a>
+            <a href="/referrers/equipment-request-forms/" class="btn btn--primary">Request equipment</a>
+          </nav>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <footer class="ftr">
+    <div class="wrap ftr-grid">
+      <div class="stack" style="gap: 12px">
+        <img src="/images/brand/max-logo-reversed.png" alt={site.name} width="152" height="60" />
+        <span>Registered NDIS provider</span>
+        <span>Member, Assistive Technology Suppliers Australia</span>
+      </div>
+      <div class="fcol"><strong>Equipment</strong>
+        <a href="/equipment/mobility/">Mobility</a><a href="/equipment/bedroom/">Bedroom</a><a href="/equipment/bathroom-toilet/">Bathroom and toilet</a><a href="/equipment/chairs-seating/">Chairs and seating</a><a href="/equipment/ex-hire-stock/">Ex-hire stock</a><a href="/equipment/">All equipment</a>
+      </div>
+      <div class="fcol"><strong>Help</strong>
+        <a href="/hire/">How hire works</a><a href="/delivery-collection/">Delivery and collection</a><a href="/trials-showroom/">Trials and showroom</a><a href="/funding/">Funding</a><a href="/portal/">Hire portal</a>
+      </div>
+      <div class="fcol"><strong>Referrers</strong>
+        <a href="/referrers/equipment-request-forms/">Equipment request forms</a><a href="/referrers/imprest-cabinet-system/">Imprest cabinets</a><a href="/referrers/equipment-catalogue/">Catalogue</a><a href="/referrers/equipment-information-sheets/">Information sheets</a>
+      </div>
+      <div class="fcol"><strong>Contact</strong>
+        <a href={site.phoneHref} class="fphone">{site.phone}</a>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <span>{site.address.street}, {site.address.suburb} {site.address.state} {site.address.postcode}</span>
+        <a href={site.facebook} rel="noopener">Facebook</a>
+      </div>
+    </div>
+    <div class="wrap ftr-base">
+      <span>© {new Date().getFullYear()} {site.name}</span>
+      <a href="/terms-and-conditions/">Terms and conditions</a>
+      <a href="/privacy-policy/">Privacy</a>
+      <a href="/returns-refunds/">Returns</a>
+      <a href="/accessibility/">Accessibility</a>
+      <a href="/about/careers/">Careers</a>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style>
+  .util { background: var(--ink); color: var(--grey-100); font-size: 14px; }
+  .util-in { display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: center; justify-content: space-between; padding-block: 10px; }
+  .util-points { display: flex; flex-wrap: wrap; gap: 6px 24px; }
+  .util-links { display: flex; gap: 24px; align-items: center; }
+  .util a { color: var(--white); text-decoration: none; font-weight: 600; }
+  .util a:hover { text-decoration: underline; color: var(--white); }
+  .util-phone { font-weight: 800 !important; }
+
+  .hdr { background: var(--white); border-bottom: 1px solid var(--grey-100); position: sticky; top: 0; z-index: 50; }
+  .hdr-in { display: flex; align-items: center; gap: 16px 32px; padding-block: 14px; }
+  .logo img { height: 52px; width: auto; }
+  .mainnav { display: flex; gap: 26px; flex: 1; font-weight: 600; }
+  .mainnav a { color: var(--ink); text-decoration: none; padding-block: 8px; border-bottom: 2px solid transparent; }
+  .mainnav a:hover, .mainnav a[aria-current='page'] { border-bottom-color: var(--red-500); color: var(--ink); }
+  .hdr-actions { display: flex; gap: 10px; align-items: center; margin-left: auto; }
+  .iconbtn { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 12px; border: 1px solid var(--grey-200); color: var(--ink); cursor: pointer; list-style: none; background: var(--white); }
+  .iconbtn::-webkit-details-marker { display: none; }
+  .iconbtn:hover { border-color: var(--ink); color: var(--ink); }
+  .mnav { position: relative; display: none; }
+  .mnav-panel { position: absolute; right: 0; top: 56px; background: var(--white); border: 1px solid var(--grey-100); border-radius: var(--r-md); box-shadow: var(--shadow); padding: 12px; display: flex; flex-direction: column; min-width: 240px; }
+  .mnav-panel a:not(.btn) { color: var(--ink); text-decoration: none; padding: 12px 14px; border-radius: 10px; font-weight: 600; }
+  .mnav-panel a:not(.btn):hover { background: var(--grey-50); }
+  .mnav-panel .btn { margin-top: 8px; }
+  .phone-only { display: none; }
+  @media (max-width: 1080px) {
+    .mainnav { display: none; }
+    .mnav { display: block; }
+  }
+  @media (max-width: 640px) {
+    .req { display: none; }
+    .phone-only { display: inline-flex; }
+    .util-points span:not(:first-child) { display: none; }
+    .util-links a:first-child { display: none; }
+    .logo img { height: 44px; }
+  }
+
+  .ftr { background: var(--ink-950); color: var(--grey-200); font-size: 15px; }
+  .ftr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 32px; padding-block: 64px 32px; }
+  .ftr-grid img { height: 54px; width: auto; }
+  .fcol { display: flex; flex-direction: column; gap: 8px; }
+  .fcol strong { color: var(--white); margin-bottom: 4px; }
+  .ftr a { color: var(--grey-200); text-decoration: none; }
+  .ftr a:hover { color: var(--white); text-decoration: underline; }
+  .ftr .fphone { color: var(--white); font-weight: 800; font-size: 18px; }
+  .ftr-base { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; padding-block: 20px 32px; border-top: 1px solid #3A3536; }
+</style>

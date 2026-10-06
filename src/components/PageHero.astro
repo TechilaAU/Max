@@ -1,0 +1,20 @@
+---
+import Photo from './Photo.astro';
+interface Props { eyebrow?: string; title: string; lede?: string; photoSlot?: string; photoLabel?: string; }
+const { eyebrow, title, lede, photoSlot, photoLabel } = Astro.props;
+---
+<section class="page-hero">
+  <div class="wrap split">
+    <div class="stack">
+      {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+      <h1>{title}</h1>
+      {lede && <p class="lede">{lede}</p>}
+      <slot />
+    </div>
+    {photoSlot && <Photo slot={photoSlot} alt={photoLabel ?? title} style="min-height: 320px; aspect-ratio: 4 / 3" eager />}
+  </div>
+</section>
+<style>
+  .page-hero { background: var(--white); padding-block: clamp(40px, 6vw, 72px); border-bottom: 1px solid var(--grey-100); }
+  .page-hero h1 { font-size: clamp(36px, 5vw, 56px); }
+</style>

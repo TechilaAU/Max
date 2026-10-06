@@ -1,0 +1,17 @@
+---
+// Standard content page: breadcrumbs, hero, body. Use slot="after" for full-width sections below the body.
+import Base from './Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHero from '../components/PageHero.astro';
+interface Props {
+  title: string; description: string; eyebrow?: string; lede?: string; h1?: string;
+  crumbs: { label: string; href?: string }[]; photoSlot?: string; photoLabel?: string; noindex?: boolean; schema?: any;
+}
+const { title, description, eyebrow, lede, h1, crumbs, photoSlot, photoLabel, noindex, schema } = Astro.props;
+---
+<Base title={title} description={description} noindex={noindex} schema={schema}>
+  <Breadcrumbs items={crumbs} />
+  <PageHero eyebrow={eyebrow} title={h1 ?? title} lede={lede} photoSlot={photoSlot} photoLabel={photoLabel}><slot name="hero" /></PageHero>
+  <section class="wrap section"><slot /></section>
+  <slot name="after" />
+</Base>

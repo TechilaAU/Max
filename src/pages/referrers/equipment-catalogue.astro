@@ -1,0 +1,15 @@
+---
+import Page from '../../layouts/Page.astro';
+import Icon from '../../components/Icon.astro';
+import { catalogues } from '../../data/infoSheets';
+import { hasPublic } from '../../lib/assets';
+---
+<Page title="Equipment catalogue" description="Download the Max Healthcare Equipment brochure and full equipment catalogue." eyebrow="Referrers" crumbs={[{ label: 'Referrers', href: '/referrers/' }, { label: 'Equipment catalogue' }]}
+  lede="Download our brochure and full catalogue, or browse the live range online for current prices.">
+  <div class="grid" style="--min: 300px">
+    {catalogues.map((c) => hasPublic(`/docs/${c.file}`)
+      ? <a class="card link-card" href={`/docs/${c.file}`}><Icon name="file" size={28} /><strong style="font-size: 21px">{c.title}</strong><span class="muted">PDF download</span></a>
+      : <div class="card link-card"><Icon name="file" size={28} /><strong style="font-size: 21px">{c.title}</strong><span class="muted">[PDF TO ADD]</span></div>)}
+    <a class="card link-card" href="/equipment/"><Icon name="search" size={28} /><strong style="font-size: 21px">Browse online</strong><span class="muted">Live range with current hire and purchase prices</span></a>
+  </div>
+</Page>

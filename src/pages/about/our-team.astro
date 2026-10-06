@@ -1,0 +1,21 @@
+---
+import Page from '../../layouts/Page.astro';
+import Photo from '../../components/Photo.astro';
+// TODO: replace with real team members (name, role, photo slot) once supplied by Max.
+const team = [
+  { role: 'Occupational Therapist', slot: 'team-ot' },
+  { role: 'Customer service', slot: 'team-service' },
+  { role: 'Delivery and installation', slot: 'team-delivery' },
+];
+---
+<Page title="Our team" description="Meet the Max Healthcare Equipment team: our on-site Occupational Therapist, customer service and delivery and installation staff." eyebrow="About" crumbs={[{ label: 'About', href: '/about/' }, { label: 'Our team' }]}
+  lede="A friendly, knowledgeable team who help you make the most of your equipment.">
+  <div class="grid" style="--min: 280px">
+    {team.map((t) => (
+      <div class="card stack" style="gap: 14px; padding: 18px">
+        <Photo slot={t.slot} alt={t.role} label={`${t.role} team photo`} style="aspect-ratio: 4 / 3; border-radius: 14px" />
+        <div><strong style="font-size: 20px; display: block">[NAME]</strong><span class="muted">{t.role}</span></div>
+      </div>
+    ))}
+  </div>
+</Page>

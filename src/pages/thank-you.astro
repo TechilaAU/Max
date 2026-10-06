@@ -1,0 +1,8 @@
+---
+import Page from '../layouts/Page.astro';
+import { site } from '../data/site';
+---
+<Page title="Thank you" h1="Thanks, we've got your request" description="Your request has been sent to Max Healthcare Equipment." noindex crumbs={[{ label: 'Thank you' }]}
+  lede="Our team will be in touch shortly. If it's urgent, call us now.">
+  <div class="btn-row"><a class="btn btn--primary" href={site.phoneHref}>Call {site.phone}</a><a class="btn btn--outline" href="/equipment/">Keep browsing</a></div>
+</Page>

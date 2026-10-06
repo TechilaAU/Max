@@ -1,0 +1,36 @@
+---
+import type { Product } from '../lib/catalogue';
+import { money } from '../lib/catalogue';
+interface Props { product: Product }
+const { product: p } = Astro.props;
+const img = p.images[0];
+---
+<a class="pcard" href={`/product/${p.slug}/`}>
+  <div class="pimg">
+    {img ? <img src={img} alt="" loading="lazy" decoding="async" /> : <div class="ph">[PRODUCT IMAGE]</div>}
+    {p.exHire && <span class="badge tag">Ex-hire</span>}
+    {p.package && !p.exHire && <span class="badge tag">Package</span>}
+  </div>
+  <div class="pbody">
+    <strong>{p.name}</strong>
+    <div class="prices">
+      {p.hirePrice ? <span>Hire <b>{money(p.hirePrice)}</b>/week</span> : null}
+      {p.buyPrice ? <span>Buy <b>{money(p.buyPrice)}</b></span> : null}
+      {!p.hirePrice && !p.buyPrice && <span>Call for price</span>}
+    </div>
+    {p.inStock === false && <span class="stock">Out of stock</span>}
+  </div>
+</a>
+<style>
+  .pcard { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--grey-100); border-radius: var(--r-md); overflow: hidden; text-decoration: none; color: var(--ink); }
+  .pcard:hover { border-color: var(--red-200); color: var(--ink); }
+  .pcard:hover strong { color: var(--red-700); }
+  .pimg { position: relative; aspect-ratio: 4 / 3; background: var(--grey-150); }
+  .pimg img { width: 100%; height: 100%; object-fit: contain; padding: 14px; background: var(--white); }
+  .tag { position: absolute; top: 12px; left: 12px; }
+  .pbody { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .pbody strong { font-size: 17px; line-height: 1.35; }
+  .prices { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 15px; color: var(--grey-700); }
+  .prices b { color: var(--ink); }
+  .stock { font-size: 14px; color: var(--grey-500); }
+</style>

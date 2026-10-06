@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hire portal demo | Max Healthcare Equipment</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#231F20">
+<link rel="icon" type="image/png" href="/favicon.png">
+<style>
+@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-wght-normal.woff2) format('woff2')}
+@font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(fonts/figtree-latin-wght-normal.woff2) format('woff2')}
+:root{
+  /* Max Healthcare brand tokens (same as the website) */
+  --ink:#231F20; --ink-2:#4A4647; --paper:#F7F6F6; --surface:#FFFFFF; --line:#E2DFDF;
+  --brand:#D3121B; --brand-hover:#B00F17; --brand-soft:#FEF2F2; --brand-logo:#ED1B24;
+  --green:#1E7A46; --green-soft:#E7F3EC; --amber:#B45309; --amber-soft:#FEF3E2;
+  --red:#B00F17; --red-soft:#FDE3E4; --blue:#1D5FA8; --blue-soft:#E6EEF8; --focus:#D3121B;
+  --display:'Bricolage Grotesque',Georgia,serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);
+  font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.55}
+h1,h2,h3{font-family:var(--display);line-height:1.15;letter-spacing:-.01em;margin:0 0 .5rem}
+h1{font-size:1.75rem} h2{font-size:1.3rem} h3{font-size:1.05rem}
+p{margin:0 0 .75rem}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.muted{color:var(--ink-2)}
+.small{font-size:.875rem}
+img{max-width:100%}
+
+/* demo bar */
+.demo-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ink);color:var(--paper);
+  display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;padding:.6rem 1rem}
+.demo-bar .home{display:flex;align-items:center;gap:.75rem;margin-right:auto;color:inherit;text-decoration:none}
+.demo-bar .home img{height:34px;width:auto;display:block}
+.demo-bar .home strong{font-size:1rem;font-weight:700;border-left:1px solid rgba(255,255,255,.25);padding-left:.75rem}
+.demo-bar .back{color:#fff;font-weight:700;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:.3rem .8rem}
+.demo-bar .back:hover{background:rgba(255,255,255,.1)}
+@media (max-width:700px){.demo-bar{position:static}.demo-bar .home strong{display:none}}
+.persona{display:flex;flex-wrap:wrap;gap:.25rem}
+.persona button{background:transparent;border:1px solid rgba(255,255,255,.35);color:inherit;border-radius:999px;padding:.4rem .9rem;cursor:pointer;font-weight:600}
+.persona button:hover{border-color:#fff}
+.persona button[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.demo-bar .reset{background:transparent;border:0;color:inherit;text-decoration:underline;cursor:pointer}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:1.25rem;max-width:1280px;margin:0 auto;padding:1.25rem}
+@media (max-width:900px){.layout{grid-template-columns:1fr}}
+
+/* browser frame for each portal */
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;min-width:0;box-shadow:0 18px 40px rgba(35,31,32,.08)}
+.urlbar{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;border-bottom:1px solid var(--line);background:var(--paper);font-size:.85rem;color:var(--ink-2);overflow-x:auto;white-space:nowrap}
+.urlbar .lock{width:10px;height:12px;border:2px solid var(--green);border-radius:2px;flex:none}
+.portal-head{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;padding:1rem 1.25rem;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
+.brand{font-family:var(--display);font-size:1.1rem}
+.brand .mark{width:36px;height:36px;border-radius:50%;display:block;object-fit:contain}
+.portal-head .who{margin-left:auto;text-align:right;font-size:.9rem}
+.tabs{display:flex;gap:.25rem;padding:0 1.25rem;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:.75rem .6rem;cursor:pointer;color:var(--ink-2);white-space:nowrap}
+.tabs button{font-weight:600}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--brand-logo);font-weight:700}
+.body{padding:1.25rem}
+
+/* elements */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border:2px solid var(--ink);background:var(--surface);color:var(--ink);border-radius:12px;padding:.6rem 1.1rem;min-height:44px;cursor:pointer;font-weight:700;transition:background-color .15s,color .15s,border-color .15s}
+.btn:hover{background:var(--ink);color:#fff}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand-hover);border-color:var(--brand-hover);color:#fff}
+.btn.danger{color:var(--red);border-color:var(--red)}
+.btn.danger:hover{background:var(--red);color:#fff}
+.btn:disabled,.btn:disabled:hover{opacity:.45;cursor:not-allowed;background:var(--surface);color:var(--ink)}
+.btn.sm{padding:.3rem .75rem;font-size:.875rem;border-radius:10px;min-height:36px;border-width:1.5px}
+.row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem}
+label.f{display:flex;flex-direction:column;gap:.25rem;font-size:.9rem}
+label.f span{color:var(--ink-2)}
+input[type=text],input[type=tel],input[type=email],input[type=date],input[type=search],select,textarea{
+  border:1.5px solid #D6D4D4;background:var(--surface);border-radius:12px;padding:.6rem .75rem;min-height:44px;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--brand);outline:3px solid var(--brand-soft);outline-offset:0}
+textarea{min-height:70px;resize:vertical}
+fieldset{border:1px solid var(--line);border-radius:16px;padding:1rem 1.1rem;margin:0 0 1rem}
+legend{font-weight:700;padding:0 .35rem}
+.req::after{content:" *";color:var(--red)}
+.pill{display:inline-block;border-radius:999px;padding:.1rem .6rem;font-size:.8rem;font-weight:700;white-space:nowrap}
+.pill.amber{background:var(--amber-soft);color:var(--amber)}
+.pill.green{background:var(--green-soft);color:var(--green)}
+.pill.blue{background:var(--blue-soft);color:var(--blue)}
+.pill.red{background:var(--red-soft);color:var(--red)}
+.pill.grey{background:var(--paper);color:var(--ink-2);border:1px solid var(--line)}
+.note{background:var(--blue-soft);color:var(--ink);border-radius:10px;padding:.7rem .9rem;margin-bottom:1rem;font-size:.92rem}
+.note.amber{background:var(--amber-soft)}
+.note.red{background:var(--red-soft)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:.55rem .5rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink-2);font-weight:600}
+.num{text-align:right;white-space:nowrap}
+hr{border:0;border-top:1px solid var(--line);margin:1rem 0}
+
+/* PIN pad */
+.pinwrap{max-width:380px;margin:1rem auto;text-align:center}
+.staffpick{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin:1rem 0}
+.staffpick button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+.staffpick button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);color:var(--ink);font-weight:700}
+.dots{display:flex;gap:.6rem;justify-content:center;margin:1rem 0}
+.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink-2)}
+.dots i.on{background:var(--brand);border-color:var(--brand)}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
+.keys button{font-family:var(--display);font-weight:700;font-size:1.5rem;padding:.8rem 0;border-radius:16px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer}
+.keys button:hover{border-color:var(--ink)}
+.keys button:active{background:var(--paper)}
+
+/* product grid */
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.9rem}
+.prod{border:1px solid var(--line);border-radius:18px;padding:.75rem;display:flex;flex-direction:column;gap:.4rem;background:var(--surface)}
+.thumb{height:96px;border-radius:8px;background:var(--paper);display:grid;place-items:center;color:var(--ink-2)}
+.thumb svg{width:56px;height:56px}
+.prod .name{font-weight:700;line-height:1.3}
+.price{font-size:.9rem}
+.price s{color:var(--ink-2);margin-left:.3rem}
+
+/* key range tick list */
+.keyrange{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.5rem}
+.krow{display:flex;align-items:center;gap:.6rem;border:1px solid var(--line);border-radius:10px;padding:.45rem .6rem}
+.krow .thumb{height:40px;width:40px;flex:none}
+.krow .thumb svg{width:26px;height:26px}
+.krow .nm{flex:1;min-width:0;font-size:.92rem;line-height:1.25}
+.krow label{display:flex;align-items:center;gap:.2rem;font-size:.85rem}
+
+/* status board: the green tick is the memorable moment */
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.card{border:1px solid var(--line);border-radius:18px;padding:1rem;background:var(--surface);display:flex;flex-direction:column;gap:.45rem}
+.card.ready{border:2px solid var(--green);background:var(--green-soft)}
+.tick{width:64px;height:64px;border-radius:50%;background:var(--green);color:var(--surface);display:grid;place-items:center;margin:.25rem 0}
+.tick svg{width:36px;height:36px}
+.card.ready .tick{animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.card.ready .tick{animation:none}}
+
+/* phone */
+.phone{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:1rem;position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);max-height:calc(100vh - 90px);overflow:auto}
+@media (max-width:900px){.phone{position:static;max-height:none}}
+.phone h2{font-size:1rem}
+.sms{background:var(--paper);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:.6rem .75rem;margin:.6rem 0;font-size:.9rem}
+.sms .to{font-size:.78rem;color:var(--ink-2)}
+.sms button{margin-top:.4rem}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(35,31,32,.55);display:grid;place-items:center;padding:1rem;z-index:50}
+.modal{background:var(--surface);border-radius:22px;max-width:640px;width:100%;max-height:90vh;overflow:auto;padding:1.25rem}
+.doc{border:1px solid var(--line);border-radius:10px;padding:1.25rem;background:var(--surface)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 1rem);background:var(--ink);color:var(--paper);padding:.6rem 1rem;border-radius:10px;z-index:60;max-width:90vw}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1rem}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
+.panel{border:1px solid var(--line);border-radius:18px;padding:1rem;background:var(--surface)}
+.empty{text-align:center;padding:2rem 1rem;color:var(--ink-2)}
+@media print{.demo-bar,.phone,.urlbar,.tabs,.no-print{display:none!important}.layout{display:block;padding:0}}
+</style>
+</head>
+<body>
+<div class="demo-bar no-print">
+  <a class="home" href="/"><img src="/images/brand/max-logo-reversed.png" alt="Max Healthcare Equipment"><strong>Portal demo</strong></a>
+  <div class="persona" role="group" aria-label="Choose a demo view" id="personaBar"></div>
+  <button class="reset" data-action="reset">Reset demo</button>
+  <a class="back" href="/">Back to website</a>
+</div>
+<div class="layout">
+  <main id="app" class="frame" aria-live="polite"></main>
+  <aside class="phone no-print" aria-label="SMS outbox">
+    <h2>Text messages sent</h2>
+    <p class="small muted">Every SMS the portal sends shows here. Tap a link to open it as the recipient.</p>
+    <div id="sms"></div>
+  </aside>
+</div>
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- catalogue (demo prices, AUD) ---------- */
+var CATS = ['Mobility','Bathroom','Seating & pressure','Bedroom','Accessories'];
+var PRODUCTS = [
+  {id:'p1',name:'Four-wheel walker',cat:'Mobility',key:true,hire:12,buy:289,icon:'walker'},
+  {id:'p2',name:'Standard wheelchair',cat:'Mobility',key:true,hire:25,buy:649,icon:'chair'},
+  {id:'p3',name:'Shower chair with back',cat:'Bathroom',key:true,hire:9,buy:179,icon:'shower'},
+  {id:'p4',name:'Over-toilet frame',cat:'Bathroom',key:true,hire:8,buy:149,icon:'toilet'},
+  {id:'p5',name:'Toilet seat raiser',cat:'Bathroom',key:true,hire:null,buy:69,icon:'toilet'},
+  {id:'p6',name:'Pressure cushion',cat:'Seating & pressure',key:true,hire:10,buy:199,icon:'cushion'},
+  {id:'p7',name:'Over-bed table',cat:'Bedroom',key:true,hire:10,buy:229,icon:'table'},
+  {id:'p8',name:'Wheelchair footplates',cat:'Accessories',key:false,hire:null,buy:85,icon:'chair'},
+  {id:'p9',name:'Bariatric shower chair',cat:'Bathroom',key:false,hire:18,buy:449,icon:'shower'},
+  {id:'p10',name:'Electric hospital bed',cat:'Bedroom',key:false,hire:65,buy:null,icon:'bed'},
+  {id:'p11',name:'Sit-to-stand hoist',cat:'Mobility',key:false,hire:95,buy:null,icon:'hoist'},
+  {id:'p12',name:'Reacher grabber',cat:'Accessories',key:false,hire:null,buy:19,icon:'reach'},
+  {id:'p13',name:'Bed stick',cat:'Bedroom',key:false,hire:7,buy:129,icon:'bed'},
+  {id:'p14',name:'Lift recliner chair',cat:'Seating & pressure',key:false,hire:45,buy:1490,icon:'cushion'}
+];
+var CONTRACT_RATE = 0.9;      // referrer contract price book
+var HOME_DELIVERY = 55;
+var ICONS = {
+  walker:'<path d="M18 12h22l4 30M18 12l-4 30M16 26h26" /><circle cx="14" cy="44" r="4"/><circle cx="44" cy="44" r="4"/>',
+  chair:'<path d="M18 10v20h20l6 12M18 30l-4 12"/><circle cx="24" cy="38" r="9"/>',
+  shower:'<path d="M14 28h28M18 28v16M38 28v16M18 28V12h4"/><path d="M32 8v8M36 6v8M40 8v8"/>',
+  toilet:'<path d="M14 24h28v6a14 14 0 0 1-28 0zM22 44h12M28 38v6M14 24V12M42 24V12"/>',
+  cushion:'<rect x="10" y="22" width="36" height="16" rx="8"/><path d="M18 30h20"/>',
+  table:'<path d="M10 16h36M40 16v28M30 44h20"/>',
+  bed:'<path d="M8 38h40M8 28h40v10M8 20v24M48 24v20M14 28v-6h10v6"/>',
+  hoist:'<path d="M14 46h28M18 46V10h18v8M36 18v10"/><circle cx="36" cy="32" r="4"/>',
+  reach:'<path d="M12 44L40 14M40 14l6-2-2 6M12 44l-2 4"/>'
+};
+function icon(n){return '<svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[n]||'')+'</svg>';}
+function prod(id){for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id)return PRODUCTS[i];}return null;}
+
+/* ---------- state ---------- */
+var KEY='maxhc-portal-demo-v1';
+function today(off){var d=new Date();d.setDate(d.getDate()+(off||0));return d.toISOString().slice(0,10);}
+function nowStr(){var d=new Date();return d.toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});}
+function fmtDate(s){if(!s)return '';var p=s.split('-');var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return Number(p[2])+' '+m[Number(p[1])-1]+' '+p[0];}
+function money(n){return '$'+Number(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function rnd(){return Math.random().toString(36).slice(2,8);}
+
+function seed(){
+  return {
+    persona:'hospital',
+    hospital:{name:'Northside Private Hospital',slug:'northside',token:'7f3k9q',rooms:['Level 2 consignment room','Rehab gym store'],idleMins:2},
+    devices:[{id:'d1',name:'Ward 4B iPad',approved:true,added:'Supplied by Max'},{id:'d2',name:'Allied health office PC',approved:true,added:'Approved by Tom Reid'}],
+    staff:[
+      {id:'s1',name:'Sarah Nguyen',mobile:'0412 555 101',role:'Clinician',pin:'1234',active:true,fails:0,locked:false},
+      {id:'s2',name:'Tom Reid',mobile:'0412 555 102',role:'Hospital Admin',pin:'9999',active:true,fails:0,locked:false},
+      {id:'s3',name:'Priya Shah',mobile:'0412 555 103',role:'Viewer',pin:'2468',active:true,fails:0,locked:false}
+    ],
+    session:null, pickStaff:null, pinEntry:'', pinMsg:'', lockedReason:'', setPin:null,
+    hTab:'board', draft:null,
+    orders:[
+      {id:'ORD-1038',token:'t-'+rnd(),source:'Hospital',staffId:'s1',created:'Yesterday 2:10 pm',
+       patient:{mobile:'0400 111 222',name:'Graham Paterson',dob:'1948-03-14',address:'12 Hill St, Chermside QLD 4032',email:''},
+       funding:{},room:'Level 2 consignment room',supply:'Taken from consignment room',ward:'',priority:'Standard',duration:'8 weeks',notes:'',
+       items:[{pid:'p1',mode:'hire'},{pid:'p4',mode:'hire'}],other:'',status:'ready',paid:'Weekly subscription'},
+      {id:'ORD-1040',token:'t-ord1040',source:'Hospital',staffId:'s1',created:'Today 9:05 am',
+       patient:{mobile:'0400 333 444',name:'',dob:'',address:'',email:''},
+       funding:{},room:'Level 2 consignment room',supply:'Deliver home',ward:'',priority:'Before 10am discharge',duration:'4 weeks',notes:'Set shower chair to lowest height',
+       items:[],other:'',status:'details',paid:''}
+    ],
+    privateCustomer:{token:'p-me',name:'Margaret Ellis',mobile:'0400 555 666',address:'4 Wattle Ct, Aspley QLD 4034',card:'Visa ending 4242',
+      hire:[{pid:'p1',since:today(-21)},{pid:'p3',since:today(-21)}],nextPayment:today(3),
+      receipts:[{id:'RCT-2201',date:today(-21),desc:'Hire, 4 weeks upfront',amt:84},{id:'RCT-2240',date:today(-7),desc:'Hire, weekly',amt:21}]},
+    pView:{token:null,page:'home',cart:[],q:'',cat:''},
+    referrer:{org:'Coastal Aged Care',user:'Jess Morgan',email:'jess.morgan@coastalcare.example',
+      tab:'catalogue',q:'',cat:'',draft:[],
+      quotes:[{id:'Q-3101',client:'Dorothy Kane',phone:'0400 777 888',address:'9 Banksia St, Redcliffe QLD 4020',funding:'Home Care Package',items:[{pid:'p8',mode:'buy',qty:1}],status:'Awaiting approval',created:today(-2)}],
+      invoices:[
+        {id:'INV-8801',date:today(-48),due:today(-18),desc:'Order ORD-0991, Ron Bell',amt:331.20,status:'Overdue'},
+        {id:'INV-8826',date:today(-20),due:today(10),desc:'Order ORD-1012, Lyn Fraser',amt:161.10,status:'Open'},
+        {id:'INV-8790',date:today(-60),due:today(-30),desc:'Order ORD-0975, Ivan Cole',amt:584.10,status:'Paid'}]},
+    sms:[{to:'0400 333 444',body:'Max Healthcare: Northside Private Hospital has ordered equipment for your discharge. Please confirm your details so we can prepare it.',link:{type:'patient',token:'t-ord1040'},at:'Today 9:05 am'}], audit:[], seq:1041, qseq:3102, iseq:8827, rseq:2241
+  };
+}
+var S;
+try{var raw=localStorage.getItem(KEY);S=raw?JSON.parse(raw):seed();}catch(e){S=seed();}
+if(!S||!S.hospital){S=seed();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function staffById(id){for(var i=0;i<S.staff.length;i++){if(S.staff[i].id===id)return S.staff[i];}return null;}
+function orderById(id){for(var i=0;i<S.orders.length;i++){if(S.orders[i].id===id)return S.orders[i];}return null;}
+function orderByToken(t){for(var i=0;i<S.orders.length;i++){if(S.orders[i].token===t)return S.orders[i];}return null;}
+function sendSms(to,body,link){S.sms.unshift({to:to,body:body,link:link||null,at:nowStr()});}
+function audit(action,ref){var who=S.session?staffById(S.session):null;S.audit.unshift({at:nowStr(),who:who?who.name:'Max staff',device:'Ward 4B iPad',action:action,ref:ref||''});}
+function toast(msg){var r=document.getElementById('toastRoot');r.innerHTML='<div class="toast" role="status">'+esc(msg)+'</div>';clearTimeout(toast.t);toast.t=setTimeout(function(){r.innerHTML='';},2800);}
+function modal(html){document.getElementById('modalRoot').innerHTML='<div class="modal-bg" data-action="closeModal"><div class="modal" role="dialog" aria-modal="true" data-stop="1">'+html+'</div></div>';}
+function closeModal(){document.getElementById('modalRoot').innerHTML='';}
+
+var STATUS={
+  details:['Awaiting patient details','amber'],
+  products:['Ready for products','blue'],
+  payment:['Awaiting patient checkout','amber'],
+  ready:['Ready for discharge','green']
+};
+function pill(st){var s=STATUS[st]||[st,'grey'];return '<span class="pill '+s[1]+'">'+esc(s[0])+'</span>';}
+function idComplete(p){return !!(p.name&&p.dob&&p.address);}
+function itemsHire(items,rate){var t=0;items.forEach(function(it){var p=prod(it.pid);if(it.mode==='hire'&&p.hire)t+=p.hire*(rate||1)*(it.qty||1);});return t;}
+function itemsBuy(items,rate){var t=0;items.forEach(function(it){var p=prod(it.pid);if(it.mode==='buy'&&p.buy)t+=p.buy*(rate||1)*(it.qty||1);});return t;}
+function itemList(items){if(!items.length)return '<span class="muted">No products yet</span>';return items.map(function(it){var p=prod(it.pid);return esc(p.name)+' <span class="muted">('+(it.mode==='hire'?'hire':'buy')+')</span>';}).join('<br>');}
+
+/* ---------- persona bar ---------- */
+var PERSONAS=[['hospital','Hospital portal'],['patient','Patient portal'],['referrer','Referrer portal'],['max','Max back office']];
+function renderPersona(){
+  document.getElementById('personaBar').innerHTML=PERSONAS.map(function(p){return '<button data-action="persona" data-v="'+p[0]+'" aria-pressed="'+(S.persona===p[0])+'">'+p[1]+'</button>';}).join('');
+}
+
+/* ---------- shell ---------- */
+function shell(url,head,tabs,body){
+  return '<div class="urlbar"><span class="lock" aria-hidden="true"></span><span>'+esc(url)+'</span></div>'+
+    '<div class="portal-head">'+head+'</div>'+(tabs||'')+'<div class="body">'+body+'</div>';
+}
+function brand(sub){return '<div class="brand"><img class="mark" src="/apple-touch-icon.png" alt=""><div>Max Healthcare<div class="small muted" style="font-weight:400">'+esc(sub)+'</div></div></div>';}
+function tabBar(list,current,action){return '<div class="tabs" role="tablist">'+list.map(function(t){return '<button role="tab" data-action="'+action+'" data-v="'+t[0]+'" aria-selected="'+(current===t[0])+'">'+t[1]+'</button>';}).join('')+'</div>';}
+
+/* =========================================================
+   HOSPITAL PORTAL
+   ========================================================= */
+function hospitalUrl(){return 'portal.maxhealthcare.com.au/h/'+S.hospital.slug+'-'+S.hospital.token;}
+function renderHospital(){
+  var h=S.hospital;
+  if(S.setPin){return shell(hospitalUrl()+'/invite',brand(h.name),'',setPinView());}
+  if(!S.session){return shell(hospitalUrl(),brand(h.name),'',pinView());}
+  var me=staffById(S.session);
+  var head=brand(h.name)+'<div class="who"><strong>'+esc(me.name)+'</strong><br><span class="muted">'+esc(me.role)+'</span></div><button class="btn sm" data-action="lock">Lock</button>';
+  var tabs=[['board','Status board']];
+  if(me.role!=='Viewer')tabs.push(['new','New discharge order']);
+  if(me.role==='Hospital Admin'){tabs.push(['staff','Staff & devices']);tabs.push(['audit','Audit log']);}
+  if(S.hTab!=='addProducts'&&!tabs.some(function(t){return t[0]===S.hTab;}))S.hTab='board';
+  if(S.hTab==='addProducts'&&(me.role==='Viewer'||!S.draft))S.hTab='board';
+  var body='';
+  if(S.hTab==='board')body=boardView(me);
+  if(S.hTab==='new')body=newOrderView(me);
+  if(S.hTab==='staff')body=staffView();
+  if(S.hTab==='audit')body=auditView();
+  if(S.hTab==='addProducts')body=addProductsView(me);
+  return shell(hospitalUrl(),head,tabBar(tabs,S.hTab==='addProducts'?'board':S.hTab,'hTab'),body);
+}
+
+function pinView(){
+  var active=S.staff.filter(function(s){return s.active;});
+  var dots='';for(var i=0;i<6;i++)dots+='<i class="'+(i<S.pinEntry.length?'on':'')+'"></i>';
+  var keys='';['1','2','3','4','5','6','7','8','9','clear','0','enter'].forEach(function(k){
+    var lab=k==='clear'?'Clear':k==='enter'?'Enter':k;
+    keys+='<button data-action="pinKey" data-v="'+k+'" aria-label="'+lab+'" style="'+(k.length>1?'font-size:1rem':'')+'">'+lab+'</button>';});
+  return '<div class="pinwrap">'+
+    (S.lockedReason?'<div class="note amber">'+esc(S.lockedReason)+'</div>':'')+
+    '<h1>Sign in with your PIN</h1><p class="muted small">Approved device: Ward 4B iPad</p>'+
+    '<div class="staffpick" role="group" aria-label="Tap your name (optional)">'+active.map(function(s){return '<button data-action="pickStaff" data-v="'+s.id+'" aria-pressed="'+(S.pickStaff===s.id)+'">'+esc(s.name)+'</button>';}).join('')+'</div>'+
+    '<div class="dots" aria-label="'+S.pinEntry.length+' digits entered">'+dots+'</div>'+
+    (S.pinMsg?'<p style="color:var(--red)" role="alert">'+esc(S.pinMsg)+'</p>':'')+
+    '<div class="keys">'+keys+'</div>'+
+    '<p class="small muted" style="margin-top:1rem">Demo PINs: Sarah 1234 (Clinician), Tom 9999 (Hospital Admin), Priya 2468 (Viewer)</p></div>';
+}
+function pinKey(k){
+  if(k==='clear'){S.pinEntry='';S.pinMsg='';return;}
+  if(k!=='enter'){if(S.pinEntry.length<6)S.pinEntry+=k;S.pinMsg='';if(S.pinEntry.length<4)return;if(S.pinEntry.length<6&&k!=='enter')return;}
+  tryPin();
+}
+function tryPin(){
+  var pin=S.pinEntry;if(pin.length<4){S.pinMsg='Enter at least 4 digits.';return;}
+  var pool=S.staff.filter(function(s){return s.active&&(!S.pickStaff||s.id===S.pickStaff);});
+  var hit=null;pool.forEach(function(s){if(s.pin===pin)hit=s;});
+  if(hit&&hit.locked){S.pinMsg=hit.name+' is locked after too many wrong PINs. Ask your Hospital Admin to reset it.';S.pinEntry='';return;}
+  if(hit){hit.fails=0;S.session=hit.id;S.pinEntry='';S.pinMsg='';S.lockedReason='';S.pickStaff=null;S.hTab='board';audit('Signed in');armIdle();return;}
+  if(S.pickStaff){var s=staffById(S.pickStaff);s.fails++;if(s.fails>=5){s.locked=true;S.pinMsg='Too many wrong PINs. '+s.name+' is now locked.';audit('Account locked after 5 wrong PINs',s.name);}else{S.pinMsg='That PIN is not right. '+(5-s.fails)+' tries left.';}}
+  else S.pinMsg='That PIN is not right. Tap your name for a clearer message.';
+  S.pinEntry='';
+}
+var idleTimer=null;
+function armIdle(){clearTimeout(idleTimer);if(!S.session)return;idleTimer=setTimeout(function(){if(S.session){audit('Auto-locked after inactivity');S.session=null;S.lockedReason='Locked after '+S.hospital.idleMins+' minutes without activity. Enter your PIN to carry on.';save();render();}},S.hospital.idleMins*60000);}
+
+function setPinView(){
+  var s=staffById(S.setPin);
+  return '<div class="pinwrap" style="text-align:left"><h1>Set your PIN</h1><p>Hi '+esc(s.name)+', you have been added to '+esc(S.hospital.name)+' as '+esc(s.role)+'. Choose a 4 to 6 digit PIN you will use to sign in on ward devices.</p>'+
+    '<label class="f"><span>New PIN</span><input id="newPin" type="tel" inputmode="numeric" maxlength="6" autocomplete="off"></label>'+
+    '<p class="small muted">PINs must be unique within this hospital.</p><div class="row"><button class="btn primary" data-action="savePin">Save PIN</button></div></div>';
+}
+
+function boardView(me){
+  var list=S.orders.filter(function(o){return o.source==='Hospital';}).slice().reverse();
+  if(!list.length)return '<div class="empty">No discharge orders yet. Start one from New discharge order.</div>';
+  return '<div class="row" style="justify-content:space-between;margin-bottom:1rem"><h2 style="margin:0">Discharges at '+esc(S.hospital.name)+'</h2><span class="small muted">Updates live as patients complete checkout</span></div><div class="board">'+
+  list.map(function(o){
+    var st=staffById(o.staffId);
+    var ready=o.status==='ready';
+    var h='<div class="card'+(ready?' ready':'')+'">';
+    h+='<div class="row" style="justify-content:space-between"><strong>'+esc(o.patient.name||'Patient '+o.patient.mobile)+'</strong><span class="small muted">'+o.id+'</span></div>';
+    if(ready)h+='<div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></div><strong style="color:var(--green)">Ready for discharge</strong><span class="small">Equipment can leave with the patient. Paid by '+esc(o.paid.toLowerCase())+'.</span>';
+    else h+=pill(o.status);
+    h+='<div class="small">'+itemList(o.items)+(o.other?'<br><span class="muted">Other: '+esc(o.other)+'</span>':'')+'</div>';
+    h+='<div class="small muted">'+esc(o.supply)+(o.ward?', '+esc(o.ward):'')+' · '+esc(o.priority)+'<br>Raised by '+esc(st?st.name:'')+', '+esc(o.created)+'</div>';
+    if(me.role!=='Viewer'){
+      if(o.status==='details')h+='<button class="btn sm" data-action="resendDetails" data-v="'+o.id+'">Resend details SMS</button>';
+      if(o.status==='products')h+='<button class="btn sm primary" data-action="openAddProducts" data-v="'+o.id+'">Add products</button>';
+      if(ready)h+='<span class="small muted">Read only. To change or cancel, call Max on 07 3000 0000.</span>';
+    }
+    return h+'</div>';
+  }).join('')+'</div>';
+}
+
+function blankDraft(){return {mobile:'',name:'',dob:'',address:'',email:'',altName:'',altPhone:'',funder:'',claim:'',caseMgr:'',room:S.hospital.rooms[0],supply:'Taken from consignment room',ward:'',priority:'Standard',duration:'4 weeks',notes:'',items:{},other:'',q:''};}
+function readDraft(){
+  var d=S.draft||blankDraft();
+  ['mobile','name','dob','address','email','altName','altPhone','funder','claim','caseMgr','room','supply','ward','priority','duration','notes','other'].forEach(function(k){var el=document.getElementById('d_'+k);if(el)d[k]=el.value;});
+  S.draft=d;return d;
+}
+function productPicker(d,keyOnly){
+  var key=PRODUCTS.filter(function(p){return p.key;});
+  var h='<div class="keyrange">'+key.map(function(p){return krow(p,d);}).join('')+'</div>';
+  h+='<div style="margin-top:1rem"><label class="f"><span>Search all stocked products</span><input type="search" id="d_q" value="'+esc(d.q)+'" placeholder="e.g. hoist, footplates" data-input="draftSearch"></label></div>';
+  if(d.q){var q=d.q.toLowerCase();var res=PRODUCTS.filter(function(p){return !p.key&&p.name.toLowerCase().indexOf(q)>-1;});
+    h+='<div class="keyrange" style="margin-top:.5rem">'+(res.length?res.map(function(p){return krow(p,d);}).join(''):'<p class="muted small">No stocked match. Use Other below and Max will follow up.</p>')+'</div>';}
+  var extra=Object.keys(d.items).filter(function(id){return !prod(id).key&&(!d.q||prod(id).name.toLowerCase().indexOf(d.q.toLowerCase())<0);});
+  if(extra.length)h+='<div class="keyrange" style="margin-top:.5rem">'+extra.map(function(id){return krow(prod(id),d);}).join('')+'</div>';
+  h+='<label class="f" style="margin-top:1rem"><span>Other equipment not listed</span><input type="text" id="d_other" value="'+esc(d.other)+'" placeholder="Describe what the patient needs"></label>';
+  return h;
+}
+function krow(p,d){
+  var sel=d.items[p.id]||'';
+  return '<div class="krow"><div class="thumb">'+icon(p.icon)+'</div><div class="nm">'+esc(p.name)+'<div class="small muted">'+(p.hire?money(p.hire)+'/wk':'')+(p.hire&&p.buy?' · ':'')+(p.buy?money(p.buy):'')+'</div></div>'+
+    (p.hire?'<label><input type="checkbox" data-action="pickItem" data-v="'+p.id+'" data-m="hire" '+(sel==='hire'?'checked':'')+'> Hire</label>':'')+
+    (p.buy?'<label><input type="checkbox" data-action="pickItem" data-v="'+p.id+'" data-m="buy" '+(sel==='buy'?'checked':'')+'> Buy</label>':'')+'</div>';
+}
+function opt(list,val){return list.map(function(v){return '<option'+(v===val?' selected':'')+'>'+esc(v)+'</option>';}).join('');}
+function newOrderView(me){
+  var d=S.draft||(S.draft=blankDraft());
+  var complete=idComplete(d);
+  var h='<h2>New discharge order</h2><p class="muted">Only the patient\'s mobile is required. If you leave out their details, we text them to fill the gaps before equipment can be added.</p>';
+  h+='<fieldset><legend>Patient</legend><div class="grid2">'+
+    '<label class="f"><span class="req">Mobile</span><input type="tel" id="d_mobile" value="'+esc(d.mobile)+'" placeholder="04xx xxx xxx" data-input="draftField"></label>'+
+    '<label class="f"><span>Full name</span><input type="text" id="d_name" value="'+esc(d.name)+'" data-input="draftField"></label>'+
+    '<label class="f"><span>Date of birth</span><input type="date" id="d_dob" value="'+esc(d.dob)+'" data-input="draftField"></label>'+
+    '<label class="f"><span>Home address</span><input type="text" id="d_address" value="'+esc(d.address)+'" data-input="draftField"></label>'+
+    '<label class="f"><span>Email</span><input type="email" id="d_email" value="'+esc(d.email)+'"></label></div>'+
+    '<details style="margin-top:.75rem"><summary>Alternative contact or funding (optional)</summary><div class="grid2" style="margin-top:.75rem">'+
+    '<label class="f"><span>Alternative contact name</span><input type="text" id="d_altName" value="'+esc(d.altName)+'"></label>'+
+    '<label class="f"><span>Alternative contact phone</span><input type="tel" id="d_altPhone" value="'+esc(d.altPhone)+'"></label>'+
+    '<label class="f"><span>Funding body</span><select id="d_funder"><option value="">Patient pays</option>'+opt(['WorkCover','DVA','Home Care Package','NDIS','Insurer'],d.funder)+'</select></label>'+
+    '<label class="f"><span>Claim number</span><input type="text" id="d_claim" value="'+esc(d.claim)+'"></label>'+
+    '<label class="f"><span>Case manager</span><input type="text" id="d_caseMgr" value="'+esc(d.caseMgr)+'"></label></div></details></fieldset>';
+  h+='<fieldset><legend>Supply</legend><div class="grid2">'+
+    '<label class="f"><span>Consignment room</span><select id="d_room">'+opt(S.hospital.rooms,d.room)+'</select></label>'+
+    '<label class="f"><span>How is it supplied?</span><select id="d_supply">'+opt(['Taken from consignment room','Deliver to ward','Deliver home','Deliver to another address'],d.supply)+'</select></label>'+
+    '<label class="f"><span>Ward and room</span><input type="text" id="d_ward" value="'+esc(d.ward)+'" placeholder="Needed for ward delivery"></label>'+
+    '<label class="f"><span>Priority</span><select id="d_priority">'+opt(['Standard','Before 10am discharge'],d.priority)+'</select></label>'+
+    '<label class="f"><span>Hire for</span><select id="d_duration">'+opt(['4 weeks','8 weeks','12 weeks','Ongoing'],d.duration)+'</select></label></div>'+
+    '<label class="f" style="margin-top:.75rem"><span>Delivery instructions</span><textarea id="d_notes" placeholder="Set-up heights, patient weight, access">'+esc(d.notes)+'</textarea></label></fieldset>';
+  h+='<fieldset><legend>Equipment</legend>';
+  if(!complete)h+='<div class="note amber">Products unlock once the patient\'s name, date of birth and address are in. Fill them in above, or send the order now and we will text the patient to complete them.</div><div style="opacity:.45;pointer-events:none" aria-hidden="true">'+productPicker(d)+'</div>';
+  else h+=productPicker(d);
+  h+='</fieldset>';
+  var n=Object.keys(d.items).length;
+  h+='<div class="row">'+(complete?'<button class="btn primary" data-action="submitOrder" '+(n||d.other?'':'disabled')+'>Send to patient for checkout</button>':'<button class="btn primary" data-action="submitOrder">Text patient to complete details</button>')+
+    '<button class="btn" data-action="clearDraft">Clear form</button><span class="small muted">Raised by '+esc(me.name)+'</span></div>';
+  return h;
+}
+function submitOrder(){
+  var d=readDraft();
+  if(!d.mobile.trim()){toast('Enter the patient\'s mobile number.');return;}
+  if(d.supply==='Deliver to ward'&&!d.ward.trim()){toast('Add the ward and room for ward delivery.');return;}
+  var complete=idComplete(d);
+  var items=complete?Object.keys(d.items).map(function(id){return {pid:id,mode:d.items[id]};}):[];
+  var o={id:'ORD-'+(S.seq++),token:'t-'+rnd(),source:'Hospital',staffId:S.session,created:'Today '+new Date().toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'}),
+    patient:{mobile:d.mobile.trim(),name:d.name.trim(),dob:d.dob,address:d.address.trim(),email:d.email.trim()},
+    funding:{funder:d.funder,claim:d.claim,caseMgr:d.caseMgr,altName:d.altName,altPhone:d.altPhone},
+    room:d.room,supply:d.supply,ward:d.ward,priority:d.priority,duration:d.duration,notes:d.notes,items:items,other:complete?d.other:'',status:'',paid:''};
+  if(!complete){o.status='details';sendSms(o.patient.mobile,'Max Healthcare: '+S.hospital.name+' has ordered equipment for your discharge. Please confirm your details so we can prepare it.',{type:'patient',token:o.token});}
+  else{o.status='payment';sendSms(o.patient.mobile,'Max Healthcare: your equipment from '+S.hospital.name+' has been added to your cart. Check out now so you can take it home.',{type:'patient',token:o.token});}
+  S.orders.push(o);audit('Created discharge order',o.id);S.draft=null;S.hTab='board';toast(o.id+' sent to the patient by SMS.');
+}
+function addProductsView(me){
+  var o=orderById(S.addFor);if(!o)return '';
+  var d=S.draft;
+  return '<h2>Add products for '+esc(o.patient.name)+'</h2><p class="muted">'+o.id+' · details confirmed by the patient · '+esc(o.supply)+'</p><fieldset><legend>Equipment</legend>'+productPicker(d)+'</fieldset>'+
+    '<div class="row"><button class="btn primary" data-action="saveProducts">Send to patient for checkout</button><button class="btn" data-action="hTab" data-v="board">Cancel</button></div>';
+}
+
+function staffView(){
+  var h='<h2>Staff</h2><p class="muted">Everyone listed here can sign in on approved devices with their own PIN.</p><div class="tablewrap"><table><thead><tr><th>Name</th><th>Role</th><th>Mobile</th><th>Status</th><th></th></tr></thead><tbody>';
+  S.staff.forEach(function(s){
+    var st=!s.active?'<span class="pill grey">Deactivated</span>':s.locked?'<span class="pill red">Locked</span>':!s.pin?'<span class="pill amber">Invite sent</span>':'<span class="pill green">Active</span>';
+    h+='<tr><td>'+esc(s.name)+'</td><td><select data-action="setRole" data-v="'+s.id+'" aria-label="Role for '+esc(s.name)+'">'+opt(['Hospital Admin','Clinician','Viewer'],s.role)+'</select></td><td>'+esc(s.mobile)+'</td><td>'+st+'</td><td class="num">'+
+      (s.active?'<button class="btn sm" data-action="resetPin" data-v="'+s.id+'">Reset PIN</button> ':'')+
+      (s.id!==S.session?(s.active?'<button class="btn sm danger" data-action="deactivate" data-v="'+s.id+'">Deactivate</button>':'<button class="btn sm" data-action="reactivate" data-v="'+s.id+'">Reactivate</button>'):'')+'</td></tr>';
+  });
+  h+='</tbody></table></div><fieldset style="margin-top:1rem"><legend>Invite a staff member</legend><div class="grid2">'+
+    '<label class="f"><span class="req">Name</span><input type="text" id="inv_name"></label><label class="f"><span class="req">Mobile</span><input type="tel" id="inv_mobile"></label>'+
+    '<label class="f"><span>Role</span><select id="inv_role">'+opt(['Clinician','Viewer','Hospital Admin'],'Clinician')+'</select></label></div>'+
+    '<div class="row" style="margin-top:.75rem"><button class="btn primary" data-action="invite">Send invite</button><span class="small muted">They get an SMS link to set their PIN.</span></div></fieldset>';
+  h+='<h2 style="margin-top:1.5rem">Approved devices</h2><div class="tablewrap"><table><thead><tr><th>Device</th><th>Approved</th><th></th></tr></thead><tbody>'+
+    S.devices.map(function(dv){return '<tr><td>'+esc(dv.name)+'</td><td>'+esc(dv.added)+'</td><td class="num"><button class="btn sm danger" data-action="removeDevice" data-v="'+dv.id+'">Remove</button></td></tr>';}).join('')+
+    '</tbody></table></div><div class="row" style="margin-top:.75rem"><input type="text" id="dev_name" placeholder="e.g. Ward 6 nurses station" style="max-width:280px"><button class="btn" data-action="addDevice">Approve this device</button></div>';
+  h+='<h2 style="margin-top:1.5rem">Settings</h2><label class="f" style="max-width:280px"><span>Lock to PIN pad after</span><select data-action="setIdle">'+[1,2,5,10].map(function(m){return '<option value="'+m+'"'+(m===S.hospital.idleMins?' selected':'')+'>'+m+' minute'+(m>1?'s':'')+' idle</option>';}).join('')+'</select></label>';
+  return h;
+}
+function auditView(){
+  if(!S.audit.length)return '<div class="empty">No activity yet.</div>';
+  return '<h2>Audit log</h2><div class="tablewrap"><table><thead><tr><th>When</th><th>Who</th><th>Device</th><th>Action</th><th>Record</th></tr></thead><tbody>'+
+    S.audit.map(function(a){return '<tr><td>'+esc(a.at)+'</td><td>'+esc(a.who)+'</td><td>'+esc(a.device)+'</td><td>'+esc(a.action)+'</td><td>'+esc(a.ref)+'</td></tr>';}).join('')+'</tbody></table></div>';
+}
+
+/* =========================================================
+   PATIENT PORTAL (tokenised)
+   ========================================================= */
+function renderPatient(){
+  var v=S.pView;
+  if(!v.token){
+    return shell('portal.maxhealthcare.com.au','' +brand('Your equipment'),'','<div class="empty"><h2>Open a link from a text message</h2><p>Patients reach this portal from the SMS links Max sends. No password needed.</p>'+
+      '<button class="btn primary" data-action="openPatient" data-v="p-me">Open Margaret Ellis\'s portal (active hire)</button></div>');
+  }
+  if(v.token==='p-me')return privatePortal();
+  var o=orderByToken(v.token);
+  if(!o)return shell('portal.maxhealthcare.com.au/t/'+v.token,brand('Your equipment'),'','<div class="note red">This link is no longer valid. Contact Max Healthcare on 07 3000 0000.</div>');
+  var url='portal.maxhealthcare.com.au/t/'+o.token;
+  var body='';
+  if(o.status==='details')body=patientDetailsView(o);
+  else if(o.status==='products')body='<h1>Thanks, your details are confirmed</h1><p>Your clinician at '+esc(S.hospital.name)+' is choosing your equipment now. We will text you when it is ready to check out.</p>';
+  else if(o.status==='payment')body=patientCheckoutView(o);
+  else body=patientDoneView(o);
+  return shell(url,brand('Your equipment'),'',body);
+}
+function patientDetailsView(o){
+  var p=o.patient;
+  return '<h1>Confirm your details</h1><p>'+esc(S.hospital.name)+' has arranged equipment for your discharge. We need three details to identify you.</p><div class="grid2" style="max-width:640px">'+
+    '<label class="f"><span class="req">Full name</span><input type="text" id="pt_name" value="'+esc(p.name)+'"></label>'+
+    '<label class="f"><span class="req">Date of birth</span><input type="date" id="pt_dob" value="'+esc(p.dob)+'"></label>'+
+    '<label class="f"><span class="req">Home address</span><input type="text" id="pt_address" value="'+esc(p.address)+'"></label>'+
+    '<label class="f"><span>Email for receipts</span><input type="email" id="pt_email" value="'+esc(p.email)+'"></label></div>'+
+    '<div class="row" style="margin-top:1rem"><button class="btn primary" data-action="ptSaveDetails" data-v="'+o.id+'">Confirm details</button></div>';
+}
+function patientCheckoutView(o){
+  var wk=itemsHire(o.items),buy=itemsBuy(o.items),del=o.supply==='Deliver home'||o.supply==='Deliver to another address'?HOME_DELIVERY:0;
+  var rows=o.items.map(function(it){var p=prod(it.pid);return '<tr><td>'+esc(p.name)+'</td><td>'+(it.mode==='hire'?'Hire':'Purchase')+'</td><td class="num">'+(it.mode==='hire'?money(p.hire)+'/wk':money(p.buy))+'</td></tr>';}).join('');
+  var h='<h1>Your equipment is ready to check out</h1><p class="muted">Arranged by '+esc(S.hospital.name)+' for '+esc(o.patient.name)+' · hire for '+esc(o.duration.toLowerCase())+'</p>';
+  h+='<div class="split"><div><div class="tablewrap"><table><thead><tr><th>Item</th><th>Type</th><th class="num">Price</th></tr></thead><tbody>'+rows+(del?'<tr><td>Home delivery</td><td>One-off</td><td class="num">'+money(del)+'</td></tr>':'')+'</tbody></table></div>'+(o.other?'<p class="small muted" style="margin-top:.5rem">Also requested: '+esc(o.other)+'. Max will confirm price and availability.</p>':'')+'</div>';
+  h+='<div class="panel">'+(wk?'<fieldset style="margin-bottom:.75rem"><legend>Pay for hire</legend><label><input type="radio" name="plan" value="Weekly subscription" data-due="'+money(wk+buy+del)+'" checked> '+money(wk)+' a week, charged weekly</label><br><label><input type="radio" name="plan" value="4 weeks upfront" data-due="'+money(wk*4+buy+del)+'"> '+money(wk*4)+' for 4 weeks upfront</label></fieldset>':'')+
+    '<label class="f"><span>Card number</span><input type="text" id="card" value="4242 4242 4242 4242"></label><div class="grid2" style="margin-top:.5rem"><label class="f"><span>Expiry</span><input type="text" value="12/29"></label><label class="f"><span>CVC</span><input type="text" value="123"></label></div>'+
+    '<p class="small muted" style="margin-top:.5rem">Secured by Stripe (test mode)</p><p><strong>Due today: <span id="dueToday">'+money((wk?wk:0)+buy+del)+'</span></strong></p>'+
+    '<button class="btn primary" style="width:100%" data-action="ptPay" data-v="'+o.id+'">Pay and confirm</button></div></div>';
+  return h;
+}
+function patientDoneView(o){
+  return '<div class="note" style="background:var(--green-soft)"><strong>Payment received.</strong> Your clinician has been told you are ready to go home with your equipment.</div><h1>Thanks, '+esc(o.patient.name.split(' ')[0])+'</h1><p>'+itemList(o.items)+'</p><p class="muted">Paid by '+esc(o.paid.toLowerCase())+'. You can come back to this link any time to see your hire, receipts, or add more equipment.</p>';
+}
+
+function privatePortal(){
+  var c=S.privateCustomer,v=S.pView;
+  var head=brand('Your equipment')+'<div class="who"><strong>'+esc(c.name)+'</strong><br><span class="muted">'+esc(c.mobile)+'</span></div>';
+  var cartN=v.cart.length;
+  var tabs=tabBar([['home','My equipment'],['shop','Browse products'],['cart','Cart'+(cartN?' ('+cartN+')':'')]],v.page,'pPage');
+  var body='';
+  if(v.page==='home'){
+    var wk=0;c.hire.forEach(function(h){wk+=prod(h.pid).hire;});
+    body='<h1>Hi '+esc(c.name.split(' ')[0])+'</h1><div class="grid2"><div class="panel"><h3>On hire</h3>'+c.hire.map(function(h){return '<div class="row" style="justify-content:space-between"><span>'+esc(prod(h.pid).name)+'</span><span class="muted small">since '+fmtDate(h.since)+'</span></div>';}).join('')+
+      '<hr><div class="row" style="justify-content:space-between"><span>Weekly hire</span><strong>'+money(wk)+'</strong></div><div class="row" style="justify-content:space-between"><span>Next payment</span><strong>'+fmtDate(c.nextPayment)+'</strong></div><div class="row" style="justify-content:space-between"><span>Card</span><span>'+esc(c.card)+'</span></div>'+
+      '<button class="btn sm" style="margin-top:.75rem" data-action="requestReturn">Request a collection</button></div>'+
+      '<div class="panel"><h3>Need anything else?</h3><p>Add more equipment to your hire or buy something outright. We deliver to '+esc(c.address)+'.</p><button class="btn primary" data-action="pPage" data-v="shop">Browse products</button></div></div>'+
+      '<h2 style="margin-top:1.5rem">Receipts</h2><div class="tablewrap"><table><tbody>'+c.receipts.slice().reverse().map(function(r){return '<tr><td>'+fmtDate(r.date)+'</td><td>'+esc(r.desc)+'</td><td class="num">'+money(r.amt)+'</td><td class="small muted">'+r.id+'</td></tr>';}).join('')+'</tbody></table></div>';
+  }
+  if(v.page==='shop')body=catalogue('pt',v.q,v.cat,1);
+  if(v.page==='cart')body=cartView();
+  return shell('portal.maxhealthcare.com.au/t/'+c.token+'-x82jd',head,tabs,body);
+}
+function catalogue(ns,q,cat,rate){
+  var list=PRODUCTS.filter(function(p){return (!cat||p.cat===cat)&&(!q||p.name.toLowerCase().indexOf(q.toLowerCase())>-1);});
+  var h='<div class="row" style="margin-bottom:1rem"><input type="search" placeholder="Search products" value="'+esc(q)+'" data-input="'+ns+'Search" aria-label="Search products" style="max-width:320px">'+
+    '<select data-action="'+ns+'Cat" aria-label="Category" style="max-width:220px"><option value="">All categories</option>'+opt(CATS,cat)+'</select>'+(rate<1?'<span class="pill blue">Contract pricing applied</span>':'')+'</div>';
+  if(!list.length)return h+'<div class="empty">No products match. Try another word or category.</div>';
+  return h+'<div class="products">'+list.map(function(p){
+    var price=(p.hire?money(p.hire*rate)+'/wk hire'+(rate<1?'<s>'+money(p.hire)+'</s>':'')+'<br>':'')+(p.buy?money(p.buy*rate)+' to buy'+(rate<1?'<s>'+money(p.buy)+'</s>':''):'');
+    return '<div class="prod"><div class="thumb">'+icon(p.icon)+'</div><div class="name">'+esc(p.name)+'</div><div class="small muted">'+esc(p.cat)+'</div><div class="price">'+price+'</div><div class="row" style="margin-top:auto">'+
+      (p.hire?'<button class="btn sm" data-action="'+ns+'Add" data-v="'+p.id+'" data-m="hire">Hire</button>':'')+(p.buy?'<button class="btn sm" data-action="'+ns+'Add" data-v="'+p.id+'" data-m="buy">Buy</button>':'')+'</div></div>';
+  }).join('')+'</div>';
+}
+function cartView(){
+  var v=S.pView,c=S.privateCustomer;
+  if(!v.cart.length)return '<div class="empty">Your cart is empty. <button class="btn" data-action="pPage" data-v="shop">Browse products</button></div>';
+  var wk=itemsHire(v.cart),buy=itemsBuy(v.cart);
+  return '<h2>Add to your order</h2><div class="split"><div class="tablewrap"><table><tbody>'+v.cart.map(function(it,i){var p=prod(it.pid);return '<tr><td>'+esc(p.name)+'</td><td>'+(it.mode==='hire'?'Hire':'Buy')+'</td><td class="num">'+(it.mode==='hire'?money(p.hire)+'/wk':money(p.buy))+'</td><td class="num"><button class="btn sm" data-action="ptRemove" data-v="'+i+'">Remove</button></td></tr>';}).join('')+'</tbody></table></div>'+
+    '<div class="panel">'+(wk?'<p>Your weekly hire goes up by <strong>'+money(wk)+'</strong>, charged with your next payment on '+fmtDate(c.nextPayment)+'.</p>':'')+(buy?'<p>Purchases: <strong>'+money(buy)+'</strong> charged today.</p>':'')+
+    '<p class="small muted">Paying with '+esc(c.card)+'. Delivered to '+esc(c.address)+', earliest tomorrow.</p><button class="btn primary" style="width:100%" data-action="ptCheckout">'+(buy?'Confirm and pay '+money(buy)+' today':'Confirm and add to my hire')+'</button></div></div>';
+}
+
+/* =========================================================
+   REFERRER PORTAL
+   ========================================================= */
+function renderReferrer(){
+  var r=S.referrer;
+  var head=brand('Partner portal')+'<div class="who"><strong>'+esc(r.user)+'</strong><br><span class="muted">'+esc(r.org)+'</span></div>';
+  var tabs=tabBar([['catalogue','Catalogue'],['quote','New quote'+(r.draft.length?' ('+r.draft.length+')':'')],['quotes','Quotes'],['invoices','Invoices']],r.tab,'rTab');
+  var body='';
+  if(r.tab==='catalogue')body=catalogue('rf',r.q,r.cat,CONTRACT_RATE);
+  if(r.tab==='quote')body=quoteBuilder();
+  if(r.tab==='quotes')body=quotesView();
+  if(r.tab==='invoices')body=invoicesView();
+  return shell('portal.maxhealthcare.com.au/partner/coastal-aged-care-m4q1z8',head,tabs,body);
+}
+function quoteBuilder(){
+  var r=S.referrer;
+  if(!r.draft.length)return '<div class="empty">Add products from the catalogue to start a quote. <button class="btn" data-action="rTab" data-v="catalogue">Open catalogue</button></div>';
+  var rows=r.draft.map(function(it,i){var p=prod(it.pid);var unit=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE;return '<tr><td>'+esc(p.name)+'</td><td>'+(it.mode==='hire'?'Hire /wk':'Purchase')+'</td><td><input type="number" min="1" value="'+it.qty+'" data-input="rQty" data-v="'+i+'" aria-label="Quantity" style="width:64px;padding:.3rem;border:1px solid var(--line);border-radius:6px"></td><td class="num">'+money(unit*it.qty)+'</td><td class="num"><button class="btn sm" data-action="rRemove" data-v="'+i+'">Remove</button></td></tr>';}).join('');
+  return '<h2>New quote</h2><div class="tablewrap"><table><thead><tr><th>Item</th><th>Type</th><th>Qty</th><th class="num">Contract price</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<fieldset style="margin-top:1rem"><legend>Client</legend><div class="grid2">'+
+    '<label class="f"><span class="req">Client name</span><input type="text" id="q_client"></label><label class="f"><span>Phone</span><input type="tel" id="q_phone"></label>'+
+    '<label class="f"><span class="req">Delivery address</span><input type="text" id="q_address"></label><label class="f"><span>Funding</span><select id="q_funding">'+opt(['Home Care Package','Transitional care','NDIS','WorkCover','Private'],'Home Care Package')+'</select></label></div></fieldset>'+
+    '<div class="row"><button class="btn primary" data-action="createQuote">Create quote</button><span class="small muted">You can download the PDF and send it for approval straight away.</span></div>';
+}
+function quoteTotal(q){var t=0;q.items.forEach(function(it){var p=prod(it.pid);t+=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE*it.qty;});return t;}
+function quotesView(){
+  var r=S.referrer;
+  if(!r.quotes.length)return '<div class="empty">No quotes yet.</div>';
+  return '<h2>Quotes</h2><div class="tablewrap"><table><thead><tr><th>Quote</th><th>Client</th><th>Funding</th><th>Status</th><th class="num">Total</th><th></th></tr></thead><tbody>'+
+    r.quotes.slice().reverse().map(function(q){var cls=q.status==='Approved'?'green':q.status==='Declined'?'red':'amber';
+      return '<tr><td>'+q.id+'<div class="small muted">'+fmtDate(q.created)+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td><span class="pill '+cls+'">'+q.status+'</span>'+(q.order?'<div class="small muted">'+q.order+'</div>':'')+'</td><td class="num">'+money(quoteTotal(q))+'</td><td class="num"><button class="btn sm" data-action="viewQuote" data-v="'+q.id+'">PDF</button> '+
+      (q.status==='Awaiting approval'?'<button class="btn sm primary" data-action="approveQuote" data-v="'+q.id+'">Approve</button> <button class="btn sm" data-action="declineQuote" data-v="'+q.id+'">Decline</button>':'')+'</td></tr>';}).join('')+'</tbody></table></div>';
+}
+function invoicesView(){
+  var r=S.referrer,out=0,over=0;
+  r.invoices.forEach(function(i){if(i.status!=='Paid'){out+=i.amt;if(i.status==='Overdue')over+=i.amt;}});
+  return '<div class="grid2" style="margin-bottom:1rem"><div class="panel"><div class="muted small">Outstanding</div><div style="font-size:1.6rem;font-weight:700">'+money(out)+'</div></div><div class="panel"><div class="muted small">Overdue</div><div style="font-size:1.6rem;font-weight:700;color:'+(over?'var(--red)':'inherit')+'">'+money(over)+'</div></div><div class="panel"><div class="muted small">Terms</div><div style="font-size:1.1rem;font-weight:700">30 days from invoice</div><button class="btn sm" style="margin-top:.5rem" data-action="statement">View statement</button></div></div>'+
+    '<div class="tablewrap"><table><thead><tr><th>Invoice</th><th>Details</th><th>Due</th><th>Status</th><th class="num">Amount</th><th></th></tr></thead><tbody>'+
+    r.invoices.slice().sort(function(a,b){return a.date<b.date?1:-1;}).map(function(i){var cls=i.status==='Paid'?'green':i.status==='Overdue'?'red':'blue';
+      return '<tr><td>'+i.id+'<div class="small muted">'+fmtDate(i.date)+'</div></td><td>'+esc(i.desc)+'</td><td>'+fmtDate(i.due)+'</td><td><span class="pill '+cls+'">'+i.status+'</span></td><td class="num">'+money(i.amt)+'</td><td class="num">'+(i.status!=='Paid'?'<button class="btn sm" data-action="payInvoice" data-v="'+i.id+'">Pay now</button>':'')+'</td></tr>';}).join('')+
+    '</tbody></table></div><p class="small muted" style="margin-top:.5rem">Invoices sync from Xero. Bank transfer is still welcome; Pay now uses Stripe.</p>';
+}
+
+/* =========================================================
+   MAX BACK OFFICE
+   ========================================================= */
+function renderMax(){
+  var head=brand('Salesforce view (what staff see)');
+  var rows=S.orders.slice().reverse().map(function(o){var st=staffById(o.staffId);return '<tr><td>'+o.id+'</td><td><span class="pill grey">'+esc(o.source)+'</span></td><td>'+esc(o.patient.name||o.patient.mobile)+'</td><td>'+(o.status?pill(o.status):'<span class="pill green">Paid</span>')+'</td><td class="small">'+itemList(o.items)+'</td><td class="small">'+esc(st?st.name+', '+S.hospital.name:o.createdBy||'')+'</td></tr>';}).join('');
+  var qrows=S.referrer.quotes.slice().reverse().map(function(q){return '<tr><td>'+q.id+'</td><td>'+esc(S.referrer.org)+'</td><td>'+esc(q.client)+'</td><td>'+(q.status==='Approved'?'Closed Won':q.status==='Declined'?'Closed Lost':'Quote sent')+'</td><td class="num">'+money(quoteTotal(q))+'</td></tr>';}).join('');
+  var body='<h2>Orders from all portals</h2><div class="tablewrap"><table><thead><tr><th>Order</th><th>Source</th><th>Customer</th><th>Status</th><th>Items</th><th>Raised by</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<h2 style="margin-top:1.5rem">Opportunities from referrer quotes</h2><div class="tablewrap"><table><thead><tr><th>Quote</th><th>Account</th><th>Client</th><th>Stage</th><th class="num">Amount</th></tr></thead><tbody>'+qrows+'</tbody></table></div>'+
+    '<h2 style="margin-top:1.5rem">Hospital portal settings</h2><div class="panel"><p><strong>'+esc(S.hospital.name)+'</strong><br><span class="small">'+esc(hospitalUrl())+'</span></p><p class="small muted">Rotating the link retires the old one straight away and signs everyone out. Send the new link to the Hospital Admin.</p><button class="btn danger" data-action="rotate">Rotate hospital link</button></div>';
+  return shell('maxhealthcare.lightning.force.com',head,'',body);
+}
+
+/* ---------- render ---------- */
+function render(){
+  renderPersona();
+  var html='';
+  if(S.persona==='hospital')html=renderHospital();
+  if(S.persona==='patient')html=renderPatient();
+  if(S.persona==='referrer')html=renderReferrer();
+  if(S.persona==='max')html=renderMax();
+  document.getElementById('app').innerHTML=html;
+  var sms=document.getElementById('sms');
+  sms.innerHTML=S.sms.length?S.sms.map(function(m,i){return '<div class="sms"><div class="to">To '+esc(m.to)+' · '+esc(m.at)+'</div>'+esc(m.body)+(m.link?'<div><button class="btn sm" data-action="openSms" data-v="'+i+'">Open link</button></div>':'')+'</div>';}).join(''):'<p class="muted small">No messages yet. Raise a discharge order in the hospital portal to see one.</p>';
+}
+
+/* ---------- actions ---------- */
+function act(a,v,el){
+  switch(a){
+  case 'persona':S.persona=v;break;
+  case 'reset':modal('<h2>Reset the demo?</h2><p>All orders, staff changes, quotes and messages go back to the starting data.</p><div class="row"><button class="btn primary" data-action="confirmReset">Reset demo</button><button class="btn" data-action="closeModal">Cancel</button></div>');return;
+  case 'confirmReset':S=seed();clearTimeout(idleTimer);closeModal();toast('Demo reset.');break;
+  case 'closeModal':closeModal();return;
+  case 'pickStaff':S.pickStaff=S.pickStaff===v?null:v;S.pinMsg='';break;
+  case 'pinKey':pinKey(v);break;
+  case 'lock':audit('Locked the device');S.session=null;S.lockedReason='';clearTimeout(idleTimer);break;
+  case 'hTab':if(S.hTab==='new')readDraft();S.hTab=v;if(v!=='new'&&v!=='addProducts')S.draft=S.hTab==='new'?S.draft:S.draft;break;
+  case 'pickItem':{var d=readDraft();if(el.checked)d.items[v]=el.getAttribute('data-m');else delete d.items[v];break;}
+  case 'submitOrder':submitOrder();break;
+  case 'clearDraft':S.draft=blankDraft();break;
+  case 'resendDetails':{var o=orderById(v);sendSms(o.patient.mobile,'Max Healthcare reminder: please confirm your details so we can prepare your discharge equipment.',{type:'patient',token:o.token});audit('Resent details SMS',o.id);toast('Reminder sent.');break;}
+  case 'openAddProducts':S.addFor=v;S.draft=blankDraft();S.hTab='addProducts';break;
+  case 'saveProducts':{var d2=readDraft();var o2=orderById(S.addFor);var ks=Object.keys(d2.items);if(!ks.length&&!d2.other){toast('Choose at least one product.');return;}
+    o2.items=ks.map(function(id){return {pid:id,mode:d2.items[id]};});o2.other=d2.other;o2.status='payment';
+    sendSms(o2.patient.mobile,'Max Healthcare: your equipment from '+S.hospital.name+' has been added to your cart. Check out now so you can take it home.',{type:'patient',token:o2.token});
+    audit('Added products',o2.id);S.draft=null;S.hTab='board';toast('Products sent to the patient.');break;}
+  case 'savePin':{var pin=(document.getElementById('newPin').value||'').trim();var s=staffById(S.setPin);
+    if(!/^\d{4,6}$/.test(pin)){toast('Use 4 to 6 digits.');return;}
+    if(S.staff.some(function(x){return x.id!==s.id&&x.active&&x.pin===pin;})){toast('That PIN is taken at this hospital. Choose another.');return;}
+    s.pin=pin;s.locked=false;s.fails=0;S.setPin=null;S.session=null;S.lockedReason='';S.audit.unshift({at:nowStr(),who:s.name,device:'Own phone',action:'Set PIN',ref:''});toast('PIN saved. Sign in with it on any approved device.');break;}
+  case 'setRole':{var st=staffById(v);st.role=el.value;audit('Changed role to '+el.value,st.name);toast(st.name+' is now '+el.value+'.');break;}
+  case 'resetPin':{var s2=staffById(v);s2.pin='';s2.locked=false;s2.fails=0;sendSms(s2.mobile,'Max Healthcare: your PIN for '+S.hospital.name+' was reset. Set a new one here.',{type:'setpin',staff:s2.id});audit('Reset PIN',s2.name);toast('Reset link sent to '+s2.name+'.');break;}
+  case 'deactivate':{var s3=staffById(v);s3.active=false;audit('Deactivated staff',s3.name);break;}
+  case 'reactivate':{var s4=staffById(v);s4.active=true;audit('Reactivated staff',s4.name);break;}
+  case 'invite':{var n=document.getElementById('inv_name').value.trim(),m=document.getElementById('inv_mobile').value.trim(),r=document.getElementById('inv_role').value;
+    if(!n||!m){toast('Add a name and mobile.');return;}
+    var ns={id:'s'+rnd(),name:n,mobile:m,role:r,pin:'',active:true,fails:0,locked:false};S.staff.push(ns);
+    sendSms(m,'Max Healthcare: '+S.hospital.name+' has added you to their equipment portal. Set your PIN here.',{type:'setpin',staff:ns.id});audit('Invited staff ('+r+')',n);toast('Invite sent to '+n+'.');break;}
+  case 'removeDevice':S.devices=S.devices.filter(function(x){return x.id!==v;});audit('Removed device');break;
+  case 'addDevice':{var dn=document.getElementById('dev_name').value.trim();if(!dn){toast('Name the device first.');return;}var me=staffById(S.session);S.devices.push({id:'d'+rnd(),name:dn,approved:true,added:'Approved by '+me.name});audit('Approved device',dn);break;}
+  case 'setIdle':S.hospital.idleMins=Number(el.value);audit('Changed idle lock to '+el.value+' min');armIdle();break;
+  case 'openSms':{var msg=S.sms[Number(v)];if(!msg.link)return;
+    if(msg.link.type==='patient'){S.persona='patient';S.pView.token=msg.link.token;S.pView.page='home';}
+    if(msg.link.type==='setpin'){var target=staffById(msg.link.staff);if(!target||!target.active){toast('This invite is no longer valid.');return;}S.persona='hospital';S.setPin=msg.link.staff;}
+    break;}
+  case 'openPatient':S.pView.token=v;S.pView.page='home';break;
+  case 'ptSaveDetails':{var o3=orderById(v);var nm=document.getElementById('pt_name').value.trim(),db=document.getElementById('pt_dob').value,ad=document.getElementById('pt_address').value.trim();
+    if(!nm||!db||!ad){toast('Fill in your name, date of birth and address.');return;}
+    o3.patient.name=nm;o3.patient.dob=db;o3.patient.address=ad;o3.patient.email=document.getElementById('pt_email').value.trim();
+    o3.status=o3.items.length?'payment':'products';toast('Details confirmed. Your clinician can now add your equipment.');break;}
+  case 'ptPay':{var o4=orderById(v);var plan=document.querySelector('input[name=plan]:checked');o4.paid=plan?plan.value:'Card payment';o4.status='ready';
+    sendSms(o4.patient.mobile,'Max Healthcare: payment received, thank you. View your hire and receipts any time here.',{type:'patient',token:o4.token});
+    S.audit.unshift({at:nowStr(),who:o4.patient.name+' (patient)',device:'Patient phone',action:'Paid via Stripe, hire agreement created',ref:o4.id});
+    toast('Paid. '+S.hospital.name+' now shows a green tick.');break;}
+  case 'pPage':S.pView.page=v;break;
+  case 'ptAdd':S.pView.cart.push({pid:v,mode:el.getAttribute('data-m'),qty:1});toast(prod(v).name+' added to your cart.');break;
+  case 'ptRemove':S.pView.cart.splice(Number(v),1);break;
+  case 'ptCheckout':{var c=S.privateCustomer,cart=S.pView.cart,buy=itemsBuy(cart),wk=itemsHire(cart);
+    var o5={id:'ORD-'+(S.seq++),token:'p-me',source:'Portal add-on',createdBy:c.name+' (patient portal)',patient:{mobile:c.mobile,name:c.name},items:cart.slice(),status:'',paid:'Saved card'};S.orders.push(o5);
+    cart.forEach(function(it){if(it.mode==='hire')c.hire.push({pid:it.pid,since:today(1)});});
+    if(buy)c.receipts.push({id:'RCT-'+(S.rseq++),date:today(),desc:'Purchase, '+cart.filter(function(i){return i.mode==='buy';}).length+' item(s)',amt:buy});
+    sendSms(c.mobile,'Max Healthcare: thanks for your order '+o5.id+'. We will deliver tomorrow. Your weekly hire is now '+money((function(){var t=0;c.hire.forEach(function(h){t+=prod(h.pid).hire;});return t;})())+'.',{type:'patient',token:'p-me'});
+    S.pView.cart=[];S.pView.page='home';toast('Order '+o5.id+' placed'+(wk?' and hire updated':'')+'.');break;}
+  case 'requestReturn':toast('Collection request sent. Max will call to book a time.');sendSms('Max Healthcare staff',S.privateCustomer.name+' requested a collection from the portal.');break;
+  case 'ptCat':S.pView.cat=el.value;break;
+  case 'rfCat':S.referrer.cat=el.value;break;
+  case 'rTab':S.referrer.tab=v;break;
+  case 'rfAdd':{var dr=S.referrer.draft,m2=el.getAttribute('data-m'),ex=null;dr.forEach(function(it){if(it.pid===v&&it.mode===m2)ex=it;});if(ex)ex.qty++;else dr.push({pid:v,mode:m2,qty:1});toast(prod(v).name+' added to the quote.');break;}
+  case 'rRemove':S.referrer.draft.splice(Number(v),1);break;
+  case 'createQuote':{var cl=document.getElementById('q_client').value.trim(),adr=document.getElementById('q_address').value.trim();if(!cl||!adr){toast('Add the client name and delivery address.');return;}
+    var q={id:'Q-'+(S.qseq++),client:cl,phone:document.getElementById('q_phone').value.trim(),address:adr,funding:document.getElementById('q_funding').value,items:S.referrer.draft.slice(),status:'Awaiting approval',created:today()};
+    S.referrer.quotes.push(q);S.referrer.draft=[];S.referrer.tab='quotes';toast(q.id+' created. Download the PDF to send for approval.');showQuote(q.id);break;}
+  case 'viewQuote':showQuote(v);return;
+  case 'approveQuote':{var q2=findQuote(v);modal('<h2>Approve '+q2.id+'</h2><p>Confirm the care partner or support coordinator has approved this quote for '+esc(q2.client)+'.</p><label class="f"><span>Authorisation (optional)</span><input type="file"></label><div class="row" style="margin-top:1rem"><button class="btn primary" data-action="confirmApprove" data-v="'+q2.id+'">Approve and order</button><button class="btn" data-action="closeModal">Cancel</button></div>');return;}
+  case 'confirmApprove':{var q3=findQuote(v);q3.status='Approved';var oid='ORD-'+(S.seq++);q3.order=oid;
+    S.orders.push({id:oid,token:'r-'+rnd(),source:'Referrer',createdBy:S.referrer.user+', '+S.referrer.org,patient:{name:q3.client,mobile:q3.phone},items:q3.items,status:'',paid:'On account'});
+    S.referrer.invoices.push({id:'INV-'+(S.iseq++),date:today(),due:today(30),desc:'Order '+oid+', '+q3.client,amt:Math.round(quoteTotal(q3)*100)/100,status:'Open'});
+    closeModal();toast('Approved. '+oid+' created and invoiced.');break;}
+  case 'declineQuote':findQuote(v).status='Declined';break;
+  case 'payInvoice':{var inv=findInv(v);modal('<h2>Pay '+inv.id+'</h2><p>'+esc(inv.desc)+'</p><p style="font-size:1.4rem;font-weight:700">'+money(inv.amt)+'</p><label class="f"><span>Card number</span><input type="text" value="4242 4242 4242 4242"></label><p class="small muted">Secured by Stripe (test mode). Payment is recorded against the Xero invoice.</p><div class="row"><button class="btn primary" data-action="confirmPay" data-v="'+inv.id+'">Pay '+money(inv.amt)+'</button><button class="btn" data-action="closeModal">Cancel</button></div>');return;}
+  case 'confirmPay':findInv(v).status='Paid';closeModal();toast('Payment received.');break;
+  case 'statement':{var r2=S.referrer;var lines=r2.invoices.filter(function(i){return i.status!=='Paid';});
+    modal('<div class="doc"><div class="row" style="justify-content:space-between">'+brand('Account statement')+'<span class="small muted">'+fmtDate(today())+'</span></div><hr><p><strong>'+esc(r2.org)+'</strong></p><table><thead><tr><th>Invoice</th><th>Due</th><th class="num">Amount</th></tr></thead><tbody>'+lines.map(function(i){return '<tr><td>'+i.id+'</td><td>'+fmtDate(i.due)+(i.status==='Overdue'?' <span class="pill red">Overdue</span>':'')+'</td><td class="num">'+money(i.amt)+'</td></tr>';}).join('')+'</tbody></table><p style="text-align:right;margin-top:.75rem"><strong>Balance '+money(lines.reduce(function(a,i){return a+i.amt;},0))+'</strong></p></div><div class="row no-print" style="margin-top:1rem"><button class="btn" data-action="print">Print or save PDF</button><button class="btn" data-action="closeModal">Close</button></div>');return;}
+  case 'print':window.print();return;
+  case 'rotate':modal('<h2>Rotate the hospital link?</h2><p>The old link stops working and everyone at '+esc(S.hospital.name)+' is signed out.</p><div class="row"><button class="btn danger" data-action="confirmRotate">Rotate link</button><button class="btn" data-action="closeModal">Cancel</button></div>');return;
+  case 'confirmRotate':{closeModal();S.hospital.token=rnd();S.session=null;S.setPin=null;S.lockedReason='The hospital link was changed by Max. Use the new link from your Hospital Admin.';
+    S.audit.unshift({at:nowStr(),who:'Max staff',device:'Salesforce',action:'Rotated hospital link',ref:''});sendSms(staffById('s2').mobile,'Max Healthcare: the portal link for '+S.hospital.name+' has changed. New link: '+hospitalUrl());toast('New link issued.');break;}
+  default:return;
+  }
+  save();render();
+}
+function findQuote(id){var r=null;S.referrer.quotes.forEach(function(q){if(q.id===id)r=q;});return r;}
+function findInv(id){var r=null;S.referrer.invoices.forEach(function(q){if(q.id===id)r=q;});return r;}
+function showQuote(id){
+  var q=findQuote(id),r=S.referrer;
+  modal('<div class="doc"><div class="row" style="justify-content:space-between">'+brand('Quotation '+q.id)+'<span class="small muted">'+fmtDate(q.created)+'<br>Valid 30 days</span></div><hr>'+
+    '<div class="grid2"><div><div class="small muted">Prepared for</div><strong>'+esc(q.client)+'</strong><br>'+esc(q.address)+'<br>'+esc(q.phone)+'</div><div><div class="small muted">Requested by</div><strong>'+esc(r.user)+'</strong><br>'+esc(r.org)+'<br>Funding: '+esc(q.funding)+'</div></div><hr>'+
+    '<table><thead><tr><th>Item</th><th>Qty</th><th class="num">Amount</th></tr></thead><tbody>'+q.items.map(function(it){var p=prod(it.pid);var u=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE;return '<tr><td>'+esc(p.name)+(it.mode==='hire'?' (hire, per week)':'')+'</td><td>'+it.qty+'</td><td class="num">'+money(u*it.qty)+'</td></tr>';}).join('')+
+    '</tbody></table><p style="text-align:right;margin-top:.75rem"><strong>Total '+money(quoteTotal(q))+' incl. GST</strong></p><p class="small muted">Contract pricing for '+esc(r.org)+'. Approve in the partner portal to place the order.</p></div>'+
+    '<div class="row no-print" style="margin-top:1rem"><button class="btn primary" data-action="print">Download PDF</button><button class="btn" data-action="closeModal">Close</button></div>');
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-action]');
+  if(!t)return;
+  if(t.getAttribute('data-action')==='closeModal'&&e.target.closest('[data-stop]')&&!e.target.closest('button'))return;
+  if(t.tagName==='SELECT'||(t.tagName==='INPUT'&&t.type!=='checkbox'))return;
+  act(t.getAttribute('data-action'),t.getAttribute('data-v'),t);
+  if(S.persona==='hospital'&&S.session)armIdle();
+});
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.name==='plan'){var due=document.getElementById('dueToday');if(due)due.textContent=t.getAttribute('data-due');return;}
+  if(t.tagName!=='SELECT')return;var a=t.getAttribute('data-action');if(a)act(a,t.getAttribute('data-v'),t);
+});
+var searchTimer=null;
+document.addEventListener('input',function(e){
+  var t=e.target,k=t.getAttribute('data-input');if(!k)return;
+  if(k==='draftField'){var d=readDraft();var was=S._complete;var now=idComplete(d);S._complete=now;if(was!==now){save();renderKeepFocus(t.id);}return;}
+  clearTimeout(searchTimer);searchTimer=setTimeout(function(){
+    if(k==='draftSearch'){readDraft();S.draft.q=t.value;}
+    if(k==='ptSearch')S.pView.q=t.value;
+    if(k==='rfSearch')S.referrer.q=t.value;
+    if(k==='rQty'){var it=S.referrer.draft[Number(t.getAttribute('data-v'))];it.qty=Math.max(1,parseInt(t.value,10)||1);}
+    save();renderKeepFocus(t.id||null,k,t.getAttribute('data-v'));
+  },250);
+});
+function renderKeepFocus(id,k,v){
+  var pos=document.activeElement&&document.activeElement.selectionStart;
+  render();
+  var el=id?document.getElementById(id):document.querySelector('[data-input="'+k+'"]'+(v!=null?'[data-v="'+v+'"]':''));
+  if(el){el.focus();try{if(pos!=null&&el.setSelectionRange)el.setSelectionRange(pos,pos);}catch(e){}}
+}
+document.addEventListener('keydown',function(e){
+  if(S.persona!=='hospital'||S.session||S.setPin)return;
+  if(e.target.tagName==='INPUT')return;
+  if(/^\d$/.test(e.key)){act('pinKey',e.key);}
+  else if(e.key==='Enter'){act('pinKey','enter');}
+  else if(e.key==='Backspace'){S.pinEntry=S.pinEntry.slice(0,-1);render();}
+});
+['mousemove','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,function(){if(S.persona==='hospital'&&S.session){clearTimeout(armIdle.t);armIdle.t=setTimeout(armIdle,500);}},{passive:true});});
+
+if(S.session)armIdle();
+render();
+})();
+</script>
+</body>
+</html>

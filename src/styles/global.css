@@ -1,6 +1,13 @@
 @import '@fontsource-variable/bricolage-grotesque';
 @import '@fontsource-variable/figtree';
 
+@font-face {
+  font-family: 'Helvetica Rounded';
+  font-weight: 700;
+  font-display: swap;
+  src: local('Helvetica Rounded LT Pro Bold'), local('HelveticaRoundedLTPro-Bd'), local('Helvetica Rounded Bold'), local('HelveticaRounded-Bold');
+}
+
 /* Brand tokens, sampled from the Max logo (see README) */
 :root {
   --red-50: #FEF2F2;
@@ -31,9 +38,10 @@
 
   --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', Georgia, serif;
   --font-body: 'Figtree Variable', 'Figtree', 'Segoe UI', system-ui, sans-serif;
+  --font-hero: 'Helvetica Rounded', 'Helvetica Rounded LT Pro', 'HelveticaRoundedLTPro-Bd', 'Arial Rounded MT Bold', var(--font-display);
 
-  --wrap: 1240px;
-  --gutter: clamp(18px, 4vw, 24px);
+  --wrap: 100%;
+  --gutter: clamp(18px, 4vw, 72px);
   --r-sm: 12px;
   --r-md: 20px;
   --r-lg: 28px;

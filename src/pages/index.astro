@@ -15,7 +15,6 @@ import { site } from '../data/site';
   <section class="hero">
     <div class="wrap split">
       <div class="stack" style="gap: 26px">
-        <span class="badge" style="align-self: flex-start">Hire or buy. 600+ items. Delivered tomorrow.</span>
         <h1>Home from hospital, with everything ready and waiting.</h1>
         <p class="lede">Beds, mobility, bathroom and daily-living equipment, delivered and set up by trained staff, with an on-site Occupational Therapist making sure it's the right fit.</p>
         <form role="search" action="/search/" method="get" class="hsearch">
@@ -85,7 +84,7 @@ import { site } from '../data/site';
 
 <style>
   .hero { background: var(--white); padding-block: clamp(48px, 7vw, 80px); }
-  .hero h1 { max-width: 14ch; }
+  .hero h1 { max-width: 14ch; font-family: var(--font-hero); font-weight: 700; letter-spacing: 0; }
   .hsearch { display: flex; gap: 10px; max-width: 580px; background: var(--grey-50); border: 1px solid var(--grey-200); border-radius: 16px; padding: 8px; }
   .hsearch input { border: 0; background: transparent; min-height: 48px; }
   .hsearch input:focus { outline: none; }

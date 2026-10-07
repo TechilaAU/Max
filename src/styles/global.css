@@ -5,7 +5,8 @@
   font-family: 'Helvetica Rounded';
   font-weight: 700;
   font-display: swap;
-  src: local('Helvetica Rounded LT Pro Bold'), local('HelveticaRoundedLTPro-Bd'), local('Helvetica Rounded Bold'), local('HelveticaRounded-Bold');
+  font-style: normal;
+  src: url('../assets/fonts/helvetica-rounded-bold.woff2') format('woff2');
 }
 
 /* Brand tokens, sampled from the Max logo (see README) */
@@ -36,9 +37,8 @@
   --warning: #B45309;
   --info: #1D5FA8;
 
-  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', Georgia, serif;
+  --font-display: 'Helvetica Rounded', 'Arial Rounded MT Bold', 'Bricolage Grotesque Variable', sans-serif;
   --font-body: 'Figtree Variable', 'Figtree', 'Segoe UI', system-ui, sans-serif;
-  --font-hero: 'Helvetica Rounded', 'Helvetica Rounded LT Pro', 'HelveticaRoundedLTPro-Bd', 'Arial Rounded MT Bold', var(--font-display);
 
   --wrap: 100%;
   --gutter: clamp(18px, 4vw, 72px);
@@ -67,7 +67,7 @@ a { color: var(--red-700); text-underline-offset: 3px; }
 a:hover { color: var(--red-800); }
 :focus-visible { outline: 3px solid var(--red-600); outline-offset: 3px; border-radius: 4px; }
 
-h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.08; letter-spacing: -0.015em; margin: 0; }
+h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.08; letter-spacing: 0; margin: 0; }
 h1 { font-size: clamp(40px, 6vw, 64px); font-weight: 800; }
 h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 700; }
 h3 { font-size: clamp(20px, 2.2vw, 24px); font-weight: 700; }

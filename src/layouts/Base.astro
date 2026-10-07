@@ -163,7 +163,7 @@ const schemas = [business, ...(schema ? (Array.isArray(schema) ? schema : [schem
 
   .ftr { background: var(--ink-950); color: var(--grey-200); font-size: 15px; }
   .ftr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 32px; padding-block: 64px 32px; }
-  .ftr-grid img { height: 54px; width: auto; }
+  .ftr-grid img { height: 54px; width: auto; align-self: flex-start; }
   .fcol { display: flex; flex-direction: column; gap: 8px; }
   .fcol strong { color: var(--white); margin-bottom: 4px; }
   .ftr a { color: var(--grey-200); text-decoration: none; }

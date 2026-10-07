@@ -88,7 +88,9 @@ p { margin: 0; }
 .eyebrow { font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red-700); }
 .section--dark .eyebrow { color: var(--red-200); }
 
-.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--min, 260px)), 1fr)); }
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min, 260px)), 1fr)); }
+/* Fill variant: fixed-width columns for product listings, so one or two results don't stretch across the page */
+.grid.fill { grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--min, 260px)), 1fr)); }
 .split { display: flex; flex-wrap: wrap; gap: clamp(32px, 5vw, 56px); align-items: center; }
 .split > * { flex: 1 1 420px; min-width: 0; }
 .head-row { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
@@ -175,6 +177,3 @@ table { border-collapse: collapse; width: 100%; }
 th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--grey-100); vertical-align: top; }
 th { font-weight: 700; width: 40%; }
 .table-wrap { overflow-x: auto; }
-
-/* Fit variant: items stretch to fill the row (for small fixed sets like panels and quotes) */
-.grid.fit { grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min, 260px)), 1fr)); }

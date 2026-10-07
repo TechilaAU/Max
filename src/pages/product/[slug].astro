@@ -79,7 +79,7 @@ const schema = {
   {related.length > 0 && (
     <section class="wrap" style="padding-bottom: var(--section)">
       <h2 style="margin-bottom: 24px">Related equipment</h2>
-      <div class="grid" style="--min: 240px">{related.map((r) => <ProductCard product={r} />)}</div>
+      <div class="grid fill" style="--min: 240px">{related.map((r) => <ProductCard product={r} />)}</div>
     </section>
   )}
 </Base>

@@ -38,7 +38,7 @@ const products = await productsFor(cat.slug);
         {products.length > 0 ? (
           <>
             <p class="muted" style="margin-bottom: 18px">{products.length} {products.length === 1 ? 'item' : 'items'}</p>
-            <div class="grid" style="--min: 240px">{products.map((p) => <ProductCard product={p} />)}</div>
+            <div class="grid fill" style="--min: 240px">{products.map((p) => <ProductCard product={p} />)}</div>
           </>
         ) : (
           <div class="card stack" style="gap: 12px">

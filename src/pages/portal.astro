@@ -2,24 +2,51 @@
 import Page from '../layouts/Page.astro';
 import { site } from '../data/site';
 ---
-<Page title="Hire portal" description="Pay for your hire, view receipts and book a collection in the Max Healthcare Equipment hire portal." eyebrow="Customers" crumbs={[{ label: 'Hire portal' }]}
-  lede="Use the secure link we texted you to pay for your hire, view receipts and book a delivery or collection day.">
-  <div class="grid" style="--min: 280px; max-width: 900px">
-    <div class="card stack" style="gap: 12px; border-color: var(--red-200)">
-      <span class="badge" style="align-self:flex-start">Preview</span>
-      <h2 style="font-size: 24px">Try the new portal</h2>
-      <p class="muted">See how hospitals, patients, referrers and the Max team will use the new portal.</p>
-      <a class="btn btn--primary" style="align-self:flex-start" href="/portal/demo/">Open the portal demo</a>
+<Page title="Access our portals" description="Patients and customers pay and manage their hire in the Max hire portal. Referrers and hospitals order, quote and track equipment in their own portals." eyebrow="Portals" crumbs={[{ label: 'Portals' }]}
+  lede="Pay for your hire and manage your equipment, or order and quote for your patients and clients.">
+  <div class="grid" style="--min: 340px; gap: 24px">
+    <div class="panel panel--red stack" style="gap: 18px">
+      <span class="eyebrow" style="color: var(--white)">Patients and customers</span>
+      <h2>Hire portal</h2>
+      <p style="color: var(--white)">Pay for your hire, see your receipts, add more equipment or book a collection. Open the link we texted you when your hire started. No password needed.</p>
+      <div class="btn-row"><a class="btn btn--light" href="/portal/demo/#patient">Access now</a></div>
+      <p style="color: var(--white); font-size: 15px">Can't find your link? Call <a href={site.phoneHref} style="color: var(--white); font-weight: 700">{site.phone}</a> and we'll send it again.</p>
     </div>
-    <div class="card stack" style="gap: 12px">
-      <h2 style="font-size: 24px">Open your portal</h2>
-      <p class="muted">Your personal link is in the text message we sent when your hire started.</p>
-      <a class="btn btn--primary" style="align-self:flex-start" href={site.portalUrl}>Go to the hire portal</a>
-    </div>
-    <div class="card stack" style="gap: 12px">
-      <h2 style="font-size: 24px">Can't find your link?</h2>
-      <p class="muted">Call us and we'll send it again.</p>
-      <a class="btn btn--outline" style="align-self:flex-start" href={site.phoneHref}>Call {site.phone}</a>
+    <div class="panel panel--white stack" style="gap: 18px">
+      <span class="eyebrow">Referrers and hospitals</span>
+      <h2>Partner access</h2>
+      <div class="grid two" style="gap: 12px">
+        <a class="mini" href="/portal/demo/#referrer"><strong>Referrer portal</strong><span>OTs, aged care and case managers: quotes, approvals, invoices and statements.</span></a>
+        <a class="mini" href="/portal/demo/#hospital"><strong>Hospital portal</strong><span>Discharge orders and live status for ward staff, signed in with a PIN.</span></a>
+      </div>
+      <form class="stack" style="gap: 10px" id="findHospital">
+        <label for="hospitalEmail" style="font-weight: 600">Lost your hospital's portal link?</label>
+        <p class="muted" style="font-size: 15px">Each hospital has its own secure link. Enter your work email and we'll send your hospital's link to it again.</p>
+        <div class="form" style="grid-template-columns: 1fr auto; gap: 10px">
+          <input id="hospitalEmail" type="email" required placeholder="name@health.sa.gov.au" autocomplete="email" />
+          <button class="btn btn--dark" type="submit">Send my link</button>
+        </div>
+        <p class="form-status" id="findHospitalStatus" role="status" hidden></p>
+      </form>
     </div>
   </div>
+  <p class="muted" style="margin-top: 24px; font-size: 15px">The portals open in an interactive preview while they are being built.</p>
 </Page>
+
+<style>
+  .mini { background: var(--grey-50); border-radius: 16px; padding: 18px; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: 4px; }
+  .mini strong { font-size: 18px; }
+  .mini span { font-size: 15px; color: var(--grey-700); line-height: 1.45; }
+  .mini:hover { background: var(--red-50); color: var(--ink); }
+</style>
+
+<script>
+  const form = document.getElementById('findHospital') as HTMLFormElement | null;
+  const status = document.getElementById('findHospitalStatus');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!status) return;
+    status.hidden = false;
+    status.textContent = 'If that email belongs to a registered hospital user, the link is on its way.';
+  });
+</script>

@@ -9,6 +9,7 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <style>
 @font-face{font-family:'Bricolage Grotesque';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-wght-normal.woff2) format('woff2')}
+@font-face{font-family:'Helvetica Rounded';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/helvetica-rounded-bold.woff2) format('woff2')}
 @font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(fonts/figtree-latin-wght-normal.woff2) format('woff2')}
 :root{
   /* Max Healthcare brand tokens (same as the website) */
@@ -16,7 +17,7 @@
   --brand:#D3121B; --brand-hover:#B00F17; --brand-soft:#FEF2F2; --brand-logo:#ED1B24;
   --green:#1E7A46; --green-soft:#E7F3EC; --amber:#B45309; --amber-soft:#FEF3E2;
   --red:#B00F17; --red-soft:#FDE3E4; --blue:#1D5FA8; --blue-soft:#E6EEF8; --focus:#D3121B;
-  --display:'Bricolage Grotesque',Georgia,serif;
+  --display:'Helvetica Rounded','Arial Rounded MT Bold','Bricolage Grotesque',sans-serif;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -24,7 +25,7 @@
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);
   font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.55}
-h1,h2,h3{font-family:var(--display);line-height:1.15;letter-spacing:-.01em;margin:0 0 .5rem}
+h1,h2,h3{font-family:var(--display);line-height:1.15;letter-spacing:0;margin:0 0 .5rem}
 h1{font-size:1.75rem} h2{font-size:1.3rem} h3{font-size:1.05rem}
 p{margin:0 0 .75rem}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -220,7 +221,7 @@ function icon(n){return '<svg viewBox="0 0 56 56" fill="none" stroke="currentCol
 function prod(id){for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id)return PRODUCTS[i];}return null;}
 
 /* ---------- state ---------- */
-var KEY='maxhc-portal-demo-v1';
+var KEY='maxhc-portal-demo-v2';
 function today(off){var d=new Date();d.setDate(d.getDate()+(off||0));return d.toISOString().slice(0,10);}
 function nowStr(){var d=new Date();return d.toLocaleString('en-AU',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});}
 function fmtDate(s){if(!s)return '';var p=s.split('-');var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return Number(p[2])+' '+m[Number(p[1])-1]+' '+p[0];}
@@ -247,25 +248,27 @@ function seed(){
       {id:'ORD-1040',token:'t-ord1040',source:'Hospital',staffId:'s1',created:'Today 9:05 am',
        patient:{mobile:'0400 333 444',name:'',dob:'',address:'',email:''},
        funding:{},room:'Level 2 consignment room',supply:'Deliver home',ward:'',priority:'Before 10am discharge',duration:'4 weeks',notes:'Set shower chair to lowest height',
-       items:[],other:'',status:'details',paid:''}
+       items:[{pid:'p1',mode:'hire'},{pid:'p3',mode:'hire'},{pid:'p4',mode:'hire'}],other:'',status:'payment',paid:''}
     ],
     privateCustomer:{token:'p-me',name:'Margaret Ellis',mobile:'0400 555 666',address:'4 Wattle Ct, Aspley QLD 4034',card:'Visa ending 4242',
       hire:[{pid:'p1',since:today(-21)},{pid:'p3',since:today(-21)}],nextPayment:today(3),
       receipts:[{id:'RCT-2201',date:today(-21),desc:'Hire, 4 weeks upfront',amt:84},{id:'RCT-2240',date:today(-7),desc:'Hire, weekly',amt:21}]},
     pView:{token:null,page:'home',cart:[],q:'',cat:''},
     referrer:{org:'Coastal Aged Care',user:'Jess Morgan',email:'jess.morgan@coastalcare.example',
-      tab:'catalogue',q:'',cat:'',draft:[],
-      quotes:[{id:'Q-3101',client:'Dorothy Kane',phone:'0400 777 888',address:'9 Banksia St, Redcliffe QLD 4020',funding:'Home Care Package',items:[{pid:'p8',mode:'buy',qty:1}],status:'Awaiting approval',created:today(-2)}],
+      tab:'catalogue',q:'',cat:'',draft:[],editing:null,dclient:{},
+      quotes:[{id:'Q-3101',client:'Dorothy Kane',phone:'0400 777 888',address:'9 Banksia St, Redcliffe QLD 4020',funding:'Home Care Package',items:[{pid:'p8',mode:'buy',qty:1,note:''}],status:'Awaiting approval',created:today(-2),rev:1}],
       invoices:[
         {id:'INV-8801',date:today(-48),due:today(-18),desc:'Order ORD-0991, Ron Bell',amt:331.20,status:'Overdue'},
         {id:'INV-8826',date:today(-20),due:today(10),desc:'Order ORD-1012, Lyn Fraser',amt:161.10,status:'Open'},
         {id:'INV-8790',date:today(-60),due:today(-30),desc:'Order ORD-0975, Ivan Cole',amt:584.10,status:'Paid'}]},
-    sms:[{to:'0400 333 444',body:'Max Healthcare: Northside Private Hospital has ordered equipment for your discharge. Please confirm your details so we can prepare it.',link:{type:'patient',token:'t-ord1040'},at:'Today 9:05 am'}], audit:[], seq:1041, qseq:3102, iseq:8827, rseq:2241
+    sms:[{to:'0400 333 444',body:'Max Healthcare: Northside Private Hospital has your discharge equipment ready. Add your details and check out here so you can take it home.',link:{type:'patient',token:'t-ord1040'},at:'Today 9:05 am'}], audit:[], seq:1041, qseq:3102, iseq:8827, rseq:2241
   };
 }
 var S;
 try{var raw=localStorage.getItem(KEY);S=raw?JSON.parse(raw):seed();}catch(e){S=seed();}
 if(!S||!S.hospital){S=seed();}
+function viewFromHash(){var v=location.hash.slice(1);if(['hospital','patient','referrer','max'].indexOf(v)>-1){S.persona=v;return true;}return false;}
+viewFromHash();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
@@ -279,13 +282,10 @@ function modal(html){document.getElementById('modalRoot').innerHTML='<div class=
 function closeModal(){document.getElementById('modalRoot').innerHTML='';}
 
 var STATUS={
-  details:['Awaiting patient details','amber'],
-  products:['Ready for products','blue'],
   payment:['Awaiting patient checkout','amber'],
   ready:['Ready for discharge','green']
 };
 function pill(st){var s=STATUS[st]||[st,'grey'];return '<span class="pill '+s[1]+'">'+esc(s[0])+'</span>';}
-function idComplete(p){return !!(p.name&&p.dob&&p.address);}
 function itemsHire(items,rate){var t=0;items.forEach(function(it){var p=prod(it.pid);if(it.mode==='hire'&&p.hire)t+=p.hire*(rate||1)*(it.qty||1);});return t;}
 function itemsBuy(items,rate){var t=0;items.forEach(function(it){var p=prod(it.pid);if(it.mode==='buy'&&p.buy)t+=p.buy*(rate||1)*(it.qty||1);});return t;}
 function itemList(items){if(!items.length)return '<span class="muted">No products yet</span>';return items.map(function(it){var p=prod(it.pid);return esc(p.name)+' <span class="muted">('+(it.mode==='hire'?'hire':'buy')+')</span>';}).join('<br>');}
@@ -317,15 +317,13 @@ function renderHospital(){
   var tabs=[['board','Status board']];
   if(me.role!=='Viewer')tabs.push(['new','New discharge order']);
   if(me.role==='Hospital Admin'){tabs.push(['staff','Staff & devices']);tabs.push(['audit','Audit log']);}
-  if(S.hTab!=='addProducts'&&!tabs.some(function(t){return t[0]===S.hTab;}))S.hTab='board';
-  if(S.hTab==='addProducts'&&(me.role==='Viewer'||!S.draft))S.hTab='board';
+  if(!tabs.some(function(t){return t[0]===S.hTab;}))S.hTab='board';
   var body='';
   if(S.hTab==='board')body=boardView(me);
   if(S.hTab==='new')body=newOrderView(me);
   if(S.hTab==='staff')body=staffView();
   if(S.hTab==='audit')body=auditView();
-  if(S.hTab==='addProducts')body=addProductsView(me);
-  return shell(hospitalUrl(),head,tabBar(tabs,S.hTab==='addProducts'?'board':S.hTab,'hTab'),body);
+  return shell(hospitalUrl(),head,tabBar(tabs,S.hTab,'hTab'),body);
 }
 
 function pinView(){
@@ -382,8 +380,7 @@ function boardView(me){
     h+='<div class="small">'+itemList(o.items)+(o.other?'<br><span class="muted">Other: '+esc(o.other)+'</span>':'')+'</div>';
     h+='<div class="small muted">'+esc(o.supply)+(o.ward?', '+esc(o.ward):'')+' · '+esc(o.priority)+'<br>Raised by '+esc(st?st.name:'')+', '+esc(o.created)+'</div>';
     if(me.role!=='Viewer'){
-      if(o.status==='details')h+='<button class="btn sm" data-action="resendDetails" data-v="'+o.id+'">Resend details SMS</button>';
-      if(o.status==='products')h+='<button class="btn sm primary" data-action="openAddProducts" data-v="'+o.id+'">Add products</button>';
+      if(o.status==='payment')h+='<button class="btn sm" data-action="resendCheckout" data-v="'+o.id+'">Resend checkout SMS</button>';
       if(ready)h+='<span class="small muted">Read only. To change or cancel, call Max on 07 3000 0000.</span>';
     }
     return h+'</div>';
@@ -416,15 +413,15 @@ function krow(p,d){
 function opt(list,val){return list.map(function(v){return '<option'+(v===val?' selected':'')+'>'+esc(v)+'</option>';}).join('');}
 function newOrderView(me){
   var d=S.draft||(S.draft=blankDraft());
-  var complete=idComplete(d);
-  var h='<h2>New discharge order</h2><p class="muted">Only the patient\'s mobile is required. If you leave out their details, we text them to fill the gaps before equipment can be added.</p>';
+  var h='<h2>New discharge order</h2><p class="muted">Choose the equipment and add the patient\'s mobile. We text the patient one link to add their details and pay in the same step.</p>';
+  h+='<fieldset><legend>Equipment</legend>'+productPicker(d)+'</fieldset>';
   h+='<fieldset><legend>Patient</legend><div class="grid2">'+
-    '<label class="f"><span class="req">Mobile</span><input type="tel" id="d_mobile" value="'+esc(d.mobile)+'" placeholder="04xx xxx xxx" data-input="draftField"></label>'+
-    '<label class="f"><span>Full name</span><input type="text" id="d_name" value="'+esc(d.name)+'" data-input="draftField"></label>'+
-    '<label class="f"><span>Date of birth</span><input type="date" id="d_dob" value="'+esc(d.dob)+'" data-input="draftField"></label>'+
-    '<label class="f"><span>Home address</span><input type="text" id="d_address" value="'+esc(d.address)+'" data-input="draftField"></label>'+
-    '<label class="f"><span>Email</span><input type="email" id="d_email" value="'+esc(d.email)+'"></label></div>'+
-    '<details style="margin-top:.75rem"><summary>Alternative contact or funding (optional)</summary><div class="grid2" style="margin-top:.75rem">'+
+    '<label class="f"><span class="req">Mobile</span><input type="tel" id="d_mobile" value="'+esc(d.mobile)+'" placeholder="04xx xxx xxx"></label></div>'+
+    '<details style="margin-top:.75rem"><summary>Patient details (optional, the patient confirms these at checkout)</summary><div class="grid2" style="margin-top:.75rem">'+
+    '<label class="f"><span>Full name</span><input type="text" id="d_name" value="'+esc(d.name)+'"></label>'+
+    '<label class="f"><span>Date of birth</span><input type="date" id="d_dob" value="'+esc(d.dob)+'"></label>'+
+    '<label class="f"><span>Home address</span><input type="text" id="d_address" value="'+esc(d.address)+'"></label>'+
+    '<label class="f"><span>Email</span><input type="email" id="d_email" value="'+esc(d.email)+'"></label>'+
     '<label class="f"><span>Alternative contact name</span><input type="text" id="d_altName" value="'+esc(d.altName)+'"></label>'+
     '<label class="f"><span>Alternative contact phone</span><input type="tel" id="d_altPhone" value="'+esc(d.altPhone)+'"></label>'+
     '<label class="f"><span>Funding body</span><select id="d_funder"><option value="">Patient pays</option>'+opt(['WorkCover','DVA','Home Care Package','NDIS','Insurer'],d.funder)+'</select></label>'+
@@ -437,34 +434,22 @@ function newOrderView(me){
     '<label class="f"><span>Priority</span><select id="d_priority">'+opt(['Standard','Before 10am discharge'],d.priority)+'</select></label>'+
     '<label class="f"><span>Hire for</span><select id="d_duration">'+opt(['4 weeks','8 weeks','12 weeks','Ongoing'],d.duration)+'</select></label></div>'+
     '<label class="f" style="margin-top:.75rem"><span>Delivery instructions</span><textarea id="d_notes" placeholder="Set-up heights, patient weight, access">'+esc(d.notes)+'</textarea></label></fieldset>';
-  h+='<fieldset><legend>Equipment</legend>';
-  if(!complete)h+='<div class="note amber">Products unlock once the patient\'s name, date of birth and address are in. Fill them in above, or send the order now and we will text the patient to complete them.</div><div style="opacity:.45;pointer-events:none" aria-hidden="true">'+productPicker(d)+'</div>';
-  else h+=productPicker(d);
-  h+='</fieldset>';
-  var n=Object.keys(d.items).length;
-  h+='<div class="row">'+(complete?'<button class="btn primary" data-action="submitOrder" '+(n||d.other?'':'disabled')+'>Send to patient for checkout</button>':'<button class="btn primary" data-action="submitOrder">Text patient to complete details</button>')+
+  h+='<div class="row"><button class="btn primary" data-action="submitOrder">Send to patient for checkout</button>'+
     '<button class="btn" data-action="clearDraft">Clear form</button><span class="small muted">Raised by '+esc(me.name)+'</span></div>';
   return h;
 }
 function submitOrder(){
   var d=readDraft();
+  var items=Object.keys(d.items).map(function(id){return {pid:id,mode:d.items[id]};});
+  if(!items.length&&!d.other.trim()){toast('Choose at least one product.');return;}
   if(!d.mobile.trim()){toast('Enter the patient\'s mobile number.');return;}
   if(d.supply==='Deliver to ward'&&!d.ward.trim()){toast('Add the ward and room for ward delivery.');return;}
-  var complete=idComplete(d);
-  var items=complete?Object.keys(d.items).map(function(id){return {pid:id,mode:d.items[id]};}):[];
   var o={id:'ORD-'+(S.seq++),token:'t-'+rnd(),source:'Hospital',staffId:S.session,created:'Today '+new Date().toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'}),
     patient:{mobile:d.mobile.trim(),name:d.name.trim(),dob:d.dob,address:d.address.trim(),email:d.email.trim()},
     funding:{funder:d.funder,claim:d.claim,caseMgr:d.caseMgr,altName:d.altName,altPhone:d.altPhone},
-    room:d.room,supply:d.supply,ward:d.ward,priority:d.priority,duration:d.duration,notes:d.notes,items:items,other:complete?d.other:'',status:'',paid:''};
-  if(!complete){o.status='details';sendSms(o.patient.mobile,'Max Healthcare: '+S.hospital.name+' has ordered equipment for your discharge. Please confirm your details so we can prepare it.',{type:'patient',token:o.token});}
-  else{o.status='payment';sendSms(o.patient.mobile,'Max Healthcare: your equipment from '+S.hospital.name+' has been added to your cart. Check out now so you can take it home.',{type:'patient',token:o.token});}
+    room:d.room,supply:d.supply,ward:d.ward,priority:d.priority,duration:d.duration,notes:d.notes,items:items,other:d.other,status:'payment',paid:''};
+  sendSms(o.patient.mobile,'Max Healthcare: '+S.hospital.name+' has your discharge equipment ready. Add your details and check out here so you can take it home.',{type:'patient',token:o.token});
   S.orders.push(o);audit('Created discharge order',o.id);S.draft=null;S.hTab='board';toast(o.id+' sent to the patient by SMS.');
-}
-function addProductsView(me){
-  var o=orderById(S.addFor);if(!o)return '';
-  var d=S.draft;
-  return '<h2>Add products for '+esc(o.patient.name)+'</h2><p class="muted">'+o.id+' · details confirmed by the patient · '+esc(o.supply)+'</p><fieldset><legend>Equipment</legend>'+productPicker(d)+'</fieldset>'+
-    '<div class="row"><button class="btn primary" data-action="saveProducts">Send to patient for checkout</button><button class="btn" data-action="hTab" data-v="board">Cancel</button></div>';
 }
 
 function staffView(){
@@ -482,7 +467,7 @@ function staffView(){
   h+='<h2 style="margin-top:1.5rem">Approved devices</h2><div class="tablewrap"><table><thead><tr><th>Device</th><th>Approved</th><th></th></tr></thead><tbody>'+
     S.devices.map(function(dv){return '<tr><td>'+esc(dv.name)+'</td><td>'+esc(dv.added)+'</td><td class="num"><button class="btn sm danger" data-action="removeDevice" data-v="'+dv.id+'">Remove</button></td></tr>';}).join('')+
     '</tbody></table></div><div class="row" style="margin-top:.75rem"><input type="text" id="dev_name" placeholder="e.g. Ward 6 nurses station" style="max-width:280px"><button class="btn" data-action="addDevice">Approve this device</button></div>';
-  h+='<h2 style="margin-top:1.5rem">Settings</h2><label class="f" style="max-width:280px"><span>Lock to PIN pad after</span><select data-action="setIdle">'+[1,2,5,10].map(function(m){return '<option value="'+m+'"'+(m===S.hospital.idleMins?' selected':'')+'>'+m+' minute'+(m>1?'s':'')+' idle</option>';}).join('')+'</select></label>';
+  h+='<h2 style="margin-top:1.5rem">Settings</h2><label class="f" style="max-width:280px"><span>Lock to PIN pad after</span><select data-action="setIdle">'+[2,10,30,60,120].map(function(m){return '<option value="'+m+'"'+(m===S.hospital.idleMins?' selected':'')+'>'+m+' minutes idle</option>';}).join('')+'</select></label>';
   return h;
 }
 function auditView(){
@@ -505,30 +490,26 @@ function renderPatient(){
   if(!o)return shell('portal.maxhealthcare.com.au/t/'+v.token,brand('Your equipment'),'','<div class="note red">This link is no longer valid. Contact Max Healthcare on 07 3000 0000.</div>');
   var url='portal.maxhealthcare.com.au/t/'+o.token;
   var body='';
-  if(o.status==='details')body=patientDetailsView(o);
-  else if(o.status==='products')body='<h1>Thanks, your details are confirmed</h1><p>Your clinician at '+esc(S.hospital.name)+' is choosing your equipment now. We will text you when it is ready to check out.</p>';
-  else if(o.status==='payment')body=patientCheckoutView(o);
+  if(o.status==='payment')body=patientCheckoutView(o);
   else body=patientDoneView(o);
   return shell(url,brand('Your equipment'),'',body);
 }
-function patientDetailsView(o){
-  var p=o.patient;
-  return '<h1>Confirm your details</h1><p>'+esc(S.hospital.name)+' has arranged equipment for your discharge. We need three details to identify you.</p><div class="grid2" style="max-width:640px">'+
-    '<label class="f"><span class="req">Full name</span><input type="text" id="pt_name" value="'+esc(p.name)+'"></label>'+
-    '<label class="f"><span class="req">Date of birth</span><input type="date" id="pt_dob" value="'+esc(p.dob)+'"></label>'+
-    '<label class="f"><span class="req">Home address</span><input type="text" id="pt_address" value="'+esc(p.address)+'"></label>'+
-    '<label class="f"><span>Email for receipts</span><input type="email" id="pt_email" value="'+esc(p.email)+'"></label></div>'+
-    '<div class="row" style="margin-top:1rem"><button class="btn primary" data-action="ptSaveDetails" data-v="'+o.id+'">Confirm details</button></div>';
-}
 function patientCheckoutView(o){
+  var p=o.patient;
   var wk=itemsHire(o.items),buy=itemsBuy(o.items),del=o.supply==='Deliver home'||o.supply==='Deliver to another address'?HOME_DELIVERY:0;
-  var rows=o.items.map(function(it){var p=prod(it.pid);return '<tr><td>'+esc(p.name)+'</td><td>'+(it.mode==='hire'?'Hire':'Purchase')+'</td><td class="num">'+(it.mode==='hire'?money(p.hire)+'/wk':money(p.buy))+'</td></tr>';}).join('');
-  var h='<h1>Your equipment is ready to check out</h1><p class="muted">Arranged by '+esc(S.hospital.name)+' for '+esc(o.patient.name)+' · hire for '+esc(o.duration.toLowerCase())+'</p>';
-  h+='<div class="split"><div><div class="tablewrap"><table><thead><tr><th>Item</th><th>Type</th><th class="num">Price</th></tr></thead><tbody>'+rows+(del?'<tr><td>Home delivery</td><td>One-off</td><td class="num">'+money(del)+'</td></tr>':'')+'</tbody></table></div>'+(o.other?'<p class="small muted" style="margin-top:.5rem">Also requested: '+esc(o.other)+'. Max will confirm price and availability.</p>':'')+'</div>';
+  var rows=o.items.map(function(it){var pr=prod(it.pid);return '<tr><td>'+esc(pr.name)+'</td><td>'+(it.mode==='hire'?'Hire':'Purchase')+'</td><td class="num">'+(it.mode==='hire'?money(pr.hire)+'/wk':money(pr.buy))+'</td></tr>';}).join('');
+  var h='<h1>Your equipment is ready</h1><p class="muted">Arranged by '+esc(S.hospital.name)+' · hire for '+esc(o.duration.toLowerCase())+'. Add your details and pay below, and it is ready to go home with you.</p>';
+  h+='<div class="split"><div>';
+  h+='<h2>Your equipment</h2><div class="tablewrap"><table><thead><tr><th>Item</th><th>Type</th><th class="num">Price</th></tr></thead><tbody>'+rows+(del?'<tr><td>Home delivery</td><td>One-off</td><td class="num">'+money(del)+'</td></tr>':'')+'</tbody></table></div>'+(o.other?'<p class="small muted" style="margin-top:.5rem">Also requested: '+esc(o.other)+'. Max will confirm price and availability.</p>':'');
+  h+='<fieldset style="margin-top:1rem"><legend>Your details</legend><div class="grid2">'+
+    '<label class="f"><span class="req">Full name</span><input type="text" id="pt_name" value="'+esc(p.name)+'" autocomplete="name"></label>'+
+    '<label class="f"><span class="req">Date of birth</span><input type="date" id="pt_dob" value="'+esc(p.dob)+'"></label>'+
+    '<label class="f"><span class="req">Home address</span><input type="text" id="pt_address" value="'+esc(p.address)+'" autocomplete="street-address"></label>'+
+    '<label class="f"><span>Email for receipts</span><input type="email" id="pt_email" value="'+esc(p.email)+'" autocomplete="email"></label></div></fieldset></div>';
   h+='<div class="panel">'+(wk?'<fieldset style="margin-bottom:.75rem"><legend>Pay for hire</legend><label><input type="radio" name="plan" value="Weekly subscription" data-due="'+money(wk+buy+del)+'" checked> '+money(wk)+' a week, charged weekly</label><br><label><input type="radio" name="plan" value="4 weeks upfront" data-due="'+money(wk*4+buy+del)+'"> '+money(wk*4)+' for 4 weeks upfront</label></fieldset>':'')+
     '<label class="f"><span>Card number</span><input type="text" id="card" value="4242 4242 4242 4242"></label><div class="grid2" style="margin-top:.5rem"><label class="f"><span>Expiry</span><input type="text" value="12/29"></label><label class="f"><span>CVC</span><input type="text" value="123"></label></div>'+
     '<p class="small muted" style="margin-top:.5rem">Secured by Stripe (test mode)</p><p><strong>Due today: <span id="dueToday">'+money((wk?wk:0)+buy+del)+'</span></strong></p>'+
-    '<button class="btn primary" style="width:100%" data-action="ptPay" data-v="'+o.id+'">Pay and confirm</button></div></div>';
+    '<button class="btn primary" style="width:100%" data-action="ptPay" data-v="'+o.id+'">Confirm details and pay</button></div></div>';
   return h;
 }
 function patientDoneView(o){
@@ -579,7 +560,7 @@ function cartView(){
 function renderReferrer(){
   var r=S.referrer;
   var head=brand('Partner portal')+'<div class="who"><strong>'+esc(r.user)+'</strong><br><span class="muted">'+esc(r.org)+'</span></div>';
-  var tabs=tabBar([['catalogue','Catalogue'],['quote','New quote'+(r.draft.length?' ('+r.draft.length+')':'')],['quotes','Quotes'],['invoices','Invoices']],r.tab,'rTab');
+  var tabs=tabBar([['catalogue','Catalogue'],['quote',(r.editing?'Editing '+r.editing:'New quote')+(r.draft.length?' ('+r.draft.length+')':'')],['quotes','Quotes'],['invoices','Invoices']],r.tab,'rTab');
   var body='';
   if(r.tab==='catalogue')body=catalogue('rf',r.q,r.cat,CONTRACT_RATE);
   if(r.tab==='quote')body=quoteBuilder();
@@ -588,14 +569,19 @@ function renderReferrer(){
   return shell('portal.maxhealthcare.com.au/partner/coastal-aged-care-m4q1z8',head,tabs,body);
 }
 function quoteBuilder(){
-  var r=S.referrer;
-  if(!r.draft.length)return '<div class="empty">Add products from the catalogue to start a quote. <button class="btn" data-action="rTab" data-v="catalogue">Open catalogue</button></div>';
-  var rows=r.draft.map(function(it,i){var p=prod(it.pid);var unit=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE;return '<tr><td>'+esc(p.name)+'</td><td>'+(it.mode==='hire'?'Hire /wk':'Purchase')+'</td><td><input type="number" min="1" value="'+it.qty+'" data-input="rQty" data-v="'+i+'" aria-label="Quantity" style="width:64px;padding:.3rem;border:1px solid var(--line);border-radius:6px"></td><td class="num">'+money(unit*it.qty)+'</td><td class="num"><button class="btn sm" data-action="rRemove" data-v="'+i+'">Remove</button></td></tr>';}).join('');
-  return '<h2>New quote</h2><div class="tablewrap"><table><thead><tr><th>Item</th><th>Type</th><th>Qty</th><th class="num">Contract price</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
-    '<fieldset style="margin-top:1rem"><legend>Client</legend><div class="grid2">'+
-    '<label class="f"><span class="req">Client name</span><input type="text" id="q_client"></label><label class="f"><span>Phone</span><input type="tel" id="q_phone"></label>'+
-    '<label class="f"><span class="req">Delivery address</span><input type="text" id="q_address"></label><label class="f"><span>Funding</span><select id="q_funding">'+opt(['Home Care Package','Transitional care','NDIS','WorkCover','Private'],'Home Care Package')+'</select></label></div></fieldset>'+
+  var r=S.referrer,c=r.dclient||{};
+  if(!r.draft.length&&!r.editing)return '<div class="empty">Add products from the catalogue to start a quote. <button class="btn" data-action="rTab" data-v="catalogue">Open catalogue</button></div>';
+  var q=r.editing?findQuote(r.editing):null;
+  var rows=r.draft.map(function(it,i){var p=prod(it.pid);var unit=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE;return '<tr><td>'+esc(p.name)+'<input type="text" value="'+esc(it.note||'')+'" data-input="rNote" data-v="'+i+'" placeholder="Colour, size or notes" aria-label="Colour, size or notes for '+esc(p.name)+'" style="margin-top:.35rem;min-height:36px;padding:.3rem .5rem;font-size:.875rem"></td><td>'+(it.mode==='hire'?'Hire /wk':'Purchase')+'</td><td><input type="number" min="1" value="'+it.qty+'" data-input="rQty" data-v="'+i+'" aria-label="Quantity" style="width:64px;padding:.3rem;border:1px solid var(--line);border-radius:6px"></td><td class="num">'+money(unit*it.qty)+'</td><td class="num"><button class="btn sm" data-action="rRemove" data-v="'+i+'">Remove</button></td></tr>';}).join('');
+  var h=q?'<h2>Edit '+q.id+'</h2><div class="note">Change products, quantities or colours before the quote is approved. Saving creates revision '+((q.rev||1)+1)+' and an updated PDF.</div>':'<h2>New quote</h2>';
+  h+=(rows?'<div class="tablewrap"><table><thead><tr><th>Item</th><th>Type</th><th>Qty</th><th class="num">Contract price</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<div class="empty">No products on this quote yet.</div>')+
+    '<div class="row" style="margin-top:.75rem"><button class="btn sm" data-action="rTab" data-v="catalogue">Add more products</button></div>';
+  h+='<fieldset style="margin-top:1rem"><legend>Client</legend><div class="grid2">'+
+    '<label class="f"><span class="req">Client name</span><input type="text" id="q_client" value="'+esc(c.client||'')+'" data-input="rClient" data-k="client"></label><label class="f"><span>Phone</span><input type="tel" id="q_phone" value="'+esc(c.phone||'')+'" data-input="rClient" data-k="phone"></label>'+
+    '<label class="f"><span class="req">Delivery address</span><input type="text" id="q_address" value="'+esc(c.address||'')+'" data-input="rClient" data-k="address"></label><label class="f"><span>Funding</span><select id="q_funding" data-action="rFunding">'+opt(['Home Care Package','Transitional care','NDIS','WorkCover','Private'],c.funding||'Home Care Package')+'</select></label></div></fieldset>';
+  h+=q?'<div class="row"><button class="btn primary" data-action="createQuote">Save changes</button><button class="btn" data-action="cancelEdit">Cancel</button></div>':
     '<div class="row"><button class="btn primary" data-action="createQuote">Create quote</button><span class="small muted">You can download the PDF and send it for approval straight away.</span></div>';
+  return h;
 }
 function quoteTotal(q){var t=0;q.items.forEach(function(it){var p=prod(it.pid);t+=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE*it.qty;});return t;}
 function quotesView(){
@@ -603,8 +589,8 @@ function quotesView(){
   if(!r.quotes.length)return '<div class="empty">No quotes yet.</div>';
   return '<h2>Quotes</h2><div class="tablewrap"><table><thead><tr><th>Quote</th><th>Client</th><th>Funding</th><th>Status</th><th class="num">Total</th><th></th></tr></thead><tbody>'+
     r.quotes.slice().reverse().map(function(q){var cls=q.status==='Approved'?'green':q.status==='Declined'?'red':'amber';
-      return '<tr><td>'+q.id+'<div class="small muted">'+fmtDate(q.created)+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td><span class="pill '+cls+'">'+q.status+'</span>'+(q.order?'<div class="small muted">'+q.order+'</div>':'')+'</td><td class="num">'+money(quoteTotal(q))+'</td><td class="num"><button class="btn sm" data-action="viewQuote" data-v="'+q.id+'">PDF</button> '+
-      (q.status==='Awaiting approval'?'<button class="btn sm primary" data-action="approveQuote" data-v="'+q.id+'">Approve</button> <button class="btn sm" data-action="declineQuote" data-v="'+q.id+'">Decline</button>':'')+'</td></tr>';}).join('')+'</tbody></table></div>';
+      return '<tr><td>'+q.id+'<div class="small muted">'+fmtDate(q.created)+((q.rev||1)>1?' · rev '+q.rev+', '+fmtDate(q.revised):'')+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td><span class="pill '+cls+'">'+q.status+'</span>'+(q.order?'<div class="small muted">'+q.order+'</div>':'')+'</td><td class="num">'+money(quoteTotal(q))+'</td><td class="num"><button class="btn sm" data-action="viewQuote" data-v="'+q.id+'">PDF</button> '+
+      (q.status==='Awaiting approval'?'<button class="btn sm" data-action="editQuote" data-v="'+q.id+'">Edit</button> <button class="btn sm primary" data-action="approveQuote" data-v="'+q.id+'">Approve</button> <button class="btn sm" data-action="declineQuote" data-v="'+q.id+'">Decline</button>':'')+'</td></tr>';}).join('')+'</tbody></table></div>';
 }
 function invoicesView(){
   var r=S.referrer,out=0,over=0;
@@ -622,7 +608,7 @@ function invoicesView(){
 function renderMax(){
   var head=brand('Salesforce view (what staff see)');
   var rows=S.orders.slice().reverse().map(function(o){var st=staffById(o.staffId);return '<tr><td>'+o.id+'</td><td><span class="pill grey">'+esc(o.source)+'</span></td><td>'+esc(o.patient.name||o.patient.mobile)+'</td><td>'+(o.status?pill(o.status):'<span class="pill green">Paid</span>')+'</td><td class="small">'+itemList(o.items)+'</td><td class="small">'+esc(st?st.name+', '+S.hospital.name:o.createdBy||'')+'</td></tr>';}).join('');
-  var qrows=S.referrer.quotes.slice().reverse().map(function(q){return '<tr><td>'+q.id+'</td><td>'+esc(S.referrer.org)+'</td><td>'+esc(q.client)+'</td><td>'+(q.status==='Approved'?'Closed Won':q.status==='Declined'?'Closed Lost':'Quote sent')+'</td><td class="num">'+money(quoteTotal(q))+'</td></tr>';}).join('');
+  var qrows=S.referrer.quotes.slice().reverse().map(function(q){return '<tr><td>'+q.id+'</td><td>'+esc(S.referrer.org)+'</td><td>'+esc(q.client)+'</td><td>'+(q.status==='Approved'?'Closed Won':q.status==='Declined'?'Closed Lost':'Quote sent')+((q.rev||1)>1?' (rev '+q.rev+')':'')+'</td><td class="num">'+money(quoteTotal(q))+'</td></tr>';}).join('');
   var body='<h2>Orders from all portals</h2><div class="tablewrap"><table><thead><tr><th>Order</th><th>Source</th><th>Customer</th><th>Status</th><th>Items</th><th>Raised by</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
     '<h2 style="margin-top:1.5rem">Opportunities from referrer quotes</h2><div class="tablewrap"><table><thead><tr><th>Quote</th><th>Account</th><th>Client</th><th>Stage</th><th class="num">Amount</th></tr></thead><tbody>'+qrows+'</tbody></table></div>'+
     '<h2 style="margin-top:1.5rem">Hospital portal settings</h2><div class="panel"><p><strong>'+esc(S.hospital.name)+'</strong><br><span class="small">'+esc(hospitalUrl())+'</span></p><p class="small muted">Rotating the link retires the old one straight away and signs everyone out. Send the new link to the Hospital Admin.</p><button class="btn danger" data-action="rotate">Rotate hospital link</button></div>';
@@ -652,16 +638,11 @@ function act(a,v,el){
   case 'pickStaff':S.pickStaff=S.pickStaff===v?null:v;S.pinMsg='';break;
   case 'pinKey':pinKey(v);break;
   case 'lock':audit('Locked the device');S.session=null;S.lockedReason='';clearTimeout(idleTimer);break;
-  case 'hTab':if(S.hTab==='new')readDraft();S.hTab=v;if(v!=='new'&&v!=='addProducts')S.draft=S.hTab==='new'?S.draft:S.draft;break;
+  case 'hTab':if(S.hTab==='new')readDraft();S.hTab=v;break;
   case 'pickItem':{var d=readDraft();if(el.checked)d.items[v]=el.getAttribute('data-m');else delete d.items[v];break;}
   case 'submitOrder':submitOrder();break;
   case 'clearDraft':S.draft=blankDraft();break;
-  case 'resendDetails':{var o=orderById(v);sendSms(o.patient.mobile,'Max Healthcare reminder: please confirm your details so we can prepare your discharge equipment.',{type:'patient',token:o.token});audit('Resent details SMS',o.id);toast('Reminder sent.');break;}
-  case 'openAddProducts':S.addFor=v;S.draft=blankDraft();S.hTab='addProducts';break;
-  case 'saveProducts':{var d2=readDraft();var o2=orderById(S.addFor);var ks=Object.keys(d2.items);if(!ks.length&&!d2.other){toast('Choose at least one product.');return;}
-    o2.items=ks.map(function(id){return {pid:id,mode:d2.items[id]};});o2.other=d2.other;o2.status='payment';
-    sendSms(o2.patient.mobile,'Max Healthcare: your equipment from '+S.hospital.name+' has been added to your cart. Check out now so you can take it home.',{type:'patient',token:o2.token});
-    audit('Added products',o2.id);S.draft=null;S.hTab='board';toast('Products sent to the patient.');break;}
+  case 'resendCheckout':{var o=orderById(v);sendSms(o.patient.mobile,'Max Healthcare reminder: your discharge equipment from '+S.hospital.name+' is ready. Add your details and check out here.',{type:'patient',token:o.token});audit('Resent checkout SMS',o.id);toast('Reminder sent.');break;}
   case 'savePin':{var pin=(document.getElementById('newPin').value||'').trim();var s=staffById(S.setPin);
     if(!/^\d{4,6}$/.test(pin)){toast('Use 4 to 6 digits.');return;}
     if(S.staff.some(function(x){return x.id!==s.id&&x.active&&x.pin===pin;})){toast('That PIN is taken at this hospital. Choose another.');return;}
@@ -682,11 +663,9 @@ function act(a,v,el){
     if(msg.link.type==='setpin'){var target=staffById(msg.link.staff);if(!target||!target.active){toast('This invite is no longer valid.');return;}S.persona='hospital';S.setPin=msg.link.staff;}
     break;}
   case 'openPatient':S.pView.token=v;S.pView.page='home';break;
-  case 'ptSaveDetails':{var o3=orderById(v);var nm=document.getElementById('pt_name').value.trim(),db=document.getElementById('pt_dob').value,ad=document.getElementById('pt_address').value.trim();
-    if(!nm||!db||!ad){toast('Fill in your name, date of birth and address.');return;}
-    o3.patient.name=nm;o3.patient.dob=db;o3.patient.address=ad;o3.patient.email=document.getElementById('pt_email').value.trim();
-    o3.status=o3.items.length?'payment':'products';toast('Details confirmed. Your clinician can now add your equipment.');break;}
-  case 'ptPay':{var o4=orderById(v);var plan=document.querySelector('input[name=plan]:checked');o4.paid=plan?plan.value:'Card payment';o4.status='ready';
+  case 'ptPay':{var o4=orderById(v);var nm=document.getElementById('pt_name').value.trim(),db=document.getElementById('pt_dob').value,ad=document.getElementById('pt_address').value.trim();
+    if(!nm||!db||!ad){toast('Add your full name, date of birth and address.');return;}
+    o4.patient.name=nm;o4.patient.dob=db;o4.patient.address=ad;o4.patient.email=document.getElementById('pt_email').value.trim();var plan=document.querySelector('input[name=plan]:checked');o4.paid=plan?plan.value:'Card payment';o4.status='ready';
     sendSms(o4.patient.mobile,'Max Healthcare: payment received, thank you. View your hire and receipts any time here.',{type:'patient',token:o4.token});
     S.audit.unshift({at:nowStr(),who:o4.patient.name+' (patient)',device:'Patient phone',action:'Paid via Stripe, hire agreement created',ref:o4.id});
     toast('Paid. '+S.hospital.name+' now shows a green tick.');break;}
@@ -703,11 +682,18 @@ function act(a,v,el){
   case 'ptCat':S.pView.cat=el.value;break;
   case 'rfCat':S.referrer.cat=el.value;break;
   case 'rTab':S.referrer.tab=v;break;
-  case 'rfAdd':{var dr=S.referrer.draft,m2=el.getAttribute('data-m'),ex=null;dr.forEach(function(it){if(it.pid===v&&it.mode===m2)ex=it;});if(ex)ex.qty++;else dr.push({pid:v,mode:m2,qty:1});toast(prod(v).name+' added to the quote.');break;}
+  case 'rfAdd':{var dr=S.referrer.draft,m2=el.getAttribute('data-m'),ex=null;dr.forEach(function(it){if(it.pid===v&&it.mode===m2&&!it.note)ex=it;});if(ex)ex.qty++;else dr.push({pid:v,mode:m2,qty:1,note:''});toast(prod(v).name+' added to the quote.');break;}
   case 'rRemove':S.referrer.draft.splice(Number(v),1);break;
-  case 'createQuote':{var cl=document.getElementById('q_client').value.trim(),adr=document.getElementById('q_address').value.trim();if(!cl||!adr){toast('Add the client name and delivery address.');return;}
-    var q={id:'Q-'+(S.qseq++),client:cl,phone:document.getElementById('q_phone').value.trim(),address:adr,funding:document.getElementById('q_funding').value,items:S.referrer.draft.slice(),status:'Awaiting approval',created:today()};
-    S.referrer.quotes.push(q);S.referrer.draft=[];S.referrer.tab='quotes';toast(q.id+' created. Download the PDF to send for approval.');showQuote(q.id);break;}
+  case 'createQuote':{var rr=S.referrer,cl=document.getElementById('q_client').value.trim(),adr=document.getElementById('q_address').value.trim();if(!cl||!adr){toast('Add the client name and delivery address.');return;}
+    if(!rr.draft.length){toast('Add at least one product.');return;}
+    var fields={client:cl,phone:document.getElementById('q_phone').value.trim(),address:adr,funding:document.getElementById('q_funding').value,items:rr.draft.slice()};
+    var q;
+    if(rr.editing){q=findQuote(rr.editing);Object.keys(fields).forEach(function(k){q[k]=fields[k];});q.rev=(q.rev||1)+1;q.revised=today();toast(q.id+' updated to revision '+q.rev+'.');}
+    else{q=fields;q.id='Q-'+(S.qseq++);q.status='Awaiting approval';q.created=today();q.rev=1;rr.quotes.push(q);toast(q.id+' created. Download the PDF to send for approval.');}
+    rr.draft=[];rr.dclient={};rr.editing=null;rr.tab='quotes';save();render();showQuote(q.id);return;}
+  case 'editQuote':{var rq=S.referrer,eq=findQuote(v);rq.editing=v;rq.draft=eq.items.map(function(it){return {pid:it.pid,mode:it.mode,qty:it.qty,note:it.note||''};});rq.dclient={client:eq.client,phone:eq.phone,address:eq.address,funding:eq.funding};rq.tab='quote';break;}
+  case 'cancelEdit':S.referrer.editing=null;S.referrer.draft=[];S.referrer.dclient={};S.referrer.tab='quotes';break;
+  case 'rFunding':S.referrer.dclient.funding=el.value;break;
   case 'viewQuote':showQuote(v);return;
   case 'approveQuote':{var q2=findQuote(v);modal('<h2>Approve '+q2.id+'</h2><p>Confirm the care partner or support coordinator has approved this quote for '+esc(q2.client)+'.</p><label class="f"><span>Authorisation (optional)</span><input type="file"></label><div class="row" style="margin-top:1rem"><button class="btn primary" data-action="confirmApprove" data-v="'+q2.id+'">Approve and order</button><button class="btn" data-action="closeModal">Cancel</button></div>');return;}
   case 'confirmApprove':{var q3=findQuote(v);q3.status='Approved';var oid='ORD-'+(S.seq++);q3.order=oid;
@@ -731,9 +717,9 @@ function findQuote(id){var r=null;S.referrer.quotes.forEach(function(q){if(q.id=
 function findInv(id){var r=null;S.referrer.invoices.forEach(function(q){if(q.id===id)r=q;});return r;}
 function showQuote(id){
   var q=findQuote(id),r=S.referrer;
-  modal('<div class="doc"><div class="row" style="justify-content:space-between">'+brand('Quotation '+q.id)+'<span class="small muted">'+fmtDate(q.created)+'<br>Valid 30 days</span></div><hr>'+
+  modal('<div class="doc"><div class="row" style="justify-content:space-between">'+brand('Quotation '+q.id+((q.rev||1)>1?', revision '+q.rev:''))+'<span class="small muted">'+fmtDate(q.created)+'<br>Valid 30 days</span></div><hr>'+
     '<div class="grid2"><div><div class="small muted">Prepared for</div><strong>'+esc(q.client)+'</strong><br>'+esc(q.address)+'<br>'+esc(q.phone)+'</div><div><div class="small muted">Requested by</div><strong>'+esc(r.user)+'</strong><br>'+esc(r.org)+'<br>Funding: '+esc(q.funding)+'</div></div><hr>'+
-    '<table><thead><tr><th>Item</th><th>Qty</th><th class="num">Amount</th></tr></thead><tbody>'+q.items.map(function(it){var p=prod(it.pid);var u=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE;return '<tr><td>'+esc(p.name)+(it.mode==='hire'?' (hire, per week)':'')+'</td><td>'+it.qty+'</td><td class="num">'+money(u*it.qty)+'</td></tr>';}).join('')+
+    '<table><thead><tr><th>Item</th><th>Qty</th><th class="num">Amount</th></tr></thead><tbody>'+q.items.map(function(it){var p=prod(it.pid);var u=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE;return '<tr><td>'+esc(p.name)+(it.mode==='hire'?' (hire, per week)':'')+(it.note?'<div class="small muted">'+esc(it.note)+'</div>':'')+'</td><td>'+it.qty+'</td><td class="num">'+money(u*it.qty)+'</td></tr>';}).join('')+
     '</tbody></table><p style="text-align:right;margin-top:.75rem"><strong>Total '+money(quoteTotal(q))+' incl. GST</strong></p><p class="small muted">Contract pricing for '+esc(r.org)+'. Approve in the partner portal to place the order.</p></div>'+
     '<div class="row no-print" style="margin-top:1rem"><button class="btn primary" data-action="print">Download PDF</button><button class="btn" data-action="closeModal">Close</button></div>');
 }
@@ -755,7 +741,8 @@ document.addEventListener('change',function(e){
 var searchTimer=null;
 document.addEventListener('input',function(e){
   var t=e.target,k=t.getAttribute('data-input');if(!k)return;
-  if(k==='draftField'){var d=readDraft();var was=S._complete;var now=idComplete(d);S._complete=now;if(was!==now){save();renderKeepFocus(t.id);}return;}
+  if(k==='rNote'){S.referrer.draft[Number(t.getAttribute('data-v'))].note=t.value;save();return;}
+  if(k==='rClient'){S.referrer.dclient[t.getAttribute('data-k')]=t.value;save();return;}
   clearTimeout(searchTimer);searchTimer=setTimeout(function(){
     if(k==='draftSearch'){readDraft();S.draft.q=t.value;}
     if(k==='ptSearch')S.pView.q=t.value;
@@ -779,6 +766,7 @@ document.addEventListener('keydown',function(e){
 });
 ['mousemove','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,function(){if(S.persona==='hospital'&&S.session){clearTimeout(armIdle.t);armIdle.t=setTimeout(armIdle,500);}},{passive:true});});
 
+window.addEventListener('hashchange',function(){if(viewFromHash()){save();render();}});
 if(S.session)armIdle();
 render();
 })();

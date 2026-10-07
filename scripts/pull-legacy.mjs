@@ -40,9 +40,16 @@ const CAT_MAP = {
   'personal-hygiene': 'personal-hygiene', 'falls-prevention': 'falls-prevention',
   'exercise-rehabilitation': 'exercise-rehabilitation', 'braces': 'exercise-rehabilitation', 'exercise-equipment': 'exercise-rehabilitation', 'weights': 'exercise-rehabilitation',
   'bariatric-plus-size': 'bariatric', 'bariatric': 'bariatric',
+  'bedroom-pressure-care-equipment': 'bedroom', 'electric-beds': 'bedroom', 'mattresses': 'bedroom', 'bed-accessories': 'bedroom', 'bedroom-furniture': 'bedroom',
+  'air-mattresses': 'pressure-care', 'static-mattresses': 'pressure-care', 'foam-gel-cushions': 'pressure-care', 'air-cushions': 'pressure-care', 'comfort-care': 'pressure-care',
+  'wheelchairs': 'mobility', 'electric-scooters': 'mobility', 'transfer-aids': 'mobility', 'ramps': 'mobility',
+  'toileting': 'bathroom-toilet', 'bath-aids': 'bathroom-toilet', 'shower-chairs': 'bathroom-toilet', 'mobile-shower-commodes': 'bathroom-toilet', 'urinals': 'bathroom-toilet',
+  'electric-recliners': 'chairs-seating', 'utility-chairs': 'chairs-seating', 'seating-accessories': 'chairs-seating',
+  'dressing-aids': 'daily-living-aids', 'reaching-aids': 'daily-living-aids', 'clothing': 'daily-living-aids',
+  'hygiene-accessories': 'personal-hygiene', 'safety': 'falls-prevention', 'exercise-and-rehabilitation': 'exercise-rehabilitation',
 };
-const SPAM = /(cialis|viagra|levitra|tadalafil|pharm|casino|betting|bookmaker|poker|loan|porn|crypto)/i;
-const strip = (html = '') => html.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '')
+const SPAM = /(\bcialis|viagra|levitra|tadalafil|pharm|casino|betting|bookmaker|poker|loan|porn|crypto)/i;
+const strip = (html = '') => html.replace(/\[maxbutton[^\]]*\]/gi, '').replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '')
   .replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n\n').replace(/<[^>]+>/g, '')
   .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&#8211;|&#8212;|&ndash;|&mdash;/g, '-').replace(/&#8217;|&rsquo;/g, "'")
   .replace(/&#8220;|&#8221;|&ldquo;|&rdquo;/g, '"').replace(/&#\d+;/g, '').replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();

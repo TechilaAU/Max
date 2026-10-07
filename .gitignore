@@ -5,3 +5,6 @@ dist/
 .env.*
 .DS_Store
 .legacy-cache/
+
+# Raw legacy media pull (pick into public/images/site or categories with scripts/make-site-images.mjs)
+public/images/legacy/

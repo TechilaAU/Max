@@ -13,7 +13,7 @@ const faqs = [
 const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
 ---
 <Page title="How equipment hire works" description="Hire healthcare equipment by the week in Adelaide. Billed from handover, pay by secure text link, free hospital delivery, book 4 weeks and pay for 3." eyebrow="Weekly hire" crumbs={[{ label: 'Hire' }]}
-  lede="Hire is ideal for short-term recovery. Weekly rates, billed from the day it's handed over, with payments and collection managed online." photoSlot="hire" photoLabel="Electric bed and walker set up in a bedroom" schema={schema}>
+  lede="Hire is ideal for short-term recovery. Weekly rates, billed from the day it's handed over, with payments and collection managed online." photoSlot="hire" photoLabel="Electric beds, lift chairs and wheelchairs in the Max showroom" schema={schema}>
   <div slot="hero" class="btn-row"><a class="btn btn--primary" href="/equipment/hire/">Browse hire equipment</a><a class="btn btn--outline" href={site.phoneHref}>Call {site.phone}</a></div>
 
   <div class="grid" style="--min: 260px; margin-bottom: 56px">

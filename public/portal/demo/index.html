@@ -226,6 +226,13 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 .home-apps{padding:24px 22px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px 10px}
 .appicon{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;cursor:pointer;font-size:.74rem;color:var(--char);position:relative}
 .appicon i{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-style:normal;color:#fff;font-weight:800}
+.ph-notif{position:absolute;top:46px;left:10px;right:10px;z-index:5;display:flex;gap:10px;align-items:flex-start;text-align:left;background:rgba(255,255,255,.97);border:0;border-radius:18px;padding:10px 12px;box-shadow:0 10px 30px -8px rgba(35,31,32,.45);cursor:pointer;font:inherit;color:var(--char);animation:notifIn .25s ease-out}
+.ph-notif i{flex:none;width:30px;height:30px;border-radius:8px;background:#2FBF4F;color:#fff;font-style:normal;font-weight:800;font-size:.6rem;display:grid;place-items:center}
+.ph-notif b{display:block;font-size:.78rem}.ph-notif span{display:block;font-size:.8rem;line-height:1.3}
+@keyframes notifIn{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.ph-notif{animation:none}}
+.otp-chip{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:10px 12px;border-radius:12px;border:1px dashed var(--grey);background:#F4F4F5;font:inherit;font-weight:700;cursor:pointer;color:var(--char)}
+.otp-chip small{font-weight:400;color:#555}
 .appicon .badge{position:absolute;top:-4px;right:6px;background:var(--red);color:#fff;border-radius:999px;font-size:.7rem;min-width:20px;height:20px;line-height:20px;text-align:center;padding:0 5px}
 
 /* in-phone browser + portal */
@@ -569,7 +576,8 @@ function text(a,body,kind,opts){
   tl(a,'sms',opts.title||'Text sent',body.length>90?body.slice(0,88)+'...':body);
   return tok;
 }
-function textRaw(mobile,name,body,extra){var t=thread(mobile,name);var m={dir:'out',body:body,token:null,at:stamp(),read:true,seen:false};for(var k in extra)m[k]=extra[k];t.msgs.push(m);}
+function textRaw(mobile,name,body,extra){var t=thread(mobile,name);var m={dir:'out',body:body,token:null,at:stamp(),read:true,seen:false};for(var k in extra)m[k]=extra[k];t.msgs.push(m);notify(mobile,body);}
+function notify(mobile,body){var P=S.phone;if(!P)return;if(P.app==='thread'&&P.mobile===mobile)return;P.notif={mobile:mobile,body:body,id:(S.tick||0)+Math.random()};var id=P.notif.id;clearTimeout(window._notifT);window._notifT=setTimeout(function(){if(S.phone.notif&&S.phone.notif.id===id){S.phone.notif=null;renderPhone();}},7000);}
 function unreadInbound(){var n=0;Object.keys(S.threads).forEach(function(k){S.threads[k].msgs.forEach(function(m){if(m.dir==='in'&&!m.read)n++;});});return n;}
 function undelivered(){var n=0;Object.keys(S.threads).forEach(function(k){S.threads[k].msgs.forEach(function(m){if(m.failed)n++;});});return n;}
 function unseenOut(){var n=0;Object.keys(S.threads).forEach(function(k){S.threads[k].msgs.forEach(function(m){if(m.dir==='out'&&!m.seen)n++;});});return n;}
@@ -833,9 +841,10 @@ function loginScreen(){
     var m=lg.mobile.replace(/\D/g,'');
     h+='<h1>Enter your code</h1><p class="lede">If '+esc(m.slice(0,2)+'** *** '+m.slice(-3))+' is the number we have for you, a six digit code is on its way. It lasts ten minutes.</p>'+
       '<label class="f">Six digit code<input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" style="letter-spacing:.3em;font-size:1.3rem" '+bind('lg_code')+'></label>'+
+      (lg.delivered?'<button class="otp-chip" data-action="loginFill"><small>From Messages</small> '+esc(lg.code)+'</button>':'<div class="notice" style="margin-top:12px">Demo note: no demo patient has this number, so no text was sent. Use a different number and try 0400 555 666.</div>')+
       (lg.err?'<div class="notice bad" style="margin-top:12px">'+esc(lg.err)+'</div>':'')+
       '<button class="btn primary block" style="margin-top:14px" data-action="loginVerify">Sign in</button><button class="btn block" style="margin-top:10px" data-action="loginResend">Send me another code</button><button class="btn quiet block" data-action="loginRestart">Use a different number</button>'+
-      '<p class="muted small centre">The code arrives as a text. Check Messages on this phone.</p>';
+      '<p class="muted small centre">The code arrives as a text. You can check Messages and come back: your code stays valid for ten minutes.</p>';
   }
   return h+'<p class="foot">Stuck? Call us on <a href="tel:1800684277">'+MAX_PHONE+'</a>.</p></div>';
 }
@@ -877,16 +886,16 @@ function renderPhone(){
   var P=S.phone,h='<div class="island" aria-hidden="true"></div><div class="sbar"><span>'+clock()+'</span><span class="sig" aria-hidden="true"><i style="height:4px"></i><i style="height:7px"></i><i style="height:10px"></i><i style="height:13px"></i></span></div>';
   if(P.app==='home'){
     var n=unseenOut();
-    h+='<div class="scroll"><div class="home-apps"><button class="appicon" data-action="phApp" data-v="messages"><i style="background:#2FBF4F">SMS</i>Messages'+(n?'<span class="badge">'+n+'</span>':'')+'</button><button class="appicon" data-action="phSite"><i style="background:var(--red)"><img src="/images/brand/max-logo-reversed.png" alt="" style="width:44px"></i>Max website</button></div><p class="muted small centre" style="padding:0 24px">Every text the portal sends lands in Messages on this demo phone, whoever it is for.</p></div>';
+    h+='<div class="scroll"><div class="home-apps"><button class="appicon" data-action="phApp" data-v="messages"><i style="background:#2FBF4F">SMS</i>Messages'+(n?'<span class="badge">'+n+'</span>':'')+'</button>'+((P.token||P.view)?'<button class="appicon" data-action="phResume"><i style="background:#1E6FD9">WEB</i>Browser</button>':'')+'<button class="appicon" data-action="phSite"><i style="background:var(--red)"><img src="/images/brand/max-logo-reversed.png" alt="" style="width:44px"></i>Max website</button></div><p class="muted small centre" style="padding:0 24px">Every text the portal sends lands in Messages on this demo phone, whoever it is for.</p></div>';
   }else if(P.app==='messages'){
     var keys=Object.keys(S.threads).sort(function(x,y){return lastIdx(y)-lastIdx(x);});
-    h+='<div class="mhead"><button class="bk" data-action="phApp" data-v="home">Home</button><h2 style="text-align:center">Messages</h2><span class="sp"></span></div><div class="scroll">'+
+    h+='<div class="mhead"><button class="bk" data-action="phApp" data-v="home">Home</button><h2 style="text-align:center">Messages</h2>'+((P.token||P.view)?'<button class="bk" data-action="phResume">Browser</button>':'<span class="sp"></span>')+'</div><div class="scroll">'+
       (keys.length?keys.map(function(k){var t=S.threads[k],last=t.msgs[t.msgs.length-1],un=t.msgs.some(function(m){return m.dir==='out'&&!m.seen;});
         var staff=t.staff;return '<button class="trow" data-action="phThread" data-v="'+esc(k)+'"><span class="av'+(staff?' staff':'')+'">'+(staff?esc(initials(t.name)):'<img src="/images/brand/max-logo-reversed.png" alt="">')+'</span><span class="tx"><strong>'+esc(t.name)+'<span>'+esc(last.at.replace('Today ',''))+'</span></strong><p>'+esc(last.body)+'</p></span>'+(un?'<span class="unread" aria-label="Unread"></span>':'')+'</button>';}).join(''):'<div class="empty">No messages yet.</div>')+'</div>';
   }else if(P.app==='thread'){
     var t=S.threads[P.mobile];
     t.msgs.forEach(function(m){m.seen=true;});
-    h+='<div class="mhead"><button class="bk" data-action="phApp" data-v="messages">Messages</button><span class="t"><strong>Max Healthcare</strong><span>to '+esc(t.name)+', '+esc(P.mobile)+'</span></span><span class="sp"></span></div><div class="scroll"><div class="thread">';
+    h+='<div class="mhead"><button class="bk" data-action="phApp" data-v="messages">Messages</button><span class="t"><strong>Max Healthcare</strong><span>to '+esc(t.name)+', '+esc(P.mobile)+'</span></span>'+((P.token||P.view)?'<button class="bk" data-action="phResume">Browser</button>':'<span class="sp"></span>')+'</div><div class="scroll"><div class="thread">';
     var lastAt='';
     t.msgs.forEach(function(m){
       if(m.at!==lastAt){h+='<div class="when">'+esc(m.at)+'</div>';lastAt=m.at;}
@@ -898,6 +907,7 @@ function renderPhone(){
     var url=P.stripe?'checkout.stripe.com':HOST+'/hire';
     h+='<div class="bbar"><button data-action="phApp" data-v="'+(P.mobile?'thread':'home')+'">Done</button><span class="addr"><b>'+esc(url)+'</b></span></div><div class="scroll" id="phScroll">'+portal()+'</div>';
   }
+  if(P.notif&&P.app!=='thread'){var nt=S.threads[P.notif.mobile];h+='<button class="ph-notif" data-action="phNotif"><i>SMS</i><span><b>Max Healthcare</b><span>'+esc(P.notif.body.length>110?P.notif.body.slice(0,107)+'...':P.notif.body)+'</span></span></button>';}
   document.getElementById('phone').innerHTML=h;
   var cap=P.app==='browser'?'The link token is taken out of the address bar as soon as the page opens, so it never ends up in history or a screenshot.':P.app==='thread'?'Tap a link to open it as the patient. Replies show up for Max staff in the hire console.':'This phone shows what patients see. Their texts link straight into the hire portal, no password.';
   document.getElementById('phoneCap').textContent=cap;
@@ -1330,7 +1340,10 @@ function act(a,v,el){
   case 'phApp':P.app=v;if(v!=='browser'){P.stripe=null;}if(v==='home'){P.mobile=null;}break;
   case 'phThread':P.app='thread';P.mobile=v;S.f.ph_reply='';break;
   case 'phOpen':openPortal(v);break;
-  case 'phSite':P.app='browser';P.token=null;P.view='login';P.login={};P.stripe=null;P.mobile=null;S.f={};break;
+  case 'phResume':P.app='browser';break;
+  case 'phNotif':{var nm=P.notif?P.notif.mobile:null;P.notif=null;if(nm&&S.threads[nm]){P.app='thread';P.mobile=nm;S.f.ph_reply='';}break;}
+  case 'loginFill':if(P.login&&P.login.code){S.f.lg_code=P.login.code;}break;
+  case 'phSite':if(P.view==='login'&&P.login&&P.login.sent&&!P.token){P.app='browser';break;}P.app='browser';P.token=null;P.view='login';P.login={};P.stripe=null;P.mobile=null;S.f={};break;
   case 'phReply':{var body=(f.ph_reply||'').trim();if(!body)return;var t=S.threads[P.mobile];t.msgs.push({dir:'in',body:body,at:stamp(),read:false,seen:true});var ha=haByMobile(P.mobile);if(ha)tl(ha,'sms','Patient replied',body);touch(P.mobile);f.ph_reply='';toast('Reply sent. Max staff see it in the hire console.');break;}
   case 'scenText':{var sa=haById(v);P.app='thread';P.mobile=sa.mobile;break;}
   case 'scenOpen':{var so=haById(v);openPortal(latestToken(so));break;}
@@ -1398,10 +1411,10 @@ function act(a,v,el){
   case 'newLink':{x=haById(S.links[P.token].ha);text(x,'Hi '+x.first+', here is a fresh link to your Max Healthcare hire:','manage',{title:'New link requested by the patient'});touch(x.mobile);P.newSent=true;break;}
   case 'toLogin':P.view='login';P.login={};S.f={};break;
   case 'loginSend':{var m=(f.lg_mobile||'').replace(/\D/g,'');if(m.length<10){P.login={err:'Enter the full mobile number, 10 digits starting with 04.'};break;}
-    var code=String(Math.floor(100000+Math.random()*900000));P.login={sent:true,mobile:f.lg_mobile,code:code};var who=haByMobile(m);
+    var code=String(Math.floor(100000+Math.random()*900000));P.login={sent:true,mobile:f.lg_mobile,code:code};var who=haByMobile(m);P.login.delivered=!!who;
     if(who){textRaw(who.mobile,fullName(who),'Your Max Healthcare code is '+code+'. It lasts 10 minutes. Never share it.');touch(who.mobile);}
     break;}
-  case 'loginResend':{var lg=P.login;lg.code=String(Math.floor(100000+Math.random()*900000));var w2=haByMobile(lg.mobile);if(w2){textRaw(w2.mobile,fullName(w2),'Your Max Healthcare code is '+lg.code+'. It lasts 10 minutes. Never share it.');touch(w2.mobile);}lg.resent=true;lg.err='';toast('A new code is on its way.');break;}
+  case 'loginResend':{var lg=P.login;lg.code=String(Math.floor(100000+Math.random()*900000));var w2=haByMobile(lg.mobile);if(w2){textRaw(w2.mobile,fullName(w2),'Your Max Healthcare code is '+lg.code+'. It lasts 10 minutes. Never share it.');touch(w2.mobile);}lg.delivered=!!w2;lg.resent=true;lg.err='';f.lg_code='';toast('A new code is on its way.');break;}
   case 'loginRestart':P.login={};S.f={};break;
   case 'loginVerify':{var lg2=P.login,w3=haByMobile(lg2.mobile);if(!w3||(f.lg_code||'').trim()!==lg2.code){lg2.err='That code is not right. Check the latest text, or send another code.';break;}
     var nt=link(w3.id,'manage');openPortal(nt);P.mobile=w3.mobile;tl(w3,'event','Signed in with a text code','');break;}

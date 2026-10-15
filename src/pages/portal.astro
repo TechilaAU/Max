@@ -30,6 +30,19 @@ import { site } from '../data/site';
       </form>
     </div>
   </div>
+  <section class="sc" aria-labelledby="scTitle">
+    <div class="sc-brand">
+      <img src="/images/brand/max-logo-reversed.png" alt="Max Healthcare Equipment" width="120" height="40" />
+      <span class="sc-x" aria-hidden="true">&times;</span>
+      <img class="sc-logo" src="/images/brand/silverchain-logo-reversed.png" alt="Silverchain" width="160" height="27" />
+    </div>
+    <div class="sc-body stack" style="gap: 10px">
+      <span class="eyebrow" style="color: #9DB8FF">Silverchain partners</span>
+      <h2 id="scTitle">Silverchain referrer portal</h2>
+      <p>Silverchain care partners and support coordinators order equipment at Silverchain contract pricing. Build quotes, get them approved, and track orders, invoices and statements in one place.</p>
+    </div>
+    <div class="btn-row sc-cta"><a class="btn sc-btn" href="/portal/silverchain/">Access now</a></div>
+  </section>
   <p class="muted" style="margin-top: 24px; font-size: 15px">The portals open in an interactive preview while they are being built.</p>
 </Page>
 
@@ -38,6 +51,17 @@ import { site } from '../data/site';
   .mini strong { font-size: 18px; }
   .mini span { font-size: 15px; color: var(--grey-700); line-height: 1.45; }
   .mini:hover { background: var(--red-50); color: var(--ink); }
+  .sc { margin-top: 24px; background: #00002D; color: #fff; border-radius: 24px; padding: 32px; display: grid; grid-template-columns: auto 1fr auto; gap: 24px 36px; align-items: center; }
+  .sc h2 { color: #fff; margin: 0; }
+  .sc p { color: #DADCF0; margin: 0; max-width: 60ch; }
+  .sc-brand { display: flex; align-items: center; gap: 14px; }
+  .sc-brand img { height: 34px; width: auto; display: block; }
+  .sc-brand .sc-logo { height: 28px; }
+  .sc-x { color: rgba(255, 255, 255, .6); font-weight: 700; font-size: 18px; }
+  .sc-btn { background: #1059FF; color: #fff; border-color: #1059FF; }
+  .sc-btn:hover { background: #0B47D6; border-color: #0B47D6; color: #fff; }
+  .sc-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+  @media (max-width: 900px) { .sc { grid-template-columns: 1fr; padding: 24px; } }
 </style>
 
 <script>

@@ -775,7 +775,7 @@ function endRequest(a){
   h+='<h2 style="margin-top:16px">How would you like to return it?</h2>'+
     '<button class="choice" data-action="erMethod" data-v="collect" aria-pressed="'+(f.er_method==='collect')+'"><h3>Max collects it</h3><span class="sub">We come to you. Pick a day below.</span></button>';
   if(bulky)h+='<p class="muted small">Beds, lifters and recliners need our team to collect them safely, so drop off is not available for this return.</p>';
-  else h+='<button class="choice" data-action="erMethod" data-v="drop" aria-pressed="'+(f.er_method==='drop')+'"><h3>I will drop it off</h3><span class="sub">Bring it to our Kilburn depot, Monday to Friday 8:30am to 4:30pm.</span></button>';
+  else h+='<button class="choice" data-action="erMethod" data-v="drop" aria-pressed="'+(f.er_method==='drop')+'"><h3>I will drop it off</h3><span class="sub">Bring it to our Keswick depot, Monday to Friday 8:30am to 4:30pm.</span></button>';
   h+='</section>';
   if(f.er_method==='collect'){
     h+='<section class="sec"><h2>Where should we collect from?</h2>'+
@@ -1118,7 +1118,7 @@ function invoicesView(){
 }
 function findQuote(id){var r=null;S.referrer.quotes.forEach(function(q){if(q.id===id)r=q;});return r;}
 function findInv(id){var r=null;S.referrer.invoices.forEach(function(q){if(q.id===id)r=q;});return r;}
-function docHead(title,right){return '<div class="dh"><div><img src="/images/brand/max-logo.png" alt="Max Healthcare Equipment"><div class="small muted" style="margin-top:6px">Max Healthcare Equipment, Kilburn SA. '+MAX_PHONE+'</div></div><div style="text-align:right"><h2 style="margin:0">'+esc(title)+'</h2><div class="small muted">'+right+'</div></div></div>';}
+function docHead(title,right){return '<div class="dh"><div><img src="/images/brand/max-logo.png" alt="Max Healthcare Equipment"><div class="small muted" style="margin-top:6px">Max Healthcare Equipment, Keswick SA. '+MAX_PHONE+'</div></div><div style="text-align:right"><h2 style="margin:0">'+esc(title)+'</h2><div class="small muted">'+right+'</div></div></div>';}
 function showQuote(id){
   var q=findQuote(id),r=S.referrer;
   modal('<div class="doc">'+docHead('Quotation '+q.id+((q.rev||1)>1?', revision '+q.rev:''),fmtDate(q.created)+'<br>Valid 30 days')+
@@ -1136,7 +1136,7 @@ function renderMax(){
   var problems=S.agreements.filter(function(a){return a.status==='Payment Failed'||a.attention;}).length;
   var tabs=tabBar([['hub','Hire hub'],['console','Hire console',problems||''],['list','Hire agreements'],['portals','Portals and orders']],mx.ha&&mx.tab==='list'?'list':mx.tab,'mxTab');
   var body=mx.ha?agreementDetail(haById(mx.ha)):mx.tab==='hub'?hubView():mx.tab==='console'?consoleView():mx.tab==='list'?listView():portalsView();
-  return frame('maxhealthcareequipment.lightning.force.com/lightning/n/Hire_Hub',brand('Salesforce, what Max staff see')+'<div class="who"><strong>Hire team</strong><br><span class="muted">Kilburn</span></div>',tabs,body);
+  return frame('maxhealthcareequipment.lightning.force.com/lightning/n/Hire_Hub',brand('Salesforce, what Max staff see')+'<div class="who"><strong>Hire team</strong><br><span class="muted">Keswick</span></div>',tabs,body);
 }
 function within(d,days){return d&&daysUntil(d)<=0&&daysUntil(d)>=-days;}
 function hubView(){

@@ -393,7 +393,70 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 .stepper{display:flex;align-items:center;gap:10px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);background:var(--char);color:#fff;padding:11px 18px;border-radius:12px;z-index:60;max-width:90vw;box-shadow:0 12px 30px -12px rgba(0,0,0,.5);font-weight:600}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-@media print{.top,.phone-wrap,.urlbar,.tabs,.no-print{display:none!important}.stage{display:block;padding:0}.modal-bg{position:static;background:none}}
+
+/* variations */
+.vpick{display:flex;flex-direction:column;gap:4px}
+.vpick .vk{font-size:.78rem;color:var(--muted);font-weight:600}
+.vpick .vk b{color:var(--char)}
+.vpick label.vk{display:flex;flex-direction:column;gap:3px}
+.vpick select{min-height:34px;padding:4px 10px;font-size:.875rem;border-radius:10px}
+.sws{display:flex;flex-wrap:wrap;gap:6px}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);cursor:pointer;padding:0}
+.sw:hover{box-shadow:0 0 0 1.5px var(--char)}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2.5px var(--red-ink)}
+.vline{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:6px}
+.vtxt{font-size:.85rem;color:var(--char-2);line-height:1.4}
+
+/* orders */
+button.tile{display:flex;flex-direction:column;align-items:flex-start;font:inherit}
+.tile[aria-pressed="true"]{border-color:var(--red-ink);box-shadow:0 0 0 1px var(--red-ink);background:var(--red-soft)}
+.tile .v.sm{font-size:1.35rem}
+
+/* quotation document */
+.modal:has(.qdoc){max-width:880px}
+.qdoc{padding:28px;font-size:.9rem;color:#1A1A2E}
+.qdoc .qd-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding-bottom:16px;border-bottom:3px solid var(--red)}
+.qdoc .qd-top .cobrand img{height:34px}.qdoc .qd-top .cobrand img.sc{height:28px}
+.qdoc .qd-title{text-align:right}
+.qdoc .qd-title h1{font-size:1.7rem;margin:0 0 8px;letter-spacing:.04em;text-transform:uppercase}
+.qdoc .qd-meta{display:grid;grid-template-columns:auto auto;gap:2px 14px;justify-content:end;font-size:.85rem}
+.qdoc .qd-meta span{color:var(--muted);text-align:left}
+.qdoc .qd-meta b{text-align:right;font-variant-numeric:tabular-nums}
+.qdoc .qd-parties{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}
+.qdoc .qd-parties>div{background:var(--paper);border-radius:10px;padding:12px 14px;line-height:1.45}
+.qdoc .qd-h{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.qdoc table.qd-lines th{background:var(--char);color:#fff;font-size:.78rem;padding:8px}
+.qdoc table.qd-lines td{padding:9px 8px}
+.qdoc table.qd-lines td small{display:block;color:var(--muted)}
+.qdoc .qd-sum{display:flex;justify-content:flex-end;margin-top:10px}
+.qdoc .qd-sum table{width:auto;min-width:290px}
+.qdoc .qd-sum td{padding:6px 8px}
+.qdoc .qd-sum tr.t td{border-top:2px solid var(--char);border-bottom:0;font-weight:800;font-size:1.02rem}
+.qdoc .qd-terms{margin-top:18px;font-size:.8rem;color:var(--char-2)}
+.qdoc .qd-terms ol{margin:4px 0 0;padding-left:18px}
+.qdoc .qd-terms li{margin:2px 0}
+.qdoc .qd-accept{margin-top:20px;border:1px solid var(--line);border-radius:10px;padding:14px}
+.qdoc .qd-accept p{margin:0 0 14px;font-size:.85rem}
+.qdoc .qd-sig{display:grid;grid-template-columns:1.2fr 1.2fr .8fr;gap:18px}
+.qdoc .qd-sig div{border-top:1px solid var(--char);padding-top:4px;font-size:.75rem;color:var(--muted);margin-top:24px}
+.qdoc .qd-foot{margin-top:18px;padding-top:10px;border-top:1px solid var(--line);font-size:.74rem;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.qdoc .stamp{display:inline-block;margin-top:8px;border:2px solid var(--ok);color:var(--ok);border-radius:8px;padding:2px 10px;font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:700px){.qdoc{padding:4px}.qdoc .qd-top{flex-direction:column}.qdoc .qd-title{text-align:left}.qdoc .qd-meta{justify-content:start}.qdoc .qd-parties{grid-template-columns:1fr}.qdoc .qd-sig{grid-template-columns:1fr}}
+
+@page{size:A4;margin:0}
+@media print{
+  .top,.phone-wrap,.urlbar,.tabs,.no-print{display:none!important}.stage{display:block;padding:0}.modal-bg{position:static;background:none}
+  body.printing{background:#fff;min-height:0}
+  body.printing>:not(#modalRoot){display:none!important}
+  body.printing .modal-bg{display:block;padding:0}
+  body.printing .modal{max-width:none;max-height:none;overflow:visible;border-radius:0;padding:0}
+  body.printing .doc{border:0;border-radius:0;padding:14mm 15mm}
+  body.printing .qdoc{padding:13mm 14mm 10mm;font-size:9.5pt}
+  body.printing .tablewrap{overflow:visible}
+  body.printing *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .qdoc table.qd-lines tr,.qdoc .qd-accept,.qdoc .qd-sum{break-inside:avoid}
+  .qdoc .qd-parties{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
 </style>
 </head>
 <body>
@@ -420,6 +483,8 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
 'use strict';
 
 var MAX_PHONE='1800 684 277';
+var MAX_BIZ={name:'Max Healthcare Equipment',street:'7 Marlow Road',suburb:'Keswick SA 5035',abn:'00 000 000 000',email:'info@maxhealthcare.com.au',web:'maxhealthcare.com.au'};
+var FUNDING=['Support at Home','CHSP','TCP'];
 var HOST='hire.maxhealthcare.com.au';
 var SHORT='mhe.au/?c=';
 var WEEKLY='Weekly subscription', UPFRONT='4 weeks upfront', NONE='Not chosen yet';
@@ -428,21 +493,21 @@ var HOME_DELIVERY=55;
 var CONTRACT_RATE=0.9;
 var CATS=['Mobility','Bathroom','Seating and pressure','Bedroom','Daily living'];
 var PRODUCTS=[
-  {id:'p1',name:'Four-wheel walker',cat:'Mobility',key:true,hire:12,buy:289,img:'carequip-territory-4-wheel-walker-standard'},
-  {id:'p2',name:'Folding transit wheelchair',cat:'Mobility',key:true,hire:25,buy:649,img:'aspire-transit-3-folding-wheelchair'},
+  {id:'p1',name:'Four-wheel walker',cat:'Mobility',key:true,hire:12,buy:289,img:'carequip-territory-4-wheel-walker-standard',vars:[{k:'Colour',o:['Red','Blue','Black'],sw:['#C8131B','#1D5FA8','#231F20']},{k:'Handle height',o:['Standard','Tall']}]},
+  {id:'p2',name:'Folding transit wheelchair',cat:'Mobility',key:true,hire:25,buy:649,img:'aspire-transit-3-folding-wheelchair',vars:[{k:'Seat width',o:['41cm (16in)','46cm (18in)','51cm (20in)'],d:1,add:{hire:[0,0,4],buy:[0,0,60]}}]},
   {id:'p3',name:'Shower chair with back',cat:'Bathroom',key:true,hire:9,buy:179,img:'aspire-shower-chair-maxi-adjustable'},
   {id:'p4',name:'Over-toilet frame',cat:'Bathroom',key:true,hire:8,buy:149,img:'aspire-over-toilet-aid-maxi-adjustable'},
   {id:'p5',name:'Toilet seat raiser',cat:'Bathroom',key:true,hire:null,buy:69,img:'betterliving-adjustable-toilet-seat-raiser'},
-  {id:'p6',name:'Pressure cushion',cat:'Seating and pressure',key:true,hire:10,buy:199,img:'better-living-foam-cushion-with-gel-insert'},
+  {id:'p6',name:'Pressure cushion',cat:'Seating and pressure',key:true,hire:10,buy:199,img:'better-living-foam-cushion-with-gel-insert',vars:[{k:'Size',o:['41 x 41cm','46 x 46cm','51 x 46cm'],d:1,add:{buy:[0,0,20]}}]},
   {id:'p7',name:'Over-chair table',cat:'Bedroom',key:true,hire:10,buy:229,img:'aspire-over-chair-table'},
   {id:'p15',name:'Walking frame',cat:'Mobility',key:true,hire:7,buy:119,img:'care-quip-walking-frame-heavy-duty'},
-  {id:'p8',name:'Wheelchair cushion',cat:'Seating and pressure',key:false,hire:null,buy:85,img:'better-living-wheelchair-cushion'},
+  {id:'p8',name:'Wheelchair cushion',cat:'Seating and pressure',key:false,hire:null,buy:85,img:'better-living-wheelchair-cushion',vars:[{k:'Cover colour',o:['Black','Navy'],sw:['#231F20','#22305E']}]},
   {id:'p9',name:'Bariatric shower chair',cat:'Bathroom',key:false,hire:18,buy:449,img:'carequip-bariatric-shower-chair'},
-  {id:'p10',name:'Electric hospital bed',cat:'Bedroom',key:false,hire:65,buy:null,img:'casero-mode-electric-bed',bulky:true},
+  {id:'p10',name:'Electric hospital bed',cat:'Bedroom',key:false,hire:65,buy:null,img:'casero-mode-electric-bed',bulky:true,vars:[{k:'Size',o:['Single','King single'],add:{hire:[0,10]}}]},
   {id:'p11',name:'Sit-to-stand aid',cat:'Mobility',key:false,hire:95,buy:null,img:'sara-stedy-sit-to-stand-aid',bulky:true},
   {id:'p12',name:'Reacher grabber',cat:'Daily living',key:false,hire:null,buy:19,img:'arthrigrip-pro-reacher'},
   {id:'p13',name:'Bed rail',cat:'Bedroom',key:false,hire:7,buy:129,img:'bed-rail'},
-  {id:'p14',name:'Lift recliner chair',cat:'Seating and pressure',key:false,hire:45,buy:1490,img:'donatello-plus-petite-lift-recliner-canyon-steel',bulky:true},
+  {id:'p14',name:'Lift recliner chair',cat:'Seating and pressure',key:false,hire:45,buy:1490,img:'donatello-plus-petite-lift-recliner-canyon-steel',bulky:true,vars:[{k:'Size',o:['Petite','Standard','Large'],d:1,add:{hire:[0,0,5],buy:[0,0,150]}},{k:'Colour',o:['Canyon steel','Mocha'],sw:['#6B6F73','#6A4B3A']}]},
   {id:'p16',name:'Bedside commode',cat:'Bathroom',key:false,hire:9,buy:189,img:'bedside-commode-classic'},
   {id:'p17',name:'Bath transfer bench',cat:'Bathroom',key:false,hire:9,buy:199,img:'bath-transfer-bench-padded'},
   {id:'p18',name:'Portable ramp 1200mm',cat:'Mobility',key:false,hire:15,buy:349,img:'1200mm-portable-ramp'}
@@ -450,6 +515,19 @@ var PRODUCTS=[
 function prod(id){for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id)return PRODUCTS[i];}return null;}
 function pimg(p){return '<img src="/images/products/'+p.img+'/main.webp" alt="" loading="lazy">';}
 function icon(p){return pimg(typeof p==='string'?prod(p):p);}
+function vdef(p){var o={};(p.vars||[]).forEach(function(d){o[d.k]=d.o[d.d||0];});return o;}
+function vfix(p,v){var o=vdef(p);(p.vars||[]).forEach(function(d){if(v&&d.o.indexOf(v[d.k])>-1)o[d.k]=v[d.k];});return o;}
+function vkey(v){return JSON.stringify(v||{});}
+function vtext(p,v,sep){return (p.vars||[]).map(function(d){return d.k+': '+(v&&v[d.k]||d.o[d.d||0]);}).join(sep||', ');}
+function baseUnit(p,mode,v){var u=mode==='hire'?p.hire:p.buy;(p.vars||[]).forEach(function(d){var a=d.add&&d.add[mode];if(a){var i=d.o.indexOf(v&&v[d.k]);if(i>-1)u+=a[i]||0;}});return u;}
+function unitPrice(it){return r2(baseUnit(prod(it.pid),it.mode,it.vars)*CONTRACT_RATE);}
+function vpicker(p,v,action,ref){
+  if(!p.vars)return '';
+  return '<div class="vpick">'+p.vars.map(function(d){var cur=v&&v[d.k]||d.o[d.d||0];
+    if(d.sw)return '<div><div class="vk">'+esc(d.k)+': <b>'+esc(cur)+'</b></div><div class="sws" role="group" aria-label="'+esc(d.k)+'">'+d.o.map(function(o,i){return '<button type="button" class="sw" style="background:'+d.sw[i]+'" data-action="'+action+'" data-v="'+ref+'" data-k="'+esc(d.k)+'" data-o="'+esc(o)+'" aria-pressed="'+(o===cur)+'" aria-label="'+esc(d.k+' '+o)+'" title="'+esc(o)+'"></button>';}).join('')+'</div></div>';
+    return '<label class="vk">'+esc(d.k)+'<select data-action="'+action+'" data-v="'+ref+'" data-k="'+esc(d.k)+'">'+d.o.map(function(o){return '<option'+(o===cur?' selected':'')+'>'+esc(o)+'</option>';}).join('')+'</select></label>';
+  }).join('')+'</div>';
+}
 
 /* ---------- dates and money ---------- */
 var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -474,7 +552,7 @@ function opt(list,val){return list.map(function(v){return '<option'+(v===val?' s
 function L(id,pid,mode,state,extra){var o={id:id,pid:pid,qty:1,mode:mode,state:state};for(var k in extra)o[k]=extra[k];return o;}
 function seed(){
   var s={
-    v:3, persona:'referrer', seq:{ord:1041,ha:132,txn:5120,wo:880,sa:4410,q:3102,inv:8827,ln:900},
+    v:4, persona:'referrer', seq:{ord:1041,ha:132,txn:5120,wo:880,sa:4410,q:3102,inv:8830,ln:900,rord:70692},
     hospital:{name:'Northside Private Hospital',slug:'northside',token:'7f3k9q',rooms:['Level 2 consignment room','Rehab gym store'],idleMins:2},
     devices:[{id:'d1',name:'Ward 4B iPad',added:'Supplied by Max'},{id:'d2',name:'Allied health office PC',added:'Approved by Tom Reid'}],
     staff:[
@@ -535,12 +613,31 @@ function seed(){
     f:{},
     mx:{tab:'hub',ha:null,queue:'problems',tlFilter:'all',list:null,tpl:'',draft:''},
     pv:{cart:[],q:'',cat:''},
-    referrer:{org:'Silverchain',user:'Jess Morgan',tab:'catalogue',q:'',cat:'',draft:[],editing:null,dclient:{},
-      quotes:[{id:'Q-3101',client:'Dorothy Kane',phone:'0400 777 888',address:'9 Banksia Street, Christies Beach SA 5165',funding:'Support at Home',items:[{pid:'p8',mode:'buy',qty:1,note:'Black cover'}],status:'Awaiting approval',created:today(-2),rev:1}],
+    referrer:{org:'Silverchain',user:'Jess Morgan',tab:'catalogue',q:'',cat:'',draft:[],editing:null,dclient:{},pick:{},ofilter:'',
+      quotes:[
+        {id:'Q-3052',client:'Ivan Cole',phone:'0400 404 707',address:'2 Hope Street, Glenelg SA 5045',funding:'Support at Home',items:[{pid:'p2',mode:'buy',qty:1,note:'',vars:{'Seat width':'46cm (18in)'}}],status:'Approved',created:today(-62),rev:1,order:'70470'},
+        {id:'Q-3061',client:'Ron Bell',phone:'0400 515 262',address:'18 Crown Street, Kilkenny SA 5009',funding:'CHSP',items:[{pid:'p3',mode:'buy',qty:1,note:''},{pid:'p16',mode:'buy',qty:1,note:''}],status:'Approved',created:today(-50),rev:1,order:'70491'},
+        {id:'Q-3077',client:'Lyn Fraser',phone:'0400 717 330',address:'31 Greenhill Road, Unley SA 5061',funding:'Support at Home',items:[{pid:'p3',mode:'buy',qty:1,note:''}],status:'Approved',created:today(-22),rev:1,order:'70552'},
+        {id:'Q-3083',client:'Mavis Reid',phone:'0400 303 141',address:'6 Coorara Avenue, Payneham South SA 5070',funding:'TCP',items:[{pid:'p1',mode:'hire',qty:1,note:'',vars:{'Colour':'Blue','Handle height':'Standard'}},{pid:'p4',mode:'hire',qty:1,note:''}],status:'Approved',created:today(-40),rev:1,order:'70618'},
+        {id:'Q-3096',client:'Ken Wallace',phone:'0400 262 919',address:'44 Hectorville Road, Hectorville SA 5073',funding:'TCP',items:[{pid:'p2',mode:'hire',qty:1,note:'',vars:{'Seat width':'51cm (20in)'}},{pid:'p3',mode:'hire',qty:1,note:''}],status:'Approved',created:today(-8),rev:1,order:'70677'},
+        {id:'Q-3098',client:'Beryl Thompson',phone:'0400 848 112',address:'Unit 2, 11 Fourth Avenue, St Peters SA 5069',funding:'Support at Home',items:[{pid:'p10',mode:'hire',qty:1,note:'Bedroom is upstairs, two people for delivery',vars:{'Size':'King single'}},{pid:'p6',mode:'hire',qty:1,note:'',vars:{'Size':'46 x 46cm'}}],status:'Approved',created:today(-4),rev:2,revised:today(-3),order:'70684'},
+        {id:'Q-3100',client:'Harold Simms',phone:'0400 616 404',address:'27 Murray Street, Clovelly Park SA 5042',funding:'CHSP',items:[{pid:'p1',mode:'buy',qty:1,note:'',vars:{'Colour':'Red','Handle height':'Tall'}},{pid:'p4',mode:'buy',qty:1,note:''}],status:'Approved',created:today(-3),rev:1,order:'70689'},
+        {id:'Q-3101',client:'Dorothy Kane',phone:'0400 777 888',address:'9 Banksia Street, Christies Beach SA 5165',funding:'Support at Home',items:[{pid:'p8',mode:'buy',qty:1,note:'',vars:{'Cover colour':'Black'}},{pid:'p14',mode:'buy',qty:1,note:'',vars:{'Size':'Petite','Colour':'Mocha'}}],status:'Awaiting approval',created:today(-2),rev:1}],
+      orders:[
+        {id:'70470',quote:'Q-3052',status:'Delivered',created:today(-61),delivery:today(-59),window:'AM (8am to 12pm)'},
+        {id:'70491',quote:'Q-3061',status:'Delivered',created:today(-48),delivery:today(-47),window:'PM (12pm to 5pm)'},
+        {id:'70552',quote:'Q-3077',status:'Delivered',created:today(-20),delivery:today(-19),window:'AM (8am to 12pm)'},
+        {id:'70618',quote:'Q-3083',status:'Collected',created:today(-38),delivery:today(-37),window:'AM (8am to 12pm)',collected:today(-9)},
+        {id:'70677',quote:'Q-3096',status:'On hire',created:today(-7),delivery:today(-6),window:'PM (12pm to 5pm)'},
+        {id:'70684',quote:'Q-3098',status:'Out for delivery',created:today(-3),delivery:today(),window:'AM (8am to 12pm)',driver:'Dean K.'},
+        {id:'70689',quote:'Q-3100',status:'Being prepared',created:today(-1),delivery:nextWorkingDay(),window:'PM (12pm to 5pm)'}],
       invoices:[
         {id:'INV-8801',date:today(-48),due:today(-18),desc:'Order 70491, Ron Bell',amt:331.20,status:'Overdue'},
         {id:'INV-8826',date:today(-20),due:today(10),desc:'Order 70552, Lyn Fraser',amt:161.10,status:'Open'},
-        {id:'INV-8790',date:today(-60),due:today(-30),desc:'Order 70470, Ivan Cole',amt:584.10,status:'Paid'}]},
+        {id:'INV-8790',date:today(-60),due:today(-30),desc:'Order 70470, Ivan Cole',amt:584.10,status:'Paid'},
+        {id:'INV-8827',date:today(-7),due:today(23),desc:'Order 70677, Ken Wallace',amt:34.20,status:'Open'},
+        {id:'INV-8828',date:today(-3),due:today(27),desc:'Order 70684, Beryl Thompson',amt:76.50,status:'Open'},
+        {id:'INV-8829',date:today(-1),due:today(29),desc:'Order 70689, Harold Simms',amt:394.20,status:'Open'}]},
     audit:[]
   };
   S=s;
@@ -573,7 +670,7 @@ function seed(){
 var S;
 var KEY='maxhc-silverchain-demo-v1';
 try{var raw=localStorage.getItem(KEY);S=raw?JSON.parse(raw):null;}catch(e){S=null;}
-if(!S||S.v!==3)seed();
+if(!S||S.v!==4)seed();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
 function link(ha,kind,token,silent){var t=token||('tk-'+rnd(8));S.links[t]={ha:ha,kind:kind,expired:false,code:rnd(4)};return t;}
@@ -624,8 +721,8 @@ function chip(a){var s=STATUS[statusOf(a)]||[a.status,'grey'];return '<span clas
 
 /* ---------- shell helpers ---------- */
 function toast(msg){var r=document.getElementById('toastRoot');r.innerHTML='<div class="toast" role="status">'+esc(msg)+'</div>';clearTimeout(toast.t);toast.t=setTimeout(function(){r.innerHTML='';},3000);}
-function modal(html){document.getElementById('modalRoot').innerHTML='<div class="modal-bg" data-action="closeModal"><div class="modal" role="dialog" aria-modal="true" data-stop="1">'+html+'</div></div>';var b=document.querySelector('.modal button,.modal input');if(b)b.focus();}
-function closeModal(){document.getElementById('modalRoot').innerHTML='';}
+function modal(html){document.body.classList.toggle('printing',html.indexOf('class="doc')>-1);document.getElementById('modalRoot').innerHTML='<div class="modal-bg" data-action="closeModal"><div class="modal" role="dialog" aria-modal="true" data-stop="1">'+html+'</div></div>';var b=document.querySelector('.modal button,.modal input');if(b)b.focus();}
+function closeModal(){document.body.classList.remove('printing');document.getElementById('modalRoot').innerHTML='';}
 function frame(url,head,tabs,body){return '<div class="frame"><div class="urlbar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="addr">'+esc(url)+'</span></div><div class="app-head">'+head+'</div>'+(tabs||'')+'<div class="body">'+body+'</div></div>';}
 function brand(sub){return '<div class="brand"><img src="/images/brand/max-logo.png" alt="Max Healthcare Equipment"><span class="sub">'+esc(sub)+'</span></div>';}
 function tabBar(list,current,action){return '<div class="tabs" role="tablist">'+list.map(function(t){return '<button role="tab" data-action="'+action+'" data-v="'+t[0]+'" aria-selected="'+(current===t[0])+'">'+t[1]+(t[2]?'<span class="count">'+t[2]+'</span>':'')+'</button>';}).join('')+'</div>';}
@@ -792,7 +889,7 @@ function endRequest(a){
   h+='<h2 style="margin-top:16px">How would you like to return it?</h2>'+
     '<button class="choice" data-action="erMethod" data-v="collect" aria-pressed="'+(f.er_method==='collect')+'"><h3>Max collects it</h3><span class="sub">We come to you. Pick a day below.</span></button>';
   if(bulky)h+='<p class="muted small">Beds, lifters and recliners need our team to collect them safely, so drop off is not available for this return.</p>';
-  else h+='<button class="choice" data-action="erMethod" data-v="drop" aria-pressed="'+(f.er_method==='drop')+'"><h3>I will drop it off</h3><span class="sub">Bring it to our Kilburn depot, Monday to Friday 8:30am to 4:30pm.</span></button>';
+  else h+='<button class="choice" data-action="erMethod" data-v="drop" aria-pressed="'+(f.er_method==='drop')+'"><h3>I will drop it off</h3><span class="sub">Bring it to our Keswick depot, Monday to Friday 8:30am to 4:30pm.</span></button>';
   h+='</section>';
   if(f.er_method==='collect'){
     h+='<section class="sec"><h2>Where should we collect from?</h2>'+
@@ -1039,7 +1136,7 @@ function newOrderView(me){
     '<label class="f">Full name<input type="text" id="d_name" value="'+esc(d.name)+'"></label><label class="f">Date of birth<input type="date" id="d_dob" value="'+esc(d.dob)+'"></label>'+
     '<label class="f">Home address<input type="text" id="d_address" value="'+esc(d.address)+'"></label><label class="f">Email<input type="email" id="d_email" value="'+esc(d.email)+'"></label>'+
     '<label class="f">Alternative contact name<input type="text" id="d_altName" value="'+esc(d.altName)+'"></label><label class="f">Alternative contact phone<input type="tel" id="d_altPhone" value="'+esc(d.altPhone)+'"></label>'+
-    '<label class="f">Funding body<select id="d_funder"><option value="">Patient pays</option>'+opt(['DVA','Home Care Package','NDIS','Return to Work SA','Insurer'],d.funder)+'</select></label><label class="f">Claim number<input type="text" id="d_claim" value="'+esc(d.claim)+'"></label>'+
+    '<label class="f">Funding body<select id="d_funder"><option value="">Patient pays</option>'+opt(FUNDING,d.funder)+'</select></label><label class="f">Claim number<input type="text" id="d_claim" value="'+esc(d.claim)+'"></label>'+
     '<label class="f">Case manager<input type="text" id="d_caseMgr" value="'+esc(d.caseMgr)+'"></label></div></details></fieldset>';
   h+='<fieldset><legend>Supply</legend><div class="grid2">'+
     '<label class="f">Consignment room<select id="d_room">'+opt(S.hospital.rooms,d.room)+'</select></label>'+
@@ -1093,37 +1190,78 @@ function cobrand(){return '<span class="cobrand"><img src="/images/brand/max-log
 function renderReferrer(){
   var r=S.referrer;
   var head='<div class="brand">'+cobrand()+'<span class="sub">Referrer portal</span></div>'+'<div class="who"><strong>'+esc(r.user)+'</strong><br><span class="muted">'+esc(r.org)+'</span></div>';
-  var tabs=tabBar([['catalogue','Catalogue'],['quote',(r.editing?'Editing '+r.editing:'New quote'),r.draft.length||''],['quotes','Quotes'],['invoices','Invoices']],r.tab,'rTab');
-  var body=r.tab==='catalogue'?catalogue('rf',r.q,r.cat,CONTRACT_RATE):r.tab==='quote'?quoteBuilder():r.tab==='quotes'?quotesView():invoicesView();
+  var tabs=tabBar([['catalogue','Catalogue'],['quote',(r.editing?'Editing '+r.editing:'New quote'),r.draft.length||''],['quotes','Quotes'],['orders','Orders'],['invoices','Invoices']],r.tab,'rTab');
+  var body=r.tab==='catalogue'?catalogue('rf',r.q,r.cat,CONTRACT_RATE):r.tab==='quote'?quoteBuilder():r.tab==='quotes'?quotesView():r.tab==='orders'?ordersView():invoicesView();
   return frame('portal.maxhealthcare.com.au/partner/silverchain-m4q1z8',head,tabs,body);
 }
 function catalogue(ns,q,cat,rateM){
+  var pick=S.referrer.pick||{};
   var list=PRODUCTS.filter(function(p){return (!cat||p.cat===cat)&&(!q||p.name.toLowerCase().indexOf(q.toLowerCase())>-1);});
   var h='<div class="row" style="margin-bottom:16px"><input type="search" placeholder="Search products" value="'+esc(q)+'" data-input="'+ns+'Search" aria-label="Search products" style="max-width:320px"><select data-action="'+ns+'Cat" aria-label="Category" style="max-width:220px"><option value="">All categories</option>'+opt(CATS,cat)+'</select>'+(rateM<1?'<span class="chip info">Contract pricing applied</span>':'')+'</div>';
   if(!list.length)return h+'<div class="empty"><strong>No products match</strong>Try another word or category.</div>';
   return h+'<div class="products">'+list.map(function(p){
-    var price=(p.hire?money(p.hire*rateM)+'/wk hire'+(rateM<1?'<s>'+money(p.hire)+'</s>':'')+'<br>':'')+(p.buy?money(p.buy*rateM)+' to buy'+(rateM<1?'<s>'+money(p.buy)+'</s>':''):'');
-    return '<div class="prod"><div class="thumb">'+pimg(p)+'</div><div class="name">'+esc(p.name)+'</div><div class="small muted">'+esc(p.cat)+'</div><div class="price">'+price+'</div><div class="row" style="margin-top:auto">'+(p.hire?'<button class="btn sm" data-action="'+ns+'Add" data-v="'+p.id+'" data-m="hire">Hire</button>':'')+(p.buy?'<button class="btn sm" data-action="'+ns+'Add" data-v="'+p.id+'" data-m="buy">Buy</button>':'')+'</div></div>';
+    var v=vfix(p,pick[p.id]),hu=p.hire?baseUnit(p,'hire',v):0,bu=p.buy?baseUnit(p,'buy',v):0;
+    var price=(p.hire?money(hu*rateM)+'/wk hire'+(rateM<1?'<s>'+money(hu)+'</s>':'')+'<br>':'')+(p.buy?money(bu*rateM)+' to buy'+(rateM<1?'<s>'+money(bu)+'</s>':''):'');
+    return '<div class="prod"><div class="thumb">'+pimg(p)+'</div><div class="name">'+esc(p.name)+'</div><div class="small muted">'+esc(p.cat)+'</div>'+vpicker(p,v,'rfVar',p.id)+'<div class="price">'+price+'</div><div class="row" style="margin-top:auto">'+(p.hire?'<button class="btn sm" data-action="'+ns+'Add" data-v="'+p.id+'" data-m="hire">Hire</button>':'')+(p.buy?'<button class="btn sm" data-action="'+ns+'Add" data-v="'+p.id+'" data-m="buy">Buy</button>':'')+'</div></div>';
   }).join('')+'</div>';
 }
 function quoteBuilder(){
   var r=S.referrer,c=r.dclient||{};
   if(!r.draft.length&&!r.editing)return '<div class="empty"><strong>No products on this quote yet</strong>Add products from the catalogue to start a quote.<div style="margin-top:12px"><button class="btn" data-action="rTab" data-v="catalogue">Open catalogue</button></div></div>';
   var q=r.editing?findQuote(r.editing):null;
-  var rows=r.draft.map(function(it,i){var p=prod(it.pid);var unit=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE;return '<tr><td>'+esc(p.name)+'<input type="text" value="'+esc(it.note||'')+'" data-input="rNote" data-v="'+i+'" placeholder="Colour, size or notes" aria-label="Colour, size or notes for '+esc(p.name)+'" style="margin-top:6px;min-height:36px;padding:6px 10px;font-size:.875rem"></td><td>'+(it.mode==='hire'?'Hire /wk':'Purchase')+'</td><td><input type="number" min="1" value="'+it.qty+'" data-input="rQty" data-v="'+i+'" aria-label="Quantity" style="width:72px;min-height:38px;padding:6px"></td><td class="num">'+money(unit*it.qty)+'</td><td class="num"><button class="btn sm" data-action="rRemove" data-v="'+i+'">Remove</button></td></tr>';}).join('');
-  var h=q?'<h2>Edit '+q.id+'</h2><div class="notice info">Change products, quantities or colours before the quote is approved. Saving creates revision '+((q.rev||1)+1)+' and an updated PDF.</div>':'<h2>New quote</h2>';
-  h+=(rows?'<div class="tablewrap"><table><thead><tr><th>Item</th><th>Type</th><th>Qty</th><th class="num">Contract price</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<div class="empty">No products on this quote yet.</div>')+'<div class="row" style="margin-top:12px"><button class="btn sm" data-action="rTab" data-v="catalogue">Add more products</button></div>';
-  h+='<fieldset style="margin-top:16px"><legend>Client</legend><div class="grid2"><label class="f"><span class="req">Client name</span><input type="text" id="q_client" value="'+esc(c.client||'')+'" data-input="rClient" data-k="client"></label><label class="f">Phone<input type="tel" id="q_phone" value="'+esc(c.phone||'')+'" data-input="rClient" data-k="phone"></label><label class="f"><span class="req">Delivery address</span><input type="text" id="q_address" value="'+esc(c.address||'')+'" data-input="rClient" data-k="address"></label><label class="f">Funding<select id="q_funding" data-action="rFunding">'+opt(['Support at Home','Home Care Package','Transitional care','DVA','NDIS','Private'],c.funding||'Home Care Package')+'</select></label></div></fieldset>';
+  var rows=r.draft.map(function(it,i){var p=prod(it.pid);var unit=unitPrice(it);return '<tr><td><strong>'+esc(p.name)+'</strong>'+(p.vars?'<div class="vline">'+vpicker(p,it.vars,'rLineVar',i)+'</div>':'')+'<input type="text" value="'+esc(it.note||'')+'" data-input="rNote" data-v="'+i+'" placeholder="Notes for this item" aria-label="Notes for '+esc(p.name)+'" style="margin-top:8px;min-height:36px;padding:6px 10px;font-size:.875rem"></td><td>'+(it.mode==='hire'?'Hire /wk':'Purchase')+'</td><td><input type="number" min="1" value="'+it.qty+'" data-input="rQty" data-v="'+i+'" aria-label="Quantity" style="width:72px;min-height:38px;padding:6px"></td><td class="num">'+money(unit)+'</td><td class="num">'+money(unit*it.qty)+'</td><td class="num"><button class="btn sm" data-action="rRemove" data-v="'+i+'">Remove</button></td></tr>';}).join('');
+  var h=q?'<h2>Edit '+q.id+'</h2><div class="notice info">Change products, quantities, colours or sizes before the quote is approved. Saving creates revision '+((q.rev||1)+1)+' and an updated PDF.</div>':'<h2>New quote</h2>';
+  h+=(rows?'<div class="tablewrap"><table><thead><tr><th>Item and options</th><th>Type</th><th>Qty</th><th class="num">Unit price</th><th class="num">Amount</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="4" class="num"><strong>Total incl. GST</strong></td><td class="num"><strong>'+money(draftTotal(r.draft))+'</strong></td><td></td></tr></tfoot></table></div>':'<div class="empty">No products on this quote yet.</div>')+'<div class="row" style="margin-top:12px"><button class="btn sm" data-action="rTab" data-v="catalogue">Add more products</button></div>';
+  h+='<fieldset style="margin-top:16px"><legend>Client</legend><div class="grid2"><label class="f"><span class="req">Client name</span><input type="text" id="q_client" value="'+esc(c.client||'')+'" data-input="rClient" data-k="client"></label><label class="f">Phone<input type="tel" id="q_phone" value="'+esc(c.phone||'')+'" data-input="rClient" data-k="phone"></label><label class="f"><span class="req">Delivery address</span><input type="text" id="q_address" value="'+esc(c.address||'')+'" data-input="rClient" data-k="address"></label><label class="f">Funding<select id="q_funding" data-action="rFunding">'+opt(FUNDING,FUNDING.indexOf(c.funding)>-1?c.funding:FUNDING[0])+'</select></label></div></fieldset>';
   return h+(q?'<div class="row"><button class="btn primary" data-action="createQuote">Save changes</button><button class="btn" data-action="cancelEdit">Cancel</button></div>':'<div class="row"><button class="btn primary" data-action="createQuote">Create quote</button><span class="small muted">You can download the PDF and send it for approval straight away.</span></div>');
 }
-function quoteTotal(q){var t=0;q.items.forEach(function(it){var p=prod(it.pid);t+=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE*it.qty;});return t;}
+function draftTotal(items){return r2(sum(items.map(function(it){return unitPrice(it)*it.qty;})));}
+function quoteTotal(q){return draftTotal(q.items);}
 function quotesView(){
   var r=S.referrer;
   if(!r.quotes.length)return '<div class="empty"><strong>No quotes yet</strong>Build one from the catalogue.</div>';
   return '<h2>Quotes</h2><div class="tablewrap"><table><thead><tr><th>Quote</th><th>Client</th><th>Funding</th><th>Status</th><th class="num">Total</th><th></th></tr></thead><tbody>'+
     r.quotes.slice().reverse().map(function(q){var cls=q.status==='Approved'?'ok':q.status==='Declined'?'bad':'warn';
-      return '<tr><td>'+q.id+'<div class="small muted">'+fmtDate(q.created)+((q.rev||1)>1?', rev '+q.rev+' on '+fmtDate(q.revised):'')+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td><span class="chip '+cls+'">'+q.status+'</span>'+(q.order?'<div class="small muted">Order '+q.order+'</div>':'')+'</td><td class="num">'+money(quoteTotal(q))+'</td><td class="num"><button class="btn sm" data-action="viewQuote" data-v="'+q.id+'">PDF</button> '+
+      return '<tr><td>'+q.id+'<div class="small muted">'+fmtDate(q.created)+((q.rev||1)>1?', rev '+q.rev+' on '+fmtDate(q.revised):'')+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td><span class="chip '+cls+'">'+q.status+'</span>'+(q.order?'<div class="small"><button class="linkbtn" data-action="viewOrder" data-v="'+q.order+'" style="padding:2px 0">Order '+q.order+'</button></div>':'')+'</td><td class="num">'+money(quoteTotal(q))+'</td><td class="num"><button class="btn sm" data-action="viewQuote" data-v="'+q.id+'">PDF</button> '+
       (q.status==='Awaiting approval'?'<button class="btn sm" data-action="editQuote" data-v="'+q.id+'">Edit</button> <button class="btn sm primary" data-action="approveQuote" data-v="'+q.id+'">Approve</button> <button class="btn sm" data-action="declineQuote" data-v="'+q.id+'">Decline</button>':'')+'</td></tr>';}).join('')+'</tbody></table></div>';
+}
+var OCHIP={'Received':'info','Being prepared':'warn','Out for delivery':'warn','Delivered':'ok','On hire':'ok','Collected':'grey'};
+var OTILES=[['Received','Received','Approved, with the Max team'],['Being prepared','Being prepared','Picked, cleaned and checked'],['Out for delivery','Out for delivery','On the truck today'],['Delivered','Delivered or on hire','With the client'],['Collected','Collected','Hire finished']];
+function findOrder(id){var r=null;S.referrer.orders.forEach(function(o){if(o.id===id)r=o;});return r;}
+function oGroup(o){return o.status==='On hire'?'Delivered':o.status;}
+function hasHire(q){return q.items.some(function(it){return it.mode==='hire';});}
+function oChip(o){return '<span class="chip '+(OCHIP[o.status]||'grey')+'">'+esc(o.status)+'</span>';}
+function oWhen(o){
+  if(o.status==='Collected')return 'Collected '+fmtDate(o.collected);
+  if(o.status==='Delivered'||o.status==='On hire')return 'Delivered '+fmtDate(o.delivery);
+  return (o.delivery===today()?'Today':fmtDate(o.delivery))+'<div class="small muted">'+esc(o.window)+'</div>';
+}
+function itemsText(q){return q.items.map(function(it){var p=prod(it.pid);return esc((it.qty>1?it.qty+' x ':'')+p.name)+(p.vars?'<div class="small muted">'+esc(vtext(p,it.vars))+'</div>':'');}).join('<div style="height:4px"></div>');}
+function ordersView(){
+  var r=S.referrer,f=r.ofilter||'';
+  var counts={};r.orders.forEach(function(o){var g=oGroup(o);counts[g]=(counts[g]||0)+1;});
+  var h='<div class="row between" style="margin-bottom:12px"><h2 style="margin:0">Orders</h2><span class="small muted">Live from Max. Updates as orders are prepared, delivered and collected.</span></div>';
+  h+='<div class="tiles">'+OTILES.map(function(t){return '<button class="tile" data-action="rOrdFilter" data-v="'+t[0]+'" aria-pressed="'+(f===t[0])+'"><div class="k">'+t[1]+'</div><div class="v">'+(counts[t[0]]||0)+'</div><div class="s">'+t[2]+'</div></button>';}).join('')+'</div>';
+  var list=r.orders.filter(function(o){return !f||oGroup(o)===f;}).slice().sort(function(a,b){return a.created<b.created?1:-1;});
+  if(f)h+='<div class="row" style="margin-bottom:10px"><span class="chip info">Showing: '+esc(f==='Delivered'?'Delivered or on hire':f)+'</span><button class="btn sm quiet" data-action="rOrdFilter" data-v="">Show all orders</button></div>';
+  if(!list.length)return h+'<div class="empty"><strong>No orders here</strong>Approved quotes become orders automatically.</div>';
+  return h+'<div class="tablewrap"><table><thead><tr><th>Order</th><th>Client</th><th>Funding</th><th>Items</th><th>Status</th><th>Delivery</th><th>Quote</th></tr></thead><tbody>'+
+    list.map(function(o){var q=findQuote(o.quote);return '<tr class="click" data-action="viewOrder" data-v="'+o.id+'"><td><strong>'+o.id+'</strong><div class="small muted">'+fmtDate(o.created)+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td class="small">'+itemsText(q)+'</td><td>'+oChip(o)+'</td><td>'+oWhen(o)+'</td><td>'+q.id+'</td></tr>';}).join('')+'</tbody></table></div><p class="small muted" style="margin-top:8px">Select an order to see its progress and delivery details.</p>';
+}
+function showOrder(id){
+  var o=findOrder(id),q=findQuote(o.quote),hire=hasHire(q);
+  var steps=['Received','Being prepared','Out for delivery'].concat(hire?['On hire','Collected']:['Delivered']);
+  var cur=steps.indexOf(o.status==='Delivered'&&hire?'On hire':o.status),last=steps.length-1;
+  var done=o.status==='Collected'||(!hire&&o.status==='Delivered');
+  modal('<div class="dhead"><h1>Order '+o.id+'</h1>'+oChip(o)+'</div>'+
+    '<ol class="steps">'+steps.map(function(s,i){return '<li class="'+(i<cur||(done&&i===last)?'done':i===cur?'cur':'')+'">'+esc(s)+'</li>';}).join('')+'</ol>'+
+    '<div class="facts"><span>Client <b>'+esc(q.client)+'</b></span><span>Funding <b>'+esc(q.funding)+'</b></span><span>Quote <b>'+q.id+'</b></span></div>'+
+    '<div class="kv"><span class="k">Deliver to</span><span class="v">'+esc(q.address)+'</span></div>'+
+    '<div class="kv"><span class="k">'+(cur>=3?'Delivered':'Delivery booked')+'</span><span class="v">'+longDate(o.delivery)+', '+esc(o.window)+'</span></div>'+
+    (o.driver?'<div class="kv"><span class="k">Driver</span><span class="v">'+esc(o.driver)+'</span></div>':'')+
+    (o.collected?'<div class="kv"><span class="k">Collected</span><span class="v">'+longDate(o.collected)+'</span></div>':'')+
+    '<h2 style="margin-top:14px">Items</h2>'+q.items.map(function(it){var p=prod(it.pid);return '<div class="item"><div class="ph">'+pimg(p)+'</div><div class="nm">'+esc((it.qty>1?it.qty+' x ':'')+p.name)+'<small>'+(it.mode==='hire'?'Hire':'Purchase')+(p.vars?', '+esc(vtext(p,it.vars)):'')+'</small>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</div></div>';}).join('')+
+    '<div class="row" style="margin-top:16px"><button class="btn" data-action="viewQuote" data-v="'+q.id+'">View quote '+q.id+'</button><button class="btn" data-action="closeModal">Close</button></div>');
 }
 function invoicesView(){
   var r=S.referrer,out=0,over=0;
@@ -1136,13 +1274,28 @@ function invoicesView(){
 }
 function findQuote(id){var r=null;S.referrer.quotes.forEach(function(q){if(q.id===id)r=q;});return r;}
 function findInv(id){var r=null;S.referrer.invoices.forEach(function(q){if(q.id===id)r=q;});return r;}
-function docHead(title,right){return '<div class="dh"><div>'+cobrand()+'<div class="small muted" style="margin-top:6px">Max Healthcare Equipment, Kilburn SA. '+MAX_PHONE+'</div></div><div style="text-align:right"><h2 style="margin:0">'+esc(title)+'</h2><div class="small muted">'+right+'</div></div></div>';}
+function docHead(title,right){return '<div class="dh"><div>'+cobrand()+'<div class="small muted" style="margin-top:6px">'+MAX_BIZ.name+', '+MAX_BIZ.street+', '+MAX_BIZ.suburb+'. '+MAX_PHONE+'</div></div><div style="text-align:right"><h2 style="margin:0">'+esc(title)+'</h2><div class="small muted">'+right+'</div></div></div>';}
 function showQuote(id){
-  var q=findQuote(id),r=S.referrer;
-  modal('<div class="doc">'+docHead('Quotation '+q.id+((q.rev||1)>1?', revision '+q.rev:''),fmtDate(q.created)+'<br>Valid 30 days')+
-    '<div class="grid2"><div><div class="small muted">Prepared for</div><strong>'+esc(q.client)+'</strong><br>'+esc(q.address)+'<br>'+esc(q.phone)+'</div><div><div class="small muted">Requested by</div><strong>'+esc(r.user)+'</strong><br>'+esc(r.org)+'<br>Funding: '+esc(q.funding)+'</div></div><hr>'+
-    '<table><thead><tr><th>Item</th><th>Qty</th><th class="num">Amount</th></tr></thead><tbody>'+q.items.map(function(it){var p=prod(it.pid);var u=(it.mode==='hire'?p.hire:p.buy)*CONTRACT_RATE;return '<tr><td>'+esc(p.name)+(it.mode==='hire'?' (hire, per week)':'')+(it.note?'<div class="small muted">'+esc(it.note)+'</div>':'')+'</td><td>'+it.qty+'</td><td class="num">'+money(u*it.qty)+'</td></tr>';}).join('')+
-    '</tbody></table><p style="text-align:right;margin-top:12px"><strong>Total '+money(quoteTotal(q))+' incl. GST</strong></p><p class="small muted">Contract pricing for '+esc(r.org)+'. Approve in the partner portal to place the order.</p></div>'+
+  var q=findQuote(id),r=S.referrer,tot=quoteTotal(q),gst=r2(tot/11),hire=hasHire(q),o=q.order?findOrder(q.order):null;
+  var lines=q.items.map(function(it){var p=prod(it.pid),u=unitPrice(it),amt=r2(u*it.qty);
+    return '<tr><td><strong>'+esc(p.name)+'</strong><small>'+(it.mode==='hire'?'Hire, charged weekly':'Purchase')+'</small>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</td><td>'+(p.vars?vtext(p,it.vars,'<br>'):'<span class="muted">Standard</span>')+'</td><td class="num">'+it.qty+'</td><td class="num">'+money(r2(u/1.1))+(it.mode==='hire'?'<small>per week</small>':'')+'</td><td class="num">'+money(r2(amt/11))+'</td><td class="num">'+money(amt)+'</td></tr>';}).join('');
+  modal('<div class="doc qdoc">'+
+    '<div class="qd-top"><div>'+cobrand()+'<div class="small muted" style="margin-top:8px">Silverchain contract pricing</div></div><div class="qd-title"><h1>Quotation</h1><div class="qd-meta"><span>Quote number</span><b>'+q.id+((q.rev||1)>1?' rev '+q.rev:'')+'</b><span>Date</span><b>'+longDate((q.rev||1)>1&&q.revised?q.revised:q.created)+'</b><span>Valid until</span><b>'+longDate(addDays(q.created,30))+'</b>'+(q.order?'<span>Order</span><b>'+q.order+'</b>':'')+'</div>'+(q.status==='Approved'?'<div class="stamp">Approved</div>':'')+'</div></div>'+
+    '<div class="qd-parties"><div><div class="qd-h">From</div><strong>'+MAX_BIZ.name+'</strong><br>'+MAX_BIZ.street+'<br>'+MAX_BIZ.suburb+'<br>ABN '+MAX_BIZ.abn+'<br>'+MAX_PHONE+'<br>'+MAX_BIZ.email+'</div>'+
+    '<div><div class="qd-h">Prepared for</div><strong>'+esc(q.client)+'</strong><br>'+esc(q.address)+(q.phone?'<br>'+esc(q.phone):'')+'<br><span class="muted">Funding:</span> '+esc(q.funding)+'</div>'+
+    '<div><div class="qd-h">Requested by</div><strong>'+esc(r.user)+'</strong><br>'+esc(r.org)+'<br>Care partner<br><span class="muted">Account:</span> SILV-0042</div></div>'+
+    '<div class="tablewrap"><table class="qd-lines"><thead><tr><th>Item</th><th>Variation</th><th class="num">Qty</th><th class="num">Unit price ex GST</th><th class="num">GST</th><th class="num">Amount incl. GST</th></tr></thead><tbody>'+lines+'</tbody></table></div>'+
+    '<div class="qd-sum"><table><tbody><tr><td>Subtotal ex GST</td><td class="num">'+money(r2(tot-gst))+'</td></tr><tr><td>GST</td><td class="num">'+money(gst)+'</td></tr><tr class="t"><td>Total incl. GST</td><td class="num">'+money(tot)+'</td></tr></tbody></table></div>'+
+    '<div class="qd-terms"><strong>Terms and notes</strong><ol>'+
+      '<li>Prices are Silverchain contract rates in Australian dollars and include GST where shown.</li>'+
+      '<li>This quote is valid for 30 days from '+longDate(q.created)+'.</li>'+
+      (hire?'<li>Hire items are charged weekly from delivery until collection. The total above includes the first week of hire.</li>':'')+
+      '<li>Max confirms the delivery date with the client once the quote is approved. Equipment is delivered, set up and demonstrated by the Max team.</li>'+
+      '<li>Invoices are payable within 30 days. Hire equipment remains the property of Max Healthcare Equipment.</li>'+
+    '</ol></div>'+
+    '<div class="qd-accept"><p><strong>Acceptance.</strong> I approve this quotation on behalf of '+esc(r.org)+' for '+esc(q.client)+' under '+esc(q.funding)+' funding.'+(o?' Approved in the partner portal, order '+o.id+'.':' Approve in the partner portal or sign and return.')+'</p><div class="qd-sig"><div>Name</div><div>Signature</div><div>Date</div></div></div>'+
+    '<div class="qd-foot"><span>'+MAX_BIZ.name+', '+MAX_BIZ.street+', '+MAX_BIZ.suburb+'</span><span>'+MAX_PHONE+' | '+MAX_BIZ.web+'</span></div>'+
+    '</div>'+
     '<div class="row no-print" style="margin-top:16px"><button class="btn primary" data-action="print">Download PDF</button><button class="btn" data-action="closeModal">Close</button></div>');
 }
 
@@ -1154,7 +1307,7 @@ function renderMax(){
   var problems=S.agreements.filter(function(a){return a.status==='Payment Failed'||a.attention;}).length;
   var tabs=tabBar([['hub','Hire hub'],['console','Hire console',problems||''],['list','Hire agreements'],['portals','Portals and orders']],mx.ha&&mx.tab==='list'?'list':mx.tab,'mxTab');
   var body=mx.ha?agreementDetail(haById(mx.ha)):mx.tab==='hub'?hubView():mx.tab==='console'?consoleView():mx.tab==='list'?listView():portalsView();
-  return frame('maxhealthcareequipment.lightning.force.com/lightning/n/Hire_Hub',brand('Salesforce, what Max staff see')+'<div class="who"><strong>Hire team</strong><br><span class="muted">Kilburn</span></div>',tabs,body);
+  return frame('maxhealthcareequipment.lightning.force.com/lightning/n/Hire_Hub',brand('Salesforce, what Max staff see')+'<div class="who"><strong>Hire team</strong><br><span class="muted">Keswick</span></div>',tabs,body);
 }
 function within(d,days){return d&&daysUntil(d)<=0&&daysUntil(d)>=-days;}
 function hubView(){
@@ -1223,6 +1376,7 @@ function listView(){
 }
 function portalsView(){
   var rows=S.orders.slice().reverse().map(function(o){var a=haById(o.ha);var st=staffById(o.staffId);return '<tr><td>'+o.id+'</td><td><span class="chip grey">'+esc(o.source)+'</span></td><td>'+esc(a?fullName(a):(o.patient||''))+'</td><td>'+(a?chip(a):'<span class="chip ok">On account</span>')+'</td><td class="small">'+o.items.map(function(it){return esc(prod(it.pid).name);}).join(', ')+'</td><td class="small">'+esc(st?st.name+', '+S.hospital.name:o.createdBy||'')+'</td></tr>';}).join('');
+  rows=S.referrer.orders.slice().sort(function(a,b){return a.created<b.created?1:-1;}).map(function(o){var q=findQuote(o.quote);return '<tr><td>'+o.id+'</td><td><span class="chip grey">Referrer</span></td><td>'+esc(q.client)+'</td><td>'+oChip(o)+'</td><td class="small">'+q.items.map(function(it){var p=prod(it.pid);return esc(p.name)+(p.vars?' ('+esc(vtext(p,it.vars))+')':'');}).join(', ')+'</td><td class="small">'+esc(S.referrer.user+', '+S.referrer.org)+'</td></tr>';}).join('')+rows;
   var qrows=S.referrer.quotes.slice().reverse().map(function(q){return '<tr><td>'+q.id+'</td><td>'+esc(S.referrer.org)+'</td><td>'+esc(q.client)+'</td><td>'+(q.status==='Approved'?'Closed Won':q.status==='Declined'?'Closed Lost':'Quote sent')+((q.rev||1)>1?' (rev '+q.rev+')':'')+'</td><td class="num">'+money(quoteTotal(q))+'</td></tr>';}).join('');
   return '<h2>Orders from all portals</h2><div class="tablewrap"><table><thead><tr><th>Order</th><th>Source</th><th>Customer</th><th>Status</th><th>Items</th><th>Raised by</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
     '<h2 style="margin-top:24px">Opportunities from referrer quotes</h2><div class="tablewrap"><table><thead><tr><th>Quote</th><th>Account</th><th>Client</th><th>Stage</th><th class="num">Amount</th></tr></thead><tbody>'+qrows+'</tbody></table></div>';
@@ -1467,7 +1621,11 @@ function act(a,v,el){
   /* referrer */
   case 'rfCat':S.referrer.cat=el.value;break;
   case 'rTab':S.referrer.tab=v;break;
-  case 'rfAdd':{var dr=S.referrer.draft,m2=el.getAttribute('data-m'),ex=null;dr.forEach(function(it){if(it.pid===v&&it.mode===m2&&!it.note)ex=it;});if(ex)ex.qty++;else dr.push({pid:v,mode:m2,qty:1,note:''});toast(prod(v).name+' added to the quote.');break;}
+  case 'rfAdd':{var dr=S.referrer.draft,m2=el.getAttribute('data-m'),pv=prod(v),vs=vfix(pv,(S.referrer.pick||{})[v]),ex=null;dr.forEach(function(it){if(it.pid===v&&it.mode===m2&&!it.note&&vkey(vfix(pv,it.vars))===vkey(vs))ex=it;});if(ex)ex.qty++;else dr.push({pid:v,mode:m2,qty:1,note:'',vars:vs});toast(pv.name+(pv.vars?' ('+vtext(pv,vs)+')':'')+' added to the quote.');break;}
+  case 'rfVar':{var pk=S.referrer.pick||(S.referrer.pick={});var pp=prod(v);pk[v]=vfix(pp,pk[v]);pk[v][el.getAttribute('data-k')]=el.tagName==='SELECT'?el.value:el.getAttribute('data-o');S._keepScroll=true;break;}
+  case 'rLineVar':{var li=S.referrer.draft[Number(v)];li.vars=vfix(prod(li.pid),li.vars);li.vars[el.getAttribute('data-k')]=el.tagName==='SELECT'?el.value:el.getAttribute('data-o');break;}
+  case 'rOrdFilter':S.referrer.ofilter=(S.referrer.ofilter===v?'':v);break;
+  case 'viewOrder':showOrder(v);return;
   case 'rRemove':S.referrer.draft.splice(Number(v),1);break;
   case 'createQuote':{var rr=S.referrer,cl=document.getElementById('q_client').value.trim(),adr=document.getElementById('q_address').value.trim();if(!cl||!adr){toast('Add the client name and delivery address.');return;}
     if(!rr.draft.length){toast('Add at least one product.');return;}
@@ -1475,15 +1633,15 @@ function act(a,v,el){
     if(rr.editing){qq=findQuote(rr.editing);Object.keys(fields).forEach(function(k){qq[k]=fields[k];});qq.rev=(qq.rev||1)+1;qq.revised=today();toast(qq.id+' updated to revision '+qq.rev+'.');}
     else{qq=fields;qq.id='Q-'+(S.seq.q++);qq.status='Awaiting approval';qq.created=today();qq.rev=1;rr.quotes.push(qq);toast(qq.id+' created. Download the PDF to send for approval.');}
     rr.draft=[];rr.dclient={};rr.editing=null;rr.tab='quotes';save();render();showQuote(qq.id);return;}
-  case 'editQuote':{var rq=S.referrer,eq=findQuote(v);rq.editing=v;rq.draft=eq.items.map(function(it){return {pid:it.pid,mode:it.mode,qty:it.qty,note:it.note||''};});rq.dclient={client:eq.client,phone:eq.phone,address:eq.address,funding:eq.funding};rq.tab='quote';break;}
+  case 'editQuote':{var rq=S.referrer,eq=findQuote(v);rq.editing=v;rq.draft=eq.items.map(function(it){return {pid:it.pid,mode:it.mode,qty:it.qty,note:it.note||'',vars:vfix(prod(it.pid),it.vars)};});rq.dclient={client:eq.client,phone:eq.phone,address:eq.address,funding:eq.funding};rq.tab='quote';break;}
   case 'cancelEdit':S.referrer.editing=null;S.referrer.draft=[];S.referrer.dclient={};S.referrer.tab='quotes';break;
   case 'rFunding':S.referrer.dclient.funding=el.value;break;
   case 'viewQuote':showQuote(v);return;
   case 'approveQuote':{var q2=findQuote(v);modal('<h2>Approve '+q2.id+'</h2><p>Confirm the care partner or support coordinator has approved this quote for '+esc(q2.client)+'.</p><label class="f">Authorisation <span class="h">Optional</span><input type="file"></label><div class="row" style="margin-top:16px"><button class="btn primary" data-action="confirmApprove" data-v="'+q2.id+'">Approve and order</button><button class="btn" data-action="closeModal">Cancel</button></div>');return;}
-  case 'confirmApprove':{var q3=findQuote(v);q3.status='Approved';var oid=String(70690+S.seq.q-3100);q3.order=oid;
-    S.orders.push({id:'ORD-'+(S.seq.ord++),source:'Referrer',createdBy:S.referrer.user+', '+S.referrer.org,patient:q3.client,items:q3.items});
+  case 'confirmApprove':{var q3=findQuote(v);q3.status='Approved';var oid=String(S.seq.rord++);q3.order=oid;
+    S.referrer.orders.push({id:oid,quote:q3.id,status:'Received',created:today(),delivery:nextWorkingDay(),window:'AM (8am to 12pm)'});
     S.referrer.invoices.push({id:'INV-'+(S.seq.inv++),date:today(),due:today(30),desc:'Order '+oid+', '+q3.client,amt:r2(quoteTotal(q3)),status:'Open'});
-    closeModal();toast('Approved. Order '+oid+' created and invoiced.');break;}
+    closeModal();toast('Approved. Order '+oid+' created and invoiced. Track it in Orders.');break;}
   case 'declineQuote':findQuote(v).status='Declined';break;
   case 'payInvoice':{var inv=findInv(v);modal('<h2>Pay '+inv.id+'</h2><p>'+esc(inv.desc)+'</p><p style="font-family:var(--display);font-size:1.6rem">'+money(inv.amt)+'</p><label class="f">Card number<input type="text" value="4242 4242 4242 4242"></label><p class="small muted" style="margin-top:8px">Secured by Stripe (test mode). Payment is recorded against the Xero invoice.</p><div class="row"><button class="btn primary" data-action="confirmPay" data-v="'+inv.id+'">Pay '+money(inv.amt)+'</button><button class="btn" data-action="closeModal">Cancel</button></div>');return;}
   case 'confirmPay':findInv(v).status='Paid';closeModal();toast('Payment received.');break;

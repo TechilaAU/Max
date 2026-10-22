@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Silverchain referrer portal | Max Healthcare Equipment</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#00002D">
+<link rel="icon" type="image/png" href="/favicon.png">
+<style>
+@font-face{font-family:'Helvetica Rounded';font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/helvetica-rounded-bold.woff2) format('woff2')}
+@font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(../fonts/figtree-latin-wght-normal.woff2) format('woff2')}
+:root{
+  --navy:#00002D; --blue:#1059FF; --blue-hover:#0B47D6; --soft:#DADCF0; --eyebrow:#9DB8FF;
+  --paper:#F3F4F8; --ink:#00002D; --muted:#5A5A78; --line:#E1E3EC;
+  --display:'Helvetica Rounded','Arial Rounded MT Bold',system-ui,sans-serif;
+  --body:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body);display:flex;flex-direction:column}
+h1,h2{font-family:var(--display);font-weight:700;line-height:1.15;margin:0}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px}
+.top{background:var(--navy);padding:14px max(20px,env(safe-area-inset-left,0px));padding-top:calc(14px + env(safe-area-inset-top,0px))}
+.cobrand{display:flex;align-items:center;gap:14px}
+.cobrand img{display:block;height:32px;width:auto}
+.cobrand img.sc{height:27px}
+.cobrand .x{color:rgba(255,255,255,.6);font-family:var(--display);font-size:18px}
+main{flex:1;width:100%;max-width:1040px;margin:0 auto;padding:40px max(20px,env(safe-area-inset-right,0px)) 56px max(20px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:28px}
+.sc{background:var(--navy);color:#fff;border-radius:24px;padding:36px;display:grid;grid-template-columns:1fr auto;gap:24px 36px;align-items:center}
+.sc .eyebrow{color:var(--eyebrow);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.sc h1{font-size:2rem;margin:8px 0 10px}
+.sc p{color:var(--soft);margin:0;max-width:60ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;border-radius:999px;background:var(--blue);color:#fff;font-weight:700;text-decoration:none;border:2px solid var(--blue);white-space:nowrap}
+.btn:hover{background:var(--blue-hover);border-color:var(--blue-hover)}
+.btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;list-style:none;margin:0;padding:0}
+.features li{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:4px}
+.features strong{font-family:var(--display);font-size:1.05rem}
+.features span{color:var(--muted);font-size:.95rem}
+.help{color:var(--muted);font-size:.95rem;margin:0}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:0 20px calc(20px + env(safe-area-inset-bottom,0px))}
+@media (max-width:760px){.sc{grid-template-columns:1fr;padding:26px}.sc h1{font-size:1.6rem}.btn{width:100%}main{padding-top:24px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="cobrand"><img src="/images/brand/max-logo-reversed.png" alt="Max Healthcare Equipment"><span class="x" aria-hidden="true">&times;</span><img class="sc" src="/images/brand/silverchain-logo-reversed.png" alt="Silverchain"></div>
+</header>
+<main>
+  <section class="sc" aria-labelledby="scTitle">
+    <div>
+      <span class="eyebrow">Silverchain partners</span>
+      <h1 id="scTitle">Silverchain referrer portal</h1>
+      <p>Silverchain care partners and support coordinators order equipment at Silverchain contract pricing. Build quotes, get them approved, and track orders, invoices and statements in one place.</p>
+    </div>
+    <a class="btn" href="/portal/silverchain/?tender">Access now</a>
+  </section>
+  <ul class="features" aria-label="What you can do in the portal">
+    <li><strong>Contract catalogue</strong><span>Every product at Silverchain pricing, with sizes and colours.</span></li>
+    <li><strong>Quotes and approvals</strong><span>Build a quote, download the PDF and approve it online.</span></li>
+    <li><strong>Order without a quote</strong><span>For clients with low level funding who do not need one.</span></li>
+    <li><strong>Live order tracking</strong><span>From received to delivered, collected and invoiced.</span></li>
+    <li><strong>Hire to buy</strong><span>See what it costs to keep hired equipment, with 65% of hire paid credited.</span></li>
+    <li><strong>Showroom trials</strong><span>Book a client in to try equipment with our occupational therapist.</span></li>
+  </ul>
+  <p class="help">Need help with the portal? Call Max Healthcare Equipment on 1800 684 277.</p>
+</main>
+<footer>Max Healthcare Equipment, 7 Marlow Road, Keswick SA 5035. ABN 58 046 204 299.</footer>
+</body>
+</html>

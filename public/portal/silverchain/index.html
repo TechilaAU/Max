@@ -47,6 +47,12 @@ body[data-persona="referrer"]{
 }
 @media (max-width:520px){.brand .cobrand img{height:24px}.brand .cobrand img.sc{height:20px}}
 
+body.tender #personaBar{display:none}
+.h2p-work{display:grid;grid-template-columns:1fr auto;gap:4px 18px;font-variant-numeric:tabular-nums;max-width:420px}
+.h2p-work .t{border-top:1px solid var(--line);padding-top:6px;font-weight:700}
+.trial-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px 16px}
+.trial-items label{display:flex;gap:8px;align-items:center;padding:4px 0;font-weight:500;cursor:pointer}
+.trial-items input{width:18px;height:18px;accent-color:var(--red-ink)}
 .stage.referrer{grid-template-columns:minmax(0,1fr)}.stage.referrer .phone-wrap{display:none}
 .stage.referrer #app{max-width:1100px;width:100%;margin:0 auto}
 
@@ -552,7 +558,7 @@ function opt(list,val){return list.map(function(v){return '<option'+(v===val?' s
 function L(id,pid,mode,state,extra){var o={id:id,pid:pid,qty:1,mode:mode,state:state};for(var k in extra)o[k]=extra[k];return o;}
 function seed(){
   var s={
-    v:4, persona:'referrer', seq:{ord:1041,ha:132,txn:5120,wo:880,sa:4410,q:3102,inv:8830,ln:900,rord:70692},
+    v:5, persona:'referrer', seq:{tr:214,ord:1041,ha:132,txn:5120,wo:880,sa:4410,q:3102,inv:8830,ln:900,rord:70692},
     hospital:{name:'Northside Private Hospital',slug:'northside',token:'7f3k9q',rooms:['Level 2 consignment room','Rehab gym store'],idleMins:2},
     devices:[{id:'d1',name:'Ward 4B iPad',added:'Supplied by Max'},{id:'d2',name:'Allied health office PC',added:'Approved by Tom Reid'}],
     staff:[
@@ -613,10 +619,11 @@ function seed(){
     f:{},
     mx:{tab:'hub',ha:null,queue:'problems',tlFilter:'all',list:null,tpl:'',draft:''},
     pv:{cart:[],q:'',cat:''},
-    referrer:{org:'Silverchain',user:'Jess Morgan',tab:'catalogue',q:'',cat:'',draft:[],editing:null,dclient:{},pick:{},ofilter:'',
+    referrer:{org:'Silverchain',user:'Jess Morgan',tab:'catalogue',q:'',cat:'',draft:[],editing:null,direct:false,dclient:{},pick:{},ofilter:'',trials:[],bought:{},calc:{pid:'p2',weeks:8},
       quotes:[
         {id:'Q-3052',client:'Ivan Cole',phone:'0400 404 707',address:'2 Hope Street, Glenelg SA 5045',funding:'Support at Home',items:[{pid:'p2',mode:'buy',qty:1,note:'',vars:{'Seat width':'46cm (18in)'}}],status:'Approved',created:today(-62),rev:1,order:'70470'},
         {id:'Q-3061',client:'Ron Bell',phone:'0400 515 262',address:'18 Crown Street, Kilkenny SA 5009',funding:'CHSP',items:[{pid:'p3',mode:'buy',qty:1,note:''},{pid:'p16',mode:'buy',qty:1,note:''}],status:'Approved',created:today(-50),rev:1,order:'70491'},
+        {id:'Q-3069',client:'Patricia Moore',phone:'0400 919 455',address:'5 Kauri Parade, Seaton SA 5023',funding:'Support at Home',items:[{pid:'p2',mode:'hire',qty:1,note:'',vars:{'Seat width':'46cm (18in)'}},{pid:'p4',mode:'hire',qty:1,note:''}],status:'Approved',created:today(-72),rev:1,order:'70540'},
         {id:'Q-3077',client:'Lyn Fraser',phone:'0400 717 330',address:'31 Greenhill Road, Unley SA 5061',funding:'Support at Home',items:[{pid:'p3',mode:'buy',qty:1,note:''}],status:'Approved',created:today(-22),rev:1,order:'70552'},
         {id:'Q-3083',client:'Mavis Reid',phone:'0400 303 141',address:'6 Coorara Avenue, Payneham South SA 5070',funding:'TCP',items:[{pid:'p1',mode:'hire',qty:1,note:'',vars:{'Colour':'Blue','Handle height':'Standard'}},{pid:'p4',mode:'hire',qty:1,note:''}],status:'Approved',created:today(-40),rev:1,order:'70618'},
         {id:'Q-3096',client:'Ken Wallace',phone:'0400 262 919',address:'44 Hectorville Road, Hectorville SA 5073',funding:'TCP',items:[{pid:'p2',mode:'hire',qty:1,note:'',vars:{'Seat width':'51cm (20in)'}},{pid:'p3',mode:'hire',qty:1,note:''}],status:'Approved',created:today(-8),rev:1,order:'70677'},
@@ -626,6 +633,7 @@ function seed(){
       orders:[
         {id:'70470',quote:'Q-3052',status:'Delivered',created:today(-61),delivery:today(-59),window:'AM (8am to 12pm)'},
         {id:'70491',quote:'Q-3061',status:'Delivered',created:today(-48),delivery:today(-47),window:'PM (12pm to 5pm)'},
+        {id:'70540',quote:'Q-3069',status:'On hire',created:today(-71),delivery:today(-70),window:'AM (8am to 12pm)'},
         {id:'70552',quote:'Q-3077',status:'Delivered',created:today(-20),delivery:today(-19),window:'AM (8am to 12pm)'},
         {id:'70618',quote:'Q-3083',status:'Collected',created:today(-38),delivery:today(-37),window:'AM (8am to 12pm)',collected:today(-9)},
         {id:'70677',quote:'Q-3096',status:'On hire',created:today(-7),delivery:today(-6),window:'PM (12pm to 5pm)'},
@@ -668,9 +676,10 @@ function seed(){
   return s;
 }
 var S;
-var KEY='maxhc-silverchain-demo-v1';
+var TENDER=/[?&]tender(=|&|$)/.test(location.search);
+var KEY='maxhc-silverchain-demo-v1'+(TENDER?'-tender':'');
 try{var raw=localStorage.getItem(KEY);S=raw?JSON.parse(raw):null;}catch(e){S=null;}
-if(!S||S.v!==4)seed();
+if(!S||S.v!==5)seed();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
 function link(ha,kind,token,silent){var t=token||('tk-'+rnd(8));S.links[t]={ha:ha,kind:kind,expired:false,code:rnd(4)};return t;}
@@ -1190,8 +1199,8 @@ function cobrand(){return '<span class="cobrand"><img src="/images/brand/max-log
 function renderReferrer(){
   var r=S.referrer;
   var head='<div class="brand">'+cobrand()+'<span class="sub">Referrer portal</span></div>'+'<div class="who"><strong>'+esc(r.user)+'</strong><br><span class="muted">'+esc(r.org)+'</span></div>';
-  var tabs=tabBar([['catalogue','Catalogue'],['quote',(r.editing?'Editing '+r.editing:'New quote'),r.draft.length||''],['quotes','Quotes'],['orders','Orders'],['invoices','Invoices']],r.tab,'rTab');
-  var body=r.tab==='catalogue'?catalogue('rf',r.q,r.cat,CONTRACT_RATE):r.tab==='quote'?quoteBuilder():r.tab==='quotes'?quotesView():r.tab==='orders'?ordersView():invoicesView();
+  var tabs=tabBar([['catalogue','Catalogue'],['quote',(r.editing?'Editing '+r.editing:r.direct?'New order':'New quote'),r.draft.length||''],['quotes','Quotes'],['orders','Orders'],['h2p','Hire to buy'],['trial','Showroom trial'],['invoices','Invoices']],r.tab,'rTab');
+  var body=r.tab==='catalogue'?catalogue('rf',r.q,r.cat,CONTRACT_RATE):r.tab==='quote'?quoteBuilder():r.tab==='quotes'?quotesView():r.tab==='orders'?ordersView():r.tab==='h2p'?h2pView():r.tab==='trial'?trialView():invoicesView();
   return frame('portal.maxhealthcare.com.au/partner/silverchain-m4q1z8',head,tabs,body);
 }
 function catalogue(ns,q,cat,rateM){
@@ -1207,21 +1216,22 @@ function catalogue(ns,q,cat,rateM){
 }
 function quoteBuilder(){
   var r=S.referrer,c=r.dclient||{};
-  if(!r.draft.length&&!r.editing)return '<div class="empty"><strong>No products on this quote yet</strong>Add products from the catalogue to start a quote.<div style="margin-top:12px"><button class="btn" data-action="rTab" data-v="catalogue">Open catalogue</button></div></div>';
+  if(!r.draft.length&&!r.editing)return '<div class="empty"><strong>No products on this '+(r.direct?'order':'quote')+' yet</strong>Add products from the catalogue to start '+(r.direct?'the order':'a quote')+'.<div class="row" style="margin-top:12px;justify-content:center"><button class="btn" data-action="rTab" data-v="catalogue">Open catalogue</button>'+(r.direct?'<button class="btn" data-action="cancelDirect">Cancel</button>':'')+'</div></div>';
   var q=r.editing?findQuote(r.editing):null;
   var rows=r.draft.map(function(it,i){var p=prod(it.pid);var unit=unitPrice(it);return '<tr><td><strong>'+esc(p.name)+'</strong>'+(p.vars?'<div class="vline">'+vpicker(p,it.vars,'rLineVar',i)+'</div>':'')+'<input type="text" value="'+esc(it.note||'')+'" data-input="rNote" data-v="'+i+'" placeholder="Notes for this item" aria-label="Notes for '+esc(p.name)+'" style="margin-top:8px;min-height:36px;padding:6px 10px;font-size:.875rem"></td><td>'+(it.mode==='hire'?'Hire /wk':'Purchase')+'</td><td><input type="number" min="1" value="'+it.qty+'" data-input="rQty" data-v="'+i+'" aria-label="Quantity" style="width:72px;min-height:38px;padding:6px"></td><td class="num">'+money(unit)+'</td><td class="num">'+money(unit*it.qty)+'</td><td class="num"><button class="btn sm" data-action="rRemove" data-v="'+i+'">Remove</button></td></tr>';}).join('');
-  var h=q?'<h2>Edit '+q.id+'</h2><div class="notice info">Change products, quantities, colours or sizes before the quote is approved. Saving creates revision '+((q.rev||1)+1)+' and an updated PDF.</div>':'<h2>New quote</h2>';
+  var h=q?'<h2>Edit '+q.id+'</h2><div class="notice info">Change products, quantities, colours or sizes before the quote is approved. Saving creates revision '+((q.rev||1)+1)+' and an updated PDF.</div>':r.direct?'<h2>New order</h2><div class="notice info">For clients with low level funding who do not need a quote. The order goes straight to Max for delivery and is invoiced to Silverchain.</div>':'<h2>New quote</h2>';
   h+=(rows?'<div class="tablewrap"><table><thead><tr><th>Item and options</th><th>Type</th><th>Qty</th><th class="num">Unit price</th><th class="num">Amount</th><th></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="4" class="num"><strong>Total incl. GST</strong></td><td class="num"><strong>'+money(draftTotal(r.draft))+'</strong></td><td></td></tr></tfoot></table></div>':'<div class="empty">No products on this quote yet.</div>')+'<div class="row" style="margin-top:12px"><button class="btn sm" data-action="rTab" data-v="catalogue">Add more products</button></div>';
   h+='<fieldset style="margin-top:16px"><legend>Client</legend><div class="grid2"><label class="f"><span class="req">Client name</span><input type="text" id="q_client" value="'+esc(c.client||'')+'" data-input="rClient" data-k="client"></label><label class="f">Phone<input type="tel" id="q_phone" value="'+esc(c.phone||'')+'" data-input="rClient" data-k="phone"></label><label class="f"><span class="req">Delivery address</span><input type="text" id="q_address" value="'+esc(c.address||'')+'" data-input="rClient" data-k="address"></label><label class="f">Funding<select id="q_funding" data-action="rFunding">'+opt(FUNDING,FUNDING.indexOf(c.funding)>-1?c.funding:FUNDING[0])+'</select></label></div></fieldset>';
-  return h+(q?'<div class="row"><button class="btn primary" data-action="createQuote">Save changes</button><button class="btn" data-action="cancelEdit">Cancel</button></div>':'<div class="row"><button class="btn primary" data-action="createQuote">Create quote</button><span class="small muted">You can download the PDF and send it for approval straight away.</span></div>');
+  return h+(q?'<div class="row"><button class="btn primary" data-action="createQuote">Save changes</button><button class="btn" data-action="cancelEdit">Cancel</button></div>':r.direct?'<div class="row"><button class="btn primary" data-action="placeDirect">Place order</button><button class="btn" data-action="cancelDirect">Cancel</button><span class="small muted">No quote or approval needed.</span></div>':'<div class="row"><button class="btn primary" data-action="createQuote">Create quote</button><button class="btn" data-action="placeDirect">Order without a quote</button><span class="small muted">Create a quote to send for approval, or order straight away for low level funding.</span></div>');
 }
 function draftTotal(items){return r2(sum(items.map(function(it){return unitPrice(it)*it.qty;})));}
 function quoteTotal(q){return draftTotal(q.items);}
 function quotesView(){
   var r=S.referrer;
-  if(!r.quotes.length)return '<div class="empty"><strong>No quotes yet</strong>Build one from the catalogue.</div>';
+  var ql=r.quotes.filter(function(q){return !q.direct;});
+  if(!ql.length)return '<div class="empty"><strong>No quotes yet</strong>Build one from the catalogue.</div>';
   return '<h2>Quotes</h2><div class="tablewrap"><table><thead><tr><th>Quote</th><th>Client</th><th>Funding</th><th>Status</th><th class="num">Total</th><th></th></tr></thead><tbody>'+
-    r.quotes.slice().reverse().map(function(q){var cls=q.status==='Approved'?'ok':q.status==='Declined'?'bad':'warn';
+    ql.slice().reverse().map(function(q){var cls=q.status==='Approved'?'ok':q.status==='Declined'?'bad':'warn';
       return '<tr><td>'+q.id+'<div class="small muted">'+fmtDate(q.created)+((q.rev||1)>1?', rev '+q.rev+' on '+fmtDate(q.revised):'')+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td><span class="chip '+cls+'">'+q.status+'</span>'+(q.order?'<div class="small"><button class="linkbtn" data-action="viewOrder" data-v="'+q.order+'" style="padding:2px 0">Order '+q.order+'</button></div>':'')+'</td><td class="num">'+money(quoteTotal(q))+'</td><td class="num"><button class="btn sm" data-action="viewQuote" data-v="'+q.id+'">PDF</button> '+
       (q.status==='Awaiting approval'?'<button class="btn sm" data-action="editQuote" data-v="'+q.id+'">Edit</button> <button class="btn sm primary" data-action="approveQuote" data-v="'+q.id+'">Approve</button> <button class="btn sm" data-action="declineQuote" data-v="'+q.id+'">Decline</button>':'')+'</td></tr>';}).join('')+'</tbody></table></div>';
 }
@@ -1240,13 +1250,13 @@ function itemsText(q){return q.items.map(function(it){var p=prod(it.pid);return 
 function ordersView(){
   var r=S.referrer,f=r.ofilter||'';
   var counts={};r.orders.forEach(function(o){var g=oGroup(o);counts[g]=(counts[g]||0)+1;});
-  var h='<div class="row between" style="margin-bottom:12px"><h2 style="margin:0">Orders</h2><span class="small muted">Live from Max. Updates as orders are prepared, delivered and collected.</span></div>';
+  var h='<div class="row between" style="margin-bottom:12px"><div><h2 style="margin:0">Orders</h2><span class="small muted">Live from Max. Updates as orders are prepared, delivered and collected.</span></div><button class="btn primary" data-action="rNewOrder">New order without a quote</button></div>';
   h+='<div class="tiles">'+OTILES.map(function(t){return '<button class="tile" data-action="rOrdFilter" data-v="'+t[0]+'" aria-pressed="'+(f===t[0])+'"><div class="k">'+t[1]+'</div><div class="v">'+(counts[t[0]]||0)+'</div><div class="s">'+t[2]+'</div></button>';}).join('')+'</div>';
   var list=r.orders.filter(function(o){return !f||oGroup(o)===f;}).slice().sort(function(a,b){return a.created<b.created?1:-1;});
   if(f)h+='<div class="row" style="margin-bottom:10px"><span class="chip info">Showing: '+esc(f==='Delivered'?'Delivered or on hire':f)+'</span><button class="btn sm quiet" data-action="rOrdFilter" data-v="">Show all orders</button></div>';
   if(!list.length)return h+'<div class="empty"><strong>No orders here</strong>Approved quotes become orders automatically.</div>';
   return h+'<div class="tablewrap"><table><thead><tr><th>Order</th><th>Client</th><th>Funding</th><th>Items</th><th>Status</th><th>Delivery</th><th>Quote</th></tr></thead><tbody>'+
-    list.map(function(o){var q=findQuote(o.quote);return '<tr class="click" data-action="viewOrder" data-v="'+o.id+'"><td><strong>'+o.id+'</strong><div class="small muted">'+fmtDate(o.created)+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td class="small">'+itemsText(q)+'</td><td>'+oChip(o)+'</td><td>'+oWhen(o)+'</td><td>'+q.id+'</td></tr>';}).join('')+'</tbody></table></div><p class="small muted" style="margin-top:8px">Select an order to see its progress and delivery details.</p>';
+    list.map(function(o){var q=findQuote(o.quote);return '<tr class="click" data-action="viewOrder" data-v="'+o.id+'"><td><strong>'+o.id+'</strong><div class="small muted">'+fmtDate(o.created)+'</div></td><td>'+esc(q.client)+'</td><td>'+esc(q.funding)+'</td><td class="small">'+itemsText(q)+'</td><td>'+oChip(o)+'</td><td>'+oWhen(o)+'</td><td>'+(q.direct?'<span class="muted">No quote</span>':q.id)+'</td></tr>';}).join('')+'</tbody></table></div><p class="small muted" style="margin-top:8px">Select an order to see its progress and delivery details.</p>';
 }
 function showOrder(id){
   var o=findOrder(id),q=findQuote(o.quote),hire=hasHire(q);
@@ -1255,13 +1265,43 @@ function showOrder(id){
   var done=o.status==='Collected'||(!hire&&o.status==='Delivered');
   modal('<div class="dhead"><h1>Order '+o.id+'</h1>'+oChip(o)+'</div>'+
     '<ol class="steps">'+steps.map(function(s,i){return '<li class="'+(i<cur||(done&&i===last)?'done':i===cur?'cur':'')+'">'+esc(s)+'</li>';}).join('')+'</ol>'+
-    '<div class="facts"><span>Client <b>'+esc(q.client)+'</b></span><span>Funding <b>'+esc(q.funding)+'</b></span><span>Quote <b>'+q.id+'</b></span></div>'+
+    '<div class="facts"><span>Client <b>'+esc(q.client)+'</b></span><span>Funding <b>'+esc(q.funding)+'</b></span><span>Quote <b>'+(q.direct?'Ordered without a quote':q.id)+'</b></span></div>'+
     '<div class="kv"><span class="k">Deliver to</span><span class="v">'+esc(q.address)+'</span></div>'+
     '<div class="kv"><span class="k">'+(cur>=3?'Delivered':'Delivery booked')+'</span><span class="v">'+longDate(o.delivery)+', '+esc(o.window)+'</span></div>'+
     (o.driver?'<div class="kv"><span class="k">Driver</span><span class="v">'+esc(o.driver)+'</span></div>':'')+
     (o.collected?'<div class="kv"><span class="k">Collected</span><span class="v">'+longDate(o.collected)+'</span></div>':'')+
     '<h2 style="margin-top:14px">Items</h2>'+q.items.map(function(it){var p=prod(it.pid);return '<div class="item"><div class="ph">'+pimg(p)+'</div><div class="nm">'+esc((it.qty>1?it.qty+' x ':'')+p.name)+'<small>'+(it.mode==='hire'?'Hire':'Purchase')+(p.vars?', '+esc(vtext(p,it.vars)):'')+'</small>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</div></div>';}).join('')+
-    '<div class="row" style="margin-top:16px"><button class="btn" data-action="viewQuote" data-v="'+q.id+'">View quote '+q.id+'</button><button class="btn" data-action="closeModal">Close</button></div>');
+    (hire&&(o.status==='On hire'||o.status==='Delivered')?'<div class="notice info" style="margin-top:14px">Want to keep this equipment? See the price to buy it in <button class="linkbtn" data-action="goH2p" style="padding:0">Hire to buy</button>.</div>':'')+
+    '<div class="row" style="margin-top:16px">'+(q.direct?'':'<button class="btn" data-action="viewQuote" data-v="'+q.id+'">View quote '+q.id+'</button>')+'<button class="btn" data-action="closeModal">Close</button></div>');
+}
+var H2P_KEEP=0.35;
+function daysSince(s){var p=s.split('-');var d=new Date(+p[0],+p[1]-1,+p[2]);var t=new Date();t.setHours(0,0,0,0);return Math.round((t-d)/86400000);}
+function h2pLine(pid,vars,qty,weeks){var p=prod(pid);var weekly=r2(baseUnit(p,'hire',vars)*CONTRACT_RATE);var paid=r2(weekly*weeks*qty);var credit=r2(paid*(1-H2P_KEEP));var rrp=r2(baseUnit(p,'buy',vars)*qty);return {weekly:weekly,paid:paid,credit:credit,rrp:rrp,price:Math.max(0,r2(rrp-credit))};}
+function h2pWork(c,weeks){return '<div class="h2p-work small"><span>Retail RRP</span><span class="num">'+money(c.rrp)+'</span><span>Hire paid, '+weeks+(weeks===1?' week':' weeks')+' at '+money(c.weekly)+'</span><span class="num">'+money(c.paid)+'</span><span>Credit, 65% of hire paid</span><span class="num">less '+money(c.credit)+'</span><span class="t">Price to buy</span><span class="t num">'+money(c.price)+'</span></div>';}
+function h2pView(){
+  var r=S.referrer,rows=[];
+  r.orders.forEach(function(o){if(o.status!=='On hire'&&o.status!=='Delivered')return;var q=findQuote(o.quote);
+    q.items.forEach(function(it,i){var p=prod(it.pid);if(it.mode!=='hire'||!p.buy)return;var wk=Math.max(1,Math.ceil(daysSince(o.delivery)/7));rows.push({o:o,q:q,it:it,key:o.id+'-'+i,p:p,weeks:wk,c:h2pLine(it.pid,it.vars,it.qty,wk)});});});
+  var h='<h2>Hire to buy</h2><p class="muted" style="max-width:68ch">A client who wants to keep hired equipment can buy it. Max keeps 35% of the hire already paid and credits the other 65% against the retail RRP of the item.</p>';
+  if(!rows.length)h+='<div class="empty"><strong>Nothing on hire right now</strong>Hired equipment shows here once it is delivered.</div>';
+  else h+='<div class="tablewrap"><table><thead><tr><th>Client and item</th><th>On hire since</th><th>How the price is worked out</th><th class="num">Price to buy</th><th></th></tr></thead><tbody>'+rows.map(function(x){var done=r.bought[x.key];
+    return '<tr><td><strong>'+esc(x.q.client)+'</strong><div class="small">'+esc((x.it.qty>1?x.it.qty+' x ':'')+x.p.name)+'</div>'+(x.p.vars?'<div class="small muted">'+esc(vtext(x.p,x.it.vars))+'</div>':'')+'<div class="small muted">Order '+x.o.id+'</div></td><td>'+fmtDate(x.o.delivery)+'<div class="small muted">'+x.weeks+(x.weeks===1?' week':' weeks')+' paid</div></td><td>'+h2pWork(x.c,x.weeks)+'</td><td class="num"><strong>'+money(x.c.price)+'</strong></td><td class="num">'+(done?'<span class="chip ok">Requested '+fmtDate(done)+'</span>':'<button class="btn sm primary" data-action="h2pBuy" data-v="'+x.key+'" data-price="'+x.c.price+'" data-name="'+esc(x.p.name)+'" data-client="'+esc(x.q.client)+'">Buy instead</button>')+'</td></tr>';}).join('')+'</tbody></table></div>';
+  var c=r.calc||(r.calc={pid:'p2',weeks:8}),hp=PRODUCTS.filter(function(p){return p.hire&&p.buy;});if(!prod(c.pid)||!prod(c.pid).hire||!prod(c.pid).buy)c.pid=hp[0].id;
+  var cp=prod(c.pid),cv=vfix(cp,c.vars),cw=Math.max(1,Math.floor(Number(c.weeks)||1)),cc=h2pLine(c.pid,cv,1,cw);
+  h+='<fieldset style="margin-top:18px"><legend>Work out a price</legend><p class="small muted">For any item, before or during a hire.</p><div class="grid2"><label class="f">Item<select id="h2p_prod" data-action="h2pProd">'+hp.map(function(p){return '<option value="'+p.id+'"'+(p.id===c.pid?' selected':'')+'>'+esc(p.name)+'</option>';}).join('')+'</select></label><label class="f">Weeks of hire paid<input type="number" id="h2p_weeks" min="1" max="104" value="'+cw+'" data-input="h2pWeeks"></label></div>'+(cp.vars?'<div style="margin-top:10px">'+vpicker(cp,cv,'h2pVar',cp.id)+'</div>':'')+'<div style="margin-top:14px">'+h2pWork(cc,cw)+'</div></fieldset>';
+  return h;
+}
+var TRIAL_TIMES=['Morning (9am to 12pm)','Afternoon (1pm to 4pm)'];
+function trialView(){
+  var r=S.referrer;
+  var h='<h2>Book a showroom trial</h2><p class="muted" style="max-width:68ch">Bring your client to try equipment before it is quoted or ordered. Trials are at the Max showroom, '+MAX_BIZ.street+', '+MAX_BIZ.suburb+', with our occupational therapist.</p>';
+  h+='<fieldset><legend>Client</legend><div class="grid2"><label class="f"><span class="req">Client name</span><input type="text" id="t_client"></label><label class="f">Client phone<input type="tel" id="t_phone"></label></div></fieldset>';
+  h+='<fieldset><legend>Equipment to trial</legend><div class="trial-items">'+PRODUCTS.map(function(p){return '<label><input type="checkbox" class="t_item" value="'+p.id+'"> '+esc(p.name)+'</label>';}).join('')+'</div></fieldset>';
+  h+='<fieldset><legend>When</legend><div class="grid2"><label class="f"><span class="req">Preferred date</span><input type="date" id="t_date" min="'+today(1)+'" value="'+nextWorkingDay()+'"></label><label class="f">Preferred time<select id="t_time">'+opt(TRIAL_TIMES,TRIAL_TIMES[0])+'</select></label></div></fieldset>';
+  h+='<fieldset><legend>Your details</legend><div class="grid2"><label class="f"><span class="req">Contact name</span><input type="text" id="t_contact" value="'+esc(r.user)+'"></label><label class="f"><span class="req">Contact phone or email</span><input type="text" id="t_cphone" value="jess.morgan@silverchain.org.au"></label></div><label class="f" style="margin-top:12px">Notes<textarea id="t_notes" placeholder="Height and weight, home setup, what the client finds hard"></textarea></label></fieldset>';
+  h+='<div class="row"><button class="btn primary" data-action="bookTrial">Request trial</button><span class="small muted">Max confirms the time by phone within one business day.</span></div>';
+  if(r.trials.length)h+='<h2 style="margin-top:24px">Trials requested</h2><div class="tablewrap"><table><thead><tr><th>Trial</th><th>Client</th><th>When</th><th>Equipment</th><th>Status</th></tr></thead><tbody>'+r.trials.slice().reverse().map(function(t){return '<tr><td>'+t.id+'</td><td>'+esc(t.client)+'</td><td>'+fmtDate(t.date)+'<div class="small muted">'+esc(t.time)+'</div></td><td class="small">'+t.items.map(function(id){return esc(prod(id).name);}).join(', ')+'</td><td><span class="chip warn">'+t.status+'</span></td></tr>';}).join('')+'</tbody></table></div>';
+  return h;
 }
 function invoicesView(){
   var r=S.referrer,out=0,over=0;
@@ -1453,10 +1493,11 @@ function confirmDoc(a,j){
 }
 
 /* ---------- render ---------- */
-var PERSONAS=[['referrer','Silverchain referrer portal'],['max','Max staff']];
+var PERSONAS=TENDER?[['referrer','Silverchain referrer portal']]:[['referrer','Silverchain referrer portal'],['max','Max staff']];
+if(TENDER){document.title='Silverchain referrer portal | Max Healthcare Equipment';document.body.classList.add('tender');document.querySelector('.top .home').outerHTML='<a class="home" href="/portal/silverchain/tender/"><span class="cobrand"><img src="/images/brand/max-logo-reversed.png" alt="Max Healthcare Equipment"><span class="x" aria-hidden="true">&times;</span><img class="sc" src="/images/brand/silverchain-logo-reversed.png" alt="Silverchain"></span><span>Referrer portal</span></a>';document.querySelector('.top .back').outerHTML='<a class="back" href="/portal/silverchain/tender/">Back to start</a>';}
 function render(){
   document.getElementById('personaBar').innerHTML=PERSONAS.map(function(p){return '<button data-action="persona" data-v="'+p[0]+'" aria-pressed="'+(S.persona===p[0])+'">'+p[1]+'</button>';}).join('');
-  if(S.persona!=='referrer'&&S.persona!=='max')S.persona='referrer';
+  if((S.persona!=='referrer'&&S.persona!=='max')||TENDER)S.persona='referrer';
   document.body.setAttribute('data-persona',S.persona);
   var html=S.persona==='referrer'?renderReferrer():renderMax();
   var app=document.getElementById('app');
@@ -1621,7 +1662,29 @@ function act(a,v,el){
   /* referrer */
   case 'rfCat':S.referrer.cat=el.value;break;
   case 'rTab':S.referrer.tab=v;break;
-  case 'rfAdd':{var dr=S.referrer.draft,m2=el.getAttribute('data-m'),pv=prod(v),vs=vfix(pv,(S.referrer.pick||{})[v]),ex=null;dr.forEach(function(it){if(it.pid===v&&it.mode===m2&&!it.note&&vkey(vfix(pv,it.vars))===vkey(vs))ex=it;});if(ex)ex.qty++;else dr.push({pid:v,mode:m2,qty:1,note:'',vars:vs});toast(pv.name+(pv.vars?' ('+vtext(pv,vs)+')':'')+' added to the quote.');break;}
+  case 'rNewOrder':{var rn=S.referrer;rn.direct=true;rn.editing=null;rn.tab=rn.draft.length?'quote':'catalogue';if(!rn.draft.length)toast('Add products from the catalogue, then place the order.');break;}
+  case 'cancelDirect':S.referrer.direct=false;S.referrer.draft=[];S.referrer.dclient={};S.referrer.tab='orders';break;
+  case 'placeDirect':{var rd=S.referrer,dcl=document.getElementById('q_client').value.trim(),dad=document.getElementById('q_address').value.trim();if(!dcl||!dad){toast('Add the client name and delivery address.');return;}
+    if(!rd.draft.length){toast('Add at least one product.');return;}
+    var did=String(S.seq.rord++);var dq={id:'D-'+did,direct:true,client:dcl,phone:document.getElementById('q_phone').value.trim(),address:dad,funding:document.getElementById('q_funding').value,items:rd.draft.slice(),status:'Ordered',created:today(),rev:1,order:did};
+    rd.quotes.push(dq);rd.orders.push({id:did,quote:dq.id,status:'Received',created:today(),delivery:nextWorkingDay(),window:'AM (8am to 12pm)'});
+    rd.invoices.push({id:'INV-'+(S.seq.inv++),date:today(),due:today(30),desc:'Order '+did+', '+dcl,amt:r2(quoteTotal(dq)),status:'Open'});
+    rd.draft=[];rd.dclient={};rd.direct=false;rd.tab='orders';save();render();toast('Order '+did+' placed with Max. No quote needed.');showOrder(did);return;}
+  case 'goH2p':closeModal();S.referrer.tab='h2p';break;
+  case 'h2pProd':S.referrer.calc={pid:el.value,weeks:(S.referrer.calc||{}).weeks||8};break;
+  case 'h2pWeeks':S.referrer.calc=S.referrer.calc||{pid:'p2'};S.referrer.calc.weeks=Number(el.value)||1;break;
+  case 'h2pVar':{var hc=S.referrer.calc;hc.vars=vfix(prod(hc.pid),hc.vars);hc.vars[el.getAttribute('data-k')]=el.tagName==='SELECT'?el.value:el.getAttribute('data-o');break;}
+  case 'h2pBuy':modal('<h2>Buy instead of hire</h2><p>'+esc(el.getAttribute('data-client'))+' keeps the '+esc(el.getAttribute('data-name'))+' for <strong>'+money(Number(el.getAttribute('data-price')))+'</strong>. Max stops the hire, and the purchase is invoiced to Silverchain.</p><div class="row" style="margin-top:16px"><button class="btn primary" data-action="h2pConfirm" data-v="'+v+'">Request purchase</button><button class="btn" data-action="closeModal">Cancel</button></div>');return;
+  case 'h2pConfirm':S.referrer.bought[v]=today();closeModal();toast('Purchase requested. Max will confirm and stop the hire.');break;
+  case 'bookTrial':{var rt=S.referrer,tcl=document.getElementById('t_client').value.trim(),tdt=document.getElementById('t_date').value,tco=document.getElementById('t_contact').value.trim(),tcp=document.getElementById('t_cphone').value.trim();
+    var tit=[].slice.call(document.querySelectorAll('.t_item:checked')).map(function(x){return x.value;});
+    if(!tcl||!tdt||!tco||!tcp){toast('Add the client name, a date and your contact details.');return;}
+    if(!tit.length){toast('Choose at least one item to trial.');return;}
+    if(tdt<today(1)){toast('Choose a date from tomorrow onwards.');return;}
+    var tr={id:'TR-'+(S.seq.tr++),client:tcl,phone:document.getElementById('t_phone').value.trim(),items:tit,date:tdt,time:document.getElementById('t_time').value,contact:tco,cphone:tcp,notes:document.getElementById('t_notes').value.trim(),status:'Requested'};
+    rt.trials.push(tr);save();render();
+    modal('<h2>Trial requested</h2><p>Reference <strong>'+tr.id+'</strong></p><div class="kv"><span class="k">Client</span><span class="v">'+esc(tr.client)+'</span></div><div class="kv"><span class="k">When</span><span class="v">'+longDate(tr.date)+', '+esc(tr.time)+'</span></div><div class="kv"><span class="k">Where</span><span class="v">Max showroom, '+MAX_BIZ.street+', '+MAX_BIZ.suburb+'</span></div><div class="kv"><span class="k">Equipment</span><span class="v">'+tr.items.map(function(id){return esc(prod(id).name);}).join(', ')+'</span></div><p class="small muted" style="margin-top:12px">Max will call '+esc(tr.contact)+' within one business day to confirm the time. Questions: '+MAX_PHONE+'.</p><div class="row" style="margin-top:16px"><button class="btn primary" data-action="closeModal">Done</button></div>');return;}
+  case 'rfAdd':{var dr=S.referrer.draft,m2=el.getAttribute('data-m'),pv=prod(v),vs=vfix(pv,(S.referrer.pick||{})[v]),ex=null;dr.forEach(function(it){if(it.pid===v&&it.mode===m2&&!it.note&&vkey(vfix(pv,it.vars))===vkey(vs))ex=it;});if(ex)ex.qty++;else dr.push({pid:v,mode:m2,qty:1,note:'',vars:vs});toast(pv.name+(pv.vars?' ('+vtext(pv,vs)+')':'')+' added to the '+(S.referrer.direct?'order':'quote')+'.');break;}
   case 'rfVar':{var pk=S.referrer.pick||(S.referrer.pick={});var pp=prod(v);pk[v]=vfix(pp,pk[v]);pk[v][el.getAttribute('data-k')]=el.tagName==='SELECT'?el.value:el.getAttribute('data-o');S._keepScroll=true;break;}
   case 'rLineVar':{var li=S.referrer.draft[Number(v)];li.vars=vfix(prod(li.pid),li.vars);li.vars[el.getAttribute('data-k')]=el.tagName==='SELECT'?el.value:el.getAttribute('data-o');break;}
   case 'rOrdFilter':S.referrer.ofilter=(S.referrer.ofilter===v?'':v);break;
@@ -1747,6 +1810,7 @@ document.addEventListener('input',function(e){
     if(k==='draftSearch'){readDraft();S.draft.q=t.value;}
     if(k==='ptSearch')S.pv.q=t.value;
     if(k==='rfSearch')S.referrer.q=t.value;
+    if(k==='h2pWeeks'){S.referrer.calc=S.referrer.calc||{pid:'p2'};S.referrer.calc.weeks=Math.min(104,Math.max(1,parseInt(t.value,10)||1));}
     if(k==='rQty'){var it=S.referrer.draft[Number(t.getAttribute('data-v'))];it.qty=Math.max(1,parseInt(t.value,10)||1);}
     save();S._keepScroll=true;renderKeepFocus(t.id||null,k,t.getAttribute('data-v'));
   },250);
